@@ -13,7 +13,7 @@ warnings.filterwarnings('ignore')
 
 if __name__ == '__main__':
     # llm
-    model = LLM().tongyi_qwen_14b_chat(temperature=1)
+    model = LLM().zhipu_glm_4()
 
     pre = []
     db_path = '../data/similary.csv'
