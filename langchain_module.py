@@ -73,6 +73,19 @@ from langchain.agents import load_tools
 from langchain_experimental.utilities import PythonREPL
 from langchain_community.utilities import TextRequestsWrapper
 from langchain.agents import AgentType, initialize_agent
+from langchain.prompts import (
+    ChatPromptTemplate,
+    MessagesPlaceholder,
+    SystemMessagePromptTemplate,
+    HumanMessagePromptTemplate,
+)
+from langchain.chains import LLMChain
+from langchain.memory import ConversationBufferMemory
+from langchain.chains import ConversationChain
+from langchain.memory import ConversationBufferWindowMemory
+from langchain.memory import ConversationSummaryMemory, ChatMessageHistory
+from langchain.memory import ConversationSummaryBufferMemory
+from langchain.memory import ConversationTokenBufferMemory
 
 
 class DocsLoader():
@@ -1281,4 +1294,145 @@ class Tools():
         return res
 
 
+class Memory():
 
+    @classmethod
+    def base_memory(cls, llm,
+                    content="You are a chatbot having a conversation with a human."
+                    ):
+        """
+        https://python.langchain.com/v0.1/docs/modules/memory/adding_memory/
+        基本内存记忆，支持多轮对话，直到退出程序（输入 end）
+        langchain 最后一轮对话不执行默认不执行的，可以回车让其执行
+        :param llm: 大模型
+        :param content: 系统提示，不宜过长
+        :return：对话所有记录
+        """
+        prompt = ChatPromptTemplate.from_messages(
+            [
+                SystemMessage(
+                    content=content
+                ),  # The persistent system prompt
+                MessagesPlaceholder(
+                    variable_name="chat_history"
+                ),  # Where the memory will be stored.
+                HumanMessagePromptTemplate.from_template(
+                    "{human_input}"
+                ),  # Where the human input will injected
+            ]
+        )
+
+        memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+        chat_llm_chain = LLMChain(
+            llm=llm,
+            prompt=prompt,
+            verbose=True,  # 看到输入提示
+            memory=memory,
+        )
+        while True:
+            human_input = input('human input:')
+            if human_input == 'end':
+                break
+            chat_llm_chain.predict(human_input=human_input)
+        chat_llm_chain.predict(human_input=human_input)
+
+        return memory.load_memory_variables({})
+
+    @classmethod
+    def window_memory(cls, llm, k=2):
+        """
+        https://python.langchain.com/v0.1/docs/modules/memory/types/buffer_window/
+        基本内存记忆，支持多轮对话，直到退出程序（输入 end）
+        langchain 最后一轮对话不执行默认不执行的，可以回车让其执行
+        :param llm: 大模型
+        :param k: 最多保存的对话轮数
+        :return：对话所有记录
+        """
+        memory = ConversationBufferWindowMemory(k=k)
+        conversation_with_summary = ConversationChain(
+            llm=llm,
+            memory=memory,
+            verbose=True,
+        )
+        while True:
+            human_input = input('human input:')
+            if human_input == 'end':
+                break
+            conversation_with_summary.predict(input=human_input)
+        conversation_with_summary.predict(input=human_input)
+
+        return memory.load_memory_variables({})
+
+    @classmethod
+    def summary_memory(cls, llm):
+        """
+        https://python.langchain.com/v0.1/docs/modules/memory/types/summary/
+        话摘要记忆会随时间推移总结对话并将当前摘要存储在记忆中。然后可以使用此记忆将迄今为止的对话摘要注入提示/链中。
+        此记忆最适合较长的对话，因为将过去的消息历史记录逐字逐句地保留在提示中会占用太多标记。
+        :param llm: 大模型
+        :return：所有对话的总结
+        """
+        memory = ConversationSummaryMemory(llm=llm)
+        conversation_with_summary = ConversationChain(
+            llm=llm,
+            memory=memory,
+            verbose=True,
+        )
+        while True:
+            human_input = input('human input:')
+            if human_input == 'end':
+                break
+            conversation_with_summary.predict(input=human_input)
+        conversation_with_summary.predict(input=human_input)
+
+        return memory.load_memory_variables({})
+
+    @classmethod
+    def summary_buffer_memory(cls, llm, max_token_limit=40):
+        """
+        https://python.langchain.com/v0.1/docs/modules/memory/types/summary_buffer/
+        它在内存中保留最近交互的缓冲区，但不是完全清除旧交互，而是将它们编译成摘要并同时使用。它使用标记长度而不是交互次数来确定何时清除交互。
+        当历史总结的摘要 token 大于 40，则清空历史
+        :param llm: 大模型
+        :param max_token_limit: 标记长度
+        :return：所有对话
+        """
+        memory = ConversationSummaryBufferMemory(llm=llm, max_token_limit=max_token_limit)
+        conversation_with_summary = ConversationChain(
+            llm=llm,
+            memory=memory,
+            verbose=True,
+        )
+        while True:
+            human_input = input('human input:')
+            if human_input == 'end':
+                break
+            conversation_with_summary.predict(input=human_input)
+        conversation_with_summary.predict(input=human_input)
+
+        return memory.load_memory_variables({})
+
+    @classmethod
+    def token_buffer_memory(cls, llm, max_token_limit=60):
+        """
+        https://python.langchain.com/v0.1/docs/modules/memory/types/token_buffer/
+        它在内存中保留最近交互的缓冲区，但不是完全清除旧交互，而是将它们编译成摘要并同时使用。它使用标记长度而不是交互次数来确定何时清除交互。
+        当历史 token 大于 40，则清空历史
+        :param llm: 大模型
+        :param max_token_limit: 标记长度
+        :return：所有对话
+        """
+        memory = ConversationTokenBufferMemory(llm=llm, max_token_limit=max_token_limit)
+        conversation_with_summary = ConversationChain(
+            llm=llm,
+            memory=memory,
+            verbose=True,
+        )
+        while True:
+            human_input = input('human input:')
+            if human_input == 'end':
+                break
+            conversation_with_summary.predict(input=human_input)
+        conversation_with_summary.predict(input=human_input)
+
+        return memory.load_memory_variables({})
