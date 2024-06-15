@@ -106,7 +106,7 @@ class DocsLoader():
         """
         https://python.langchain.com/docs/modules/data_connection/document_loaders/csv/
         可用参数解释：https://blog.csdn.net/zjkpy_5/article/details/137727850?spm=1001.2014.3001.5501
-        加载 csv 数据
+        加载 csv 数据，对于 csv 默认一行为一个块，相当于分割过了
         :param filepath: 
         :return: 
         """""
