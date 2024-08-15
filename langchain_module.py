@@ -1161,6 +1161,15 @@ class Chain():
         return res
 
     @classmethod
+    def batch_base_llm_chain_no_var(cls, model, prompt):
+        """
+        基础链，批次调用
+        不带变量的，传入的 prompt 是一个列表
+        """
+        res = model.batch(prompt)
+        return res
+
+    @classmethod
     def base_chat_llm_chain(cls, model, inputs, **kwargs):
         """
         https://python.langchain.com/docs/modules/model_io/prompts/composition/#string-prompt-composition
