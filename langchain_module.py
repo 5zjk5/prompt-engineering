@@ -16,7 +16,6 @@ Prompt：prompt 模版
 """
 import json
 import os
-import pprint
 from pathlib import Path
 from langchain_community.document_loaders import TextLoader
 from langchain_community.document_loaders.csv_loader import CSVLoader
@@ -65,7 +64,6 @@ from langchain_core.prompts import FewShotPromptTemplate
 from langchain_core.example_selectors import MaxMarginalRelevanceExampleSelector
 from langchain_core.prompts import FewShotChatMessagePromptTemplate
 from langchain_core.example_selectors import SemanticSimilarityExampleSelector
-from langchain.chains import LLMChain
 from langchain.output_parsers import CommaSeparatedListOutputParser
 from langchain.output_parsers import DatetimeOutputParser
 from langchain_core.output_parsers import JsonOutputParser
@@ -1128,18 +1126,25 @@ class Chain():
     def batch_base_llm_chain(cls, model, prompt, max_concurrency=5, **kwargs):
         """
         https://python.langchain.com/docs/modules/model_io/prompts/composition/#string-prompt-composition
-        基础链，带有变量的 prompt ，model 两个组成链，批次调用
+        基础链，带有变量的 prompt ，与不带变量的都可以用，model 两个组成链，批次调用
         :param model: llm
         :param prompt: prompt 其中的变量是用 {} 括起来的
         :param kwargs: prompt 中的变量
         :param max_concurrency: 并发请求数
-        e.g:
-            promt = 'tell me a joke about {other} and {topic2}'
+        e.g: 带变量的调用
+            prompt = 'tell me a joke about {other} and {topic2}'
             other = ['bear', 'dog']
             topic2 = ['cat', 'monkey']
+            Chain.batch_base_llm_chain(llm, prompt, other=other, topic2=topic2)
 
             传进来后的 kwargs: kwargs = {'topic1': ['bear', 'dog'], 'topic2': ['cat', 'monkey']}
             处理后 batch_list: batch_list = [{"topic1": "bears", "topic2": "cat"}, {"topic1": "dog", "topic2": "monkey"}]
+
+        e.g: 不带变量的调用
+            prompt = '{prompt_string}'
+            prompt_lst = ['xxx', 'xxx'...]
+            Chain.batch_base_llm_chain(llm, '{prompt_string}', max_concurrency=16, prompt_string=prompt_lst)
+
         :return:
         """
         prompt = PromptTemplate.from_template(prompt)
@@ -1165,6 +1170,8 @@ class Chain():
         """
         基础链，批次调用
         不带变量的，传入的 prompt 是一个列表
+        这种方式经过测试，没有用，测试了通义，智谱，这应该是专门为 openai 设计的接口
+        需要真正批次调用使用 batch_base_llm_chain 方法，经测试有用
         """
         res = model.batch(prompt)
         return res
