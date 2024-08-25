@@ -39,6 +39,10 @@
     使用 qwen 系列识别文本情感。
 
 
+* **PDF文件理解**<br>
+    测试 glm4-long 模型，长上下文理解的能力。 pdf 的字数为 11w，传进去解析到回答问题，用了 31s，效果还是不错的。 解析读取 pdf，调用大模型都是使用 langchain。
+
+
 # model
 存放 embedding 模型，可以自己去 huggingFace 下载
 
