@@ -1,3 +1,44 @@
+# 项目案例介绍
+此仓库为 langchain 框架的案例，主要是做一些 prompt 工程的案例。
+
+## 项目
+每个项目都有 readme 介绍，可以参考
+* **prompt自动优化**<br>
+    使用智谱 glm4-airx 模型，构造 prompt 自动优化项目。经过测试，可以提高 prompt 优化的效率，提升准确率。不同场景需要测试。
+
+
+* **GLM法律行业大模型挑战赛道(agent)**<br>
+    使用 langchain 构建 agent，法律行业的应用，是阿里天池的一个比赛来着，作为学习 agent 的应用，是一个不错的案例。
+
+
+* **langchain中的agent使用**<br>
+    主要把 langchin 中几种 agent 进行实验，把支持的 agent 汇总到一起了，以及一些使用场景写在注释了。
+
+
+* **专业识别**<br>
+    langchian 的 rag 实现，从多个专业中，检索召回相关的后，再传给大模型去选择，主要使用的是 qwen 系列。
+
+
+* **句子语义相似识别**<br>
+    langchain 批次调用技术，使用 qwen 系列的模型，可以识别句子的相似度。
+
+
+* **实体识别**<br>
+    使用 langchin 结合大模型进行实体命名识别案例。
+
+
+* **智能问答系统(Agent+RAG)**<br>
+    阿里天池的练习来着，主要是 agent 与 rag 的应用，使用 glm4 结合 langchain 框架进行实操，作为学习案例可以。
+
+
+* **电影评论检索(Agent+RAG)**<br>
+    使用 glm4 通过 prompt 去检索数据，让模型能找到准确的数据。
+
+
+* **评论情感识别**<br>
+    使用 qwen 系列识别文本情感。
+
+
 # model
 存放 embedding 模型，可以自己去 huggingFace 下载
 
