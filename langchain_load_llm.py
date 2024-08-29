@@ -76,20 +76,10 @@ class LLM():
         )
         return model
 
-    def local_llm(self, model_path, temperature=0.6):
-        tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
-        model = AutoModelForCausalLM.from_pretrained(model_path, device_map="auto", trust_remote_code=True).eval()
-        model.generation_config = GenerationConfig.from_pretrained(model_path, trust_remote_code=True,
-                                                                   temperature=temperature)
-        pipe = pipeline(
-            "text-generation",
-            model=model,
-            tokenizer=tokenizer,
-            # max_length=4096,
-            # max_tokens=4096,
-            max_new_tokens=512,
-            top_p=1,
-            repetition_penalty=1.15
-        )
-        model = HuggingFacePipeline(pipeline=pipe)
+    def zhipu_glm_4_flash(self, temperature=0.9):
+        # 智谱的 temperature 最高不能 >= 1
+        model = ChatOpenAI(temperature=temperature, model="glm-4-flash",
+                           openai_api_key=self.ZHIPUAI_API_KEY,
+                           openai_api_base="https://open.bigmodel.cn/api/paas/v4/"
+                           )
         return model
