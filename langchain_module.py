@@ -532,7 +532,7 @@ class Retriever():
         :param long_context: 长上下文排序
         :return:
         """
-        retriever = db.as_retriever(search_type="mmr", ssearch_kwargs={'k': topk, 'fetch_k': fetch_k})
+        retriever = db.as_retriever(search_type="mmr", search_kwargs={'k': topk, 'fetch_k': fetch_k})
         retriever_docs = retriever.get_relevant_documents(query)
         if long_context:
             reordering = LongContextReorder()
