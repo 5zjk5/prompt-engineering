@@ -82,3 +82,6 @@ spider.py 爬虫代码
 run_embedding_to_vector_all_doc.py 向量化生成整部小说的代码
 run_embedding_to_vector_test_doc.py 测试前 100 章向量生成的代码
 run_answer.py 回答主流程代码
+
+langgraph.py 是实验 grapy rag 的效果，使用 langgraph，15 个相同的问题，从结果上来看，没有传统的好。
+可能是工程节点之类的也简单，要用图形语言来描述，代码斌复杂，且理解比较困难了。
