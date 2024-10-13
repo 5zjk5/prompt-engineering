@@ -30,8 +30,11 @@
 * **智能问答系统(Agent+RAG)**<br>
     阿里天池的练习来着，主要是 agent 与 rag 的应用，使用 glm4 结合 langchain 框架进行实操，作为学习案例可以。
 
+* **智能问答系统(Agent+RAG)-1**<br>
+    与上面同个项目，不过是自己实现 agent，plane agent，action agent，计划执行，虽然更灵活，可以自定义方式，但更耗费 token 了。
+    两个方案共同难点是，生成的 sql 到底准不准，两个方案最终效果差不多的。
 
-* **电影评论检索(Agent+RAG)**<br>
+* **电影评论检索**<br>
     使用 glm4 通过 prompt 去检索数据，让模型能找到准确的数据。
 
 
