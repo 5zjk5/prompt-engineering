@@ -48,9 +48,6 @@
 * **《斗破苍穹》RAG智搜/**<br>
     对比测试智谱 GLM 系列模型在小说问答 RAG 上的效果，进行多组实验，模型选择，分块方法，检索，及问题设置，总结普通 RAG 的局限性。
 
-* **自定义 React Agant**<br>
-    自己实现一个自定义的 react agent
-
 # model
 存放 embedding 模型，可以自己去 huggingFace 下载
 
