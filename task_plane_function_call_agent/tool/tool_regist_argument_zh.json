@@ -1,0 +1,1209 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "feishu_spreadsheet_get_metadata",
+      "description": "飞书列出指定电子表格信息，需要使用电子表格token识别对需要操作的电子表格，电子表格token获取文档：\nhttps://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet/get",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "spreadsheet_token": {
+            "description": "电子表格token，用于识别需要指定需要列出的电子表格信息",
+            "type": "string"
+          }
+        },
+        "required": [
+          "spreadsheet_token"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "feishu_spreadsheet_create",
+      "description": "飞书创建空白电子表格，默认创建到个人主目录下，可以指定表格名称及保存到的目标文件夹，创建配置应用：https://open.feishu.cn/document/home/quick-access-to-base/step-1-create-and-configure-an-application\napi调试台获得token：https://open.feishu.cn/document/server-docs/docs/sheets-v3/spreadsheet/create",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "description": "需要创建的表格名称，默认为“未命名”",
+            "type": "string"
+          },
+          "folder_token": {
+            "description": "需要保存到的目标文件夹token，默认保存到个人主目录下",
+            "type": "string"
+          }
+        },
+        "required": [
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "feishu_multidimensional_table_add_row",
+      "description": "飞书对多维表格下已存在的数据表进行数据写入，需要指定操作的多维表格token及数据表id，文档：\nhttps://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/create",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "app_token": {
+            "description": "多维表格token，用于指定需要对哪个多维表格操作",
+            "type": "string"
+          },
+          "table_id": {
+            "description": "数据表格id，用于指定对多维表格下哪张数据表插入数据",
+            "type": "string"
+          }
+        },
+        "required": [
+          "app_token",
+          "table_id"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "feishu_multidimensional_table_get_metadata",
+      "description": "飞书指定多维表格获得元数据，包括表名，token，版本号，时区，公式字段类型，文档：\nhttps://open.feishu.cn/document/server-docs/docs/bitable-v1/app/get",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "app_token": {
+            "description": "多维表格token，用于获取该多维表格的元数据",
+            "type": "string"
+          }
+        },
+        "required": [
+          "app_token"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "feishu_multidimensional_table_add_table",
+      "description": "飞书指定多维表格创建数据表，需要使用多维表格token进行创建，文档：\nhttps://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table/create",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "app_token": {
+            "description": "多维表格token，用于指定在该多维表格下创建数据表",
+            "type": "string"
+          }
+        },
+        "required": [
+          "app_token"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "feishu_multidimensional_table_get_table",
+      "description": "飞书列出指定多维表格下的数据表，需要指定多维表格token用于识别操作的多维表格，文档：\nhttps://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table/list",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "app_token": {
+            "description": "多维表格token，用于列出该多维表格下的数据表",
+            "type": "string"
+          }
+        },
+        "required": [
+          "app_token"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "feishu_multidimensional_table_create",
+      "description": "飞书空白多维表格创建，默认创建在个人主目录下，可以指定创建表格名称及保存到的目标文件夹，创建配置应用：https://open.feishu.cn/document/home/quick-access-to-base/step-1-create-and-configure-an-application\napi调试台获得token：https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/create?appId=cli_a7efab64a8b8d00e",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "表格名称，默认名称为“未命名”",
+            "type": "string"
+          },
+          "folder_token": {
+            "description": "需要保存到的目标文件夹token，默认保存到个人主目录下",
+            "type": "string"
+          }
+        },
+        "required": [
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "pie",
+      "description": "根据类别，对应类别数量数据生成饼图",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "labels": {
+            "description": "类别标签，列表格式，每个元素为双引号括起来的字符串，英文逗号分隔，例如：[\"1月\", \"2月\"]",
+            "type": "array"
+          },
+          "data": {
+            "description": "类别对应数量，列表格式，每个元素为数值，以英文逗号分隔，例如：[10, 15]",
+            "type": "array"
+          }
+        },
+        "required": [
+          "labels",
+          "data"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "line",
+      "description": "根据 x 轴 y 轴数据生成折线图",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "labels": {
+            "description": "x 轴，列表格式，每个元素为双引号括起来的字符串，英文逗号分隔，例如：[\"1月\", \"2月\"]",
+            "type": "array"
+          },
+          "data": {
+            "description": "y 轴，列表格式，每个元素为数值，以英文逗号分隔，例如：[10, 15]",
+            "type": "array"
+          }
+        },
+        "required": [
+          "labels",
+          "data"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "bar",
+      "description": "根据 x 轴 y 轴数据生成柱状图",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "labels": {
+            "description": "x 轴，列表格式，每个元素为双引号括起来的字符串，英文逗号分隔，例如：[\"1月\", \"2月\"]",
+            "type": "array"
+          },
+          "data": {
+            "description": "y 轴，列表格式，每个元素为数值，以英文逗号分隔，例如：[10, 15]",
+            "type": "array"
+          }
+        },
+        "required": [
+          "labels",
+          "data"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "weekly_work_report_generation",
+      "description": "生成全面的每周工作报告，无论是从头开始还是基于用户提供的材料。该报告涵盖了主要成就、遇到的挑战、正在进行的任务和下周的计划。该工具适用于为工作跟踪、项目更新或管理评审生成详细的报告",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "report_materials": {
+            "description": "用于生成周报的材料或信息。这可能包括任务列表、项目更新、会议记录或进度指标。",
+            "type": "string"
+          },
+          "report_format": {
+            "description": "更喜欢报告的格式（例如，要点、详细段落或执行摘要）。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "report_materials"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "text_continue_writing",
+      "description": "它根据用户提供的初始文本继续编写后续内容。适合撰写报告、文章、电子邮件等",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "initial_text": {
+            "description": "要继续的初始文本内容",
+            "type": "string"
+          },
+          "desired_length": {
+            "description": "续文的期望长度（例如，100字，1段）",
+            "type": "string"
+          }
+        },
+        "required": [
+          "initial_text"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "project_status_summary_generation",
+      "description": "它生成项目的状态摘要，描述当前的进度、遇到的问题和接下来的步骤。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "project_details": {
+            "description": "项目的详细信息，包括名称、阶段、任务进度等",
+            "type": "string"
+          },
+          "issues_encountered": {
+            "description": "项目中遇到的具体问题或障碍",
+            "type": "string"
+          },
+          "next_steps": {
+            "description": "项目的后续步骤或操作项",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_details"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "product_proposal_document_generation",
+      "description": "生成全面的产品提案文档，概述背景、需求分析、市场趋势、产品定位和技术实施计划。该文档是为向利益相关者展示新产品想法或改进建议而设计的。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "proposal_materials": {
+            "description": "用于生成产品方案的材料。这可能包括市场研究数据、产品设计计划或技术规范",
+            "type": "string"
+          },
+          "proposal_format": {
+            "description": "建议的首选格式或结构（例如，正式的业务建议、执行摘要或详细的技术计划）。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "proposal_materials"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "product_introduction_document_generation",
+      "description": "生成详细的产品介绍文档，描述产品的主要特性、配置、用例和技术规格说明。本文档适用于市场营销、销售或技术人员，用于介绍新产品或现有产品",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "product_info": {
+            "description": "关于产品的详细信息，包括关键特性、规格、好处和目标用例",
+            "type": "string"
+          },
+          "target_audience": {
+            "description": "针对文档的目标受众（如技术人员、销售人员、一般公众）定制语言和细节",
+            "type": "string"
+          }
+        },
+        "required": [
+          "product_info"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "ppt_outline_generation",
+      "description": "生成详细的PPT大纲，包括每个幻灯片的主要标题，字幕和关键内容点。该工具帮助用户有效地组织他们的演示，确保逻辑流程和适当的结构，清楚地传达他们的想法。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "presentation_topic": {
+            "description": "主题：演讲的主题或主题这可以是一个特定的项目，研究课题，或一般的主题，需要发展成一个PPT大纲",
+            "type": "string"
+          },
+          "slide_count": {
+            "description": "演示文稿中所需的幻灯片数量，这有助于确定大纲的详细程度或精简程度",
+            "type": "string"
+          },
+          "audience_type": {
+            "description": "演示文稿的目标受众（例如，学术、公司或一般），允许自定义语气和内容焦点。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "presentation_topic"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "meeting_summary",
+      "description": "根据用户提供的会议记录生成详细的会议摘要或会议纪要。摘要包括关键的讨论点、做出的决定、行动项目和未来的后续行动，确保有效地记录和分发会议结果。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "minutes_of_meeting": {
+            "description": "需要总结的会议具体内容或记录。这可能包括讨论的主题、决策和分配的任务",
+            "type": "string"
+          },
+          "summary_style": {
+            "description": "会议总结的风格，如正式的报告、简短的要点或以行动为导向的会议记录。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "minutes_of_meeting"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "email_summary",
+      "description": "生成用户提供的一封或一系列电子邮件的简明摘要。这个摘要突出了要点、决定、需要采取的行动或需要的后续行动，使审查冗长或复杂的电子邮件线程更容易",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "email_content": {
+            "description": "邮件中需要总结的具体内容或文本。这可以包括单独的电子邮件或一系列的通信",
+            "type": "string"
+          },
+          "summary_length": {
+            "description": "摘要所需的长度或详细程度（例如，简短的要点、详细的摘要或执行概述）",
+            "type": "string"
+          }
+        },
+        "required": [
+          "email_content"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "email_reply",
+      "description": "它支持回复给定的电子邮件内容。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "email_content": {
+            "description": "需要回复的邮件内容",
+            "type": "string"
+          },
+          "reply_tone": {
+            "description": "邮件的语气（例如，正式的、随意的、促销的）",
+            "type": "string"
+          },
+          "reply_length": {
+            "description": "期望的回复长度（例如，简短，详细）",
+            "type": "string"
+          }
+        },
+        "required": [
+          "email_content"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "email_generation",
+      "description": "它支持回复给定的电子邮件内容。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "email_topic": {
+            "description": "邮件的主题或内容",
+            "type": "string"
+          },
+          "reply_tone": {
+            "description": "邮件的语气（例如，正式的、随意的、促销的）",
+            "type": "string"
+          },
+          "email_recipient": {
+            "description": "邮件收件人",
+            "type": "string"
+          },
+          "email_sender": {
+            "description": "邮件发送人",
+            "type": "string"
+          }
+        },
+        "required": [
+          "email_topic"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "document_polishing",
+      "description": "细化和增强所提供的文档，改进其清晰度、结构和表示，以满足特定的指导方针或标准。该工具可以专注于语法、语气、格式和逻辑流程，以确保文档的修饰和专业",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "document_content": {
+            "description": "需要润色的文件的全部内容。这可以包括报告、论文、提案或任何其他类型的书面内容",
+            "type": "string"
+          },
+          "polishing_criteria": {
+            "description": "文档应符合的特定准则或标准，如专业的语气、正式的结构或特定的格式规则",
+            "type": "string"
+          },
+          "focus_area": {
+            "description": "用户希望具体改进的文档区域，例如语法、连贯性或说服力",
+            "type": "string"
+          }
+        },
+        "required": [
+          "document_content"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "document_expansion",
+      "description": "它支持扩展给定的文档或文本内容，在现有内容的基础上扩展它",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "document_content": {
+            "description": "需要展开的文档或文本内容",
+            "type": "string"
+          },
+          "desired_length": {
+            "description": "扩展内容的期望长度",
+            "type": "string"
+          },
+          "expansion_guideline": {
+            "description": "扩展内容的指导方针或方向（例如，关注细节，增加例子）",
+            "type": "string"
+          }
+        },
+        "required": [
+          "document_content"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "document_summary",
+      "description": "它总结给定的文档或文本内容。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "document_content": {
+            "description": "需要总结的文档或文本内容",
+            "type": "string"
+          },
+          "summary_length": {
+            "description": "摘要的期望长度（例如，简短，详细）",
+            "type": "string"
+          }
+        },
+        "required": [
+          "document_content"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_gaode_geo_distance",
+      "description": "高德地图，根据起点位置及目的地经纬度测量直线距离。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "origin": {
+            "description": "起始位置（经度,纬度）,如117.500244, 40.417801 经纬度小数点不超过6位",
+            "type": "string"
+          },
+          "destination": {
+            "description": "终点位置经度,纬度）,如117.500244, 40.417801 经纬度小数点不超过6位",
+            "type": "string"
+          }
+        },
+        "required": [
+          "origin",
+          "destination"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_gaode_ride_route_plan",
+      "description": "高德地图，根据起点位置及目的地经纬度骑行路径规划。最大支持 500km 的骑行路线规划。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "origin": {
+            "description": "起始位置（经度,纬度）,如117.500244, 40.417801 经纬度小数点不超过6位",
+            "type": "string"
+          },
+          "destination": {
+            "description": "终点位置经度,纬度）,如117.500244, 40.417801 经纬度小数点不超过6位",
+            "type": "string"
+          }
+        },
+        "required": [
+          "origin",
+          "destination"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_gaode_drive_route_plan",
+      "description": "高德地图，根据起点位置及目的地经纬度驾车路径规划。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "origin": {
+            "description": "起始位置（经度,纬度）,如117.500244, 40.417801 经纬度小数点不超过6位",
+            "type": "string"
+          },
+          "destination": {
+            "description": "终点位置经度,纬度）,如117.500244, 40.417801 经纬度小数点不超过6位",
+            "type": "string"
+          }
+        },
+        "required": [
+          "origin",
+          "destination"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_gaode_walk_route_plan",
+      "description": "高德地图，根据起点位置及目的地经纬度步行路径规划，最大支持 100km 的步行路线规划",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "origin": {
+            "description": "起始位置（经度,纬度）,如117.500244, 40.417801 经纬度小数点不超过6位",
+            "type": "string"
+          },
+          "destination": {
+            "description": "终点位置经度,纬度）,如117.500244, 40.417801 经纬度小数点不超过6位",
+            "type": "string"
+          }
+        },
+        "required": [
+          "origin",
+          "destination"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_gaode_geocode",
+      "description": "高德地图，将详细的结构化地址转换为高德经纬度坐标。且支持对地标性名胜景区、建筑物名称解析为高德经纬度坐标。 结构化地址举例：北京市朝阳区阜通东大街6号转换后经纬度：116.480881,39.989410  地标性建筑举例：天安门转换后经纬度：116.397499,39.908722",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "description": "结构化地址，例如：北京市朝阳区阜通东大街6号",
+            "type": "string"
+          }
+        },
+        "required": [
+          "address"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_stock_chart_data",
+      "description": "用于查询指定股票的历史价格图表数据。可以根据时间间隔、股票标识符和时间跨度查询历史价格图表数据。同时支持指定地区代码，盘前和盘后交易的数据，Yfid 数据源，收盘价，事件类型等。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "interval": {
+            "description": "时间间隔，定义了返回的价格点之间的间隔。支持的值包括：1m、2m、5m、15m、30m、60m、1d、1wk、1mo，分别代表1分钟、2分钟、5分钟、15分钟、30分钟、60分钟、1天、1周、1个月。",
+            "type": "string"
+          },
+          "symbol": {
+            "description": "要查询的股票标识符（通常是股票代码或ID）",
+            "type": "string"
+          },
+          "range": {
+            "description": "数据的时间跨度。支持的值包括：1d、5d、1mo、3mo、6mo、1y、2y、5y、10y、ytd、max，分别代表1天、5天、1个月、3个月、6个月、1年、2年、5年、10年、年初至今以及最大范围。",
+            "type": "string"
+          },
+          "region": {
+            "description": "股票市场的地区代码。\n支持的值包括：US、BR、AU、CA、FR、DE、HK、IN、IT、ES、GB、SG，分别代表美国、巴西、澳大利亚、加拿大、法国、德国、中国香港、印度、意大利、西班牙、英国、新加坡。",
+            "type": "string"
+          },
+          "includePrePost": {
+            "description": "是否包含盘前和盘后交易的数据。默认为 false",
+            "type": "boolean"
+          },
+          "useYfid": {
+            "description": "是否启用 Yfid 数据源。默认为 true",
+            "type": "boolean"
+          },
+          "includeAdjustedClose": {
+            "description": "是否在返回的数据中包含调整后的收盘价。默认为 true",
+            "type": "boolean"
+          },
+          "events": {
+            "description": "获取的事件类型，多个事件以逗号分隔。支持的值包括：capitalGain、div、split、earn、history，分别代表资本增值、股息、拆股、收益以及历史。例如：capitalGain, split。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "interval",
+          "symbol",
+          "range"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_recipes",
+      "description": "根据食谱、配料、食物等跟食物相关的关键词查询食谱",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query_recipes": {
+            "description": "查询食谱关键词，可以使用食谱、配料、食物等跟食物相关的关键词",
+            "type": "string"
+          },
+          "size": {
+            "description": "查询得到食谱结果数",
+            "type": "string"
+          }
+        },
+        "required": [
+          "query_recipes"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "books_related_searches",
+      "description": "根据书名查询获取关于所查询书籍或相关书籍的信息",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query_book": {
+            "description": "查询书籍名称",
+            "type": "string"
+          },
+          "price": {
+            "description": "查询书籍的价钱",
+            "type": "string"
+          }
+        },
+        "required": [
+          "query_book"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "random_generate_music_name",
+      "description": "随机生成一首歌的名字",
+      "parameters": {
+        "type": "object",
+        "properties": {
+        },
+        "required": [
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "music_search",
+      "description": "用于根据用户的查询要求搜索相关的音乐信息，包括但不限于专辑、艺人、曲目等。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query_music": {
+            "description": "搜索相关的音乐信息的关键词，专辑、艺人、曲目等。",
+            "type": "string"
+          },
+          "limit": {
+            "description": "查询音乐信息的返回数量",
+            "type": "string"
+          }
+        },
+        "required": [
+          "query_music"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "cheapest_tickets",
+      "description": "通过城市的国际航空运输协会（IATA）代码查询返回所选航线在出发 / 返程日期筛选条件下，最便宜的直飞机票，以及含 1 次或 2 次经停的机票。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "origin": {
+            "description": "起始城市代码，必须为国际航空运输协会（IATA）代码",
+            "type": "string"
+          },
+          "destination": {
+            "description": "目的地城市代码，必须国际航空运输协会（IATA）代码",
+            "type": "string"
+          },
+          "depart_date": {
+            "description": "起始日期，例如：2025-01-01",
+            "type": "string"
+          },
+          "return_date": {
+            "description": "结束日期，例如：2025-01-01",
+            "type": "string"
+          }
+        },
+        "required": [
+          "origin",
+          "destination"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_google_autocomplete",
+      "description": "谷歌自动完成 API 能让你获取某个关键词的建议。自动词汇填充，一般在搜索引擎查找词汇的时候会出现词汇填充的功能",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query_keyword": {
+            "description": "需要进行自动填充的关键词",
+            "type": "string"
+          }
+        },
+        "required": [
+          "query_keyword"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_finance_news_list",
+      "description": "用于查询指定地区的最新财经新闻链接（url）列表，支持：US、BR、AU、CA、FR、DE、HK、IN、IT、ES、GB、SG，分别代表：美国、巴西、澳大利亚、加拿大、法国、德国、香港、印度、意大利、西班牙、英国、新加坡",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "region": {
+            "description": "指定区域，支持：US、BR、AU、CA、FR、DE、HK、IN、IT、ES、GB、SG，分别代表：美国、巴西、澳大利亚、加拿大、法国、德国、香港、印度、意大利、西班牙、英国、新加坡",
+            "type": "string"
+          }
+        },
+        "required": [
+          "region"
+        ]
+      }
+    }
+  },
+    {
+    "type": "function",
+    "function": {
+      "name": "search_engine",
+      "description": "根据搜索词，搜索互联网上相关信息，返回搜索结果",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query_search_keyword": {
+            "description": "搜索词，用于搜索",
+            "type": "string"
+          },
+          "engine": {
+            "description": "搜索引擎,支持 duckduckgo，bing，baidu，google 搜索引擎进行搜索",
+            "type": "string"
+          },
+          "kl": {
+            "description": "语言,默认为英语，us-en",
+            "type": "string"
+          }
+        },
+        "required": [
+          "query_search_keyword"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "calculator",
+      "description": "简单计算器，用户计算简单数学算术式，可以计算加减乘除幂运算。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "math_arithmetic_expression": {
+            "description": "数学算术式表达式，例如：1 + 1 / 2",
+            "type": "string"
+          }
+        },
+        "required": [
+          "math_arithmetic_expression"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "baidu_translate",
+      "description": "百度翻译工具，一种语言转换为另外一种语言，必须指定需要翻译结果的语言。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "description": "待翻译的原始文本内容",
+            "type": "string"
+          },
+          "from_lang": {
+            "description": "待翻译的原始内容的语言，默认为 auto 自动识别语言",
+            "type": "string"
+          },
+          "to_lang": {
+            "description": "翻译的目标语言，取值包括：zh|en，分别代表中文|英文。其他语言参考：https://api.fanyi.baidu.com/doc/21",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "to_lang"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "ocr",
+      "description": "通过用户传入的图像链接，自动识别图片中的文字内容，并输出为可编辑的文本格式。支持多种常见图片格式（如JPEG、PNG、BMP等），能够处理不同语言和字体，适用于文档扫描、图像转文字、信息提取等多种场景。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "image_url": {
+            "description": "用户上传图片后获得的图片链接，用于提取图片中的文字内容",
+            "type": "string"
+          }
+        },
+        "required": [
+          "image_url"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "search_salary_by_company_job",
+      "description": "根据公司，职位查询薪水",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "company": {
+            "description": "需要查询的公司名称",
+            "type": "string"
+          },
+          "job_title": {
+            "description": "需要查询的职位名称",
+            "type": "string"
+          }
+        },
+        "required": [
+          "company",
+          "job_title"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "search_salary_by_job_location",
+      "description": "根据职位，地点查询薪水",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "description": "需要查询的工作地点",
+            "type": "string"
+          },
+          "job_title": {
+            "description": "需要查询的职位名称",
+            "type": "string"
+          }
+        },
+        "required": [
+          "company",
+          "job_title"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "job_search",
+      "description": "根据公司名，职位名查询职位",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "company": {
+            "description": "需要查询的公司名称",
+            "type": "string"
+          },
+          "job_title": {
+            "description": "需要查询的职位名称",
+            "type": "string"
+          }
+        },
+        "required": [
+          "company",
+          "job_title"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "next_public_holidays_worldwide",
+      "description": "返回未来7天内的世界上国家公众假期，例如：未来7天的3月8日是世界上多个国家的妇女节，会列出当天有哪些国家有此节日，包含国家名称，国家代码，节日描述",
+      "parameters": {
+        "type": "object",
+        "properties": {
+        },
+        "required": [
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "next_public_holidays",
+      "description": "根据国家代码（countryCode） 返回当前国家接下来365天内的公共假期。所有可用国家代码可通过 available_countries 工具获得",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "countryCode": {
+            "description": "国家代码（countryCode），用于指定国家，所有可用国家代码可通过 available_countries 工具获得",
+            "type": "string"
+          }
+        },
+        "required": [
+          "countryCode"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "public_holidays",
+      "description": "根据国家代码（countryCode）、 指定年份，获取特定国家的公共假日。所有可用国家代码可通过 available_countries 工具获得",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "countryCode": {
+            "description": "国家代码（countryCode），用于指定国家，所有可用国家代码可通过 available_countries 工具获得",
+            "type": "string"
+          },
+          "year": {
+            "description": "指定的年份，例如：2024",
+            "type": "string"
+          }
+        },
+        "required": [
+          "countryCode",
+          "year"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "long_weekend",
+      "description": "根据国家代码（countryCode）、年份， 获取指定国家的长周末（超过两天）。所有可用国家代码可通过 available_countries 工具获得",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "countryCode": {
+            "description": "国家代码（countryCode），用于指定国家，所有可用国家代码可通过 available_countries 工具获得",
+            "type": "string"
+          },
+          "year": {
+            "description": "年份",
+            "type": "string"
+          }
+        },
+        "required": [
+          "countryCode",
+          "year"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "country_info",
+      "description": "根据国家代码（countryCode）获取指定国家的信息。所有可用国家代码可通过 available_countries 工具获得",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "countryCode": {
+            "description": "国家代码（countryCode），用于指定国家，所有可用国家代码可通过 available_countries 工具获得",
+            "type": "string"
+          }
+        },
+        "required": [
+          "countryCode"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "available_countries",
+      "description": "获取支持查询的所有国家的全面列表，即国家对应的 countryCode。此工具提供必要信息，以确保您可以访问您感兴趣的国家数据和详细信息。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+        },
+        "required": [
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "current_date",
+      "description": "获得当前年，月，日，星期，例如：2025，March，18，Tuesday",
+      "parameters": {
+        "type": "object",
+        "properties": {
+        },
+        "required": [
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "arxiv_search",
+      "description": "arxiv 论文查询工具，可根据论文主题，论文 id 进行查询，可指定返回结果数。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "search_query": {
+            "description": "搜索论文关键词，用于搜索论文",
+            "type": "string"
+          },
+          "id_list": {
+            "description": "论文id",
+            "type": "string"
+          },
+          "start": {
+            "description": "开始页数",
+            "type": "string"
+          },
+          "max_results": {
+            "description": "返回查询得到的论文结果数",
+            "type": "string"
+          }
+        },
+        "required": [
+          "search_query"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "text_to_img",
+      "description": "智谱，通过文字描述生成图片",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "description": "图片的提示词，用于对要生成图片的详细描述",
+            "type": "string"
+          },
+          "model": {
+            "description": "指定智谱文生图模型，默认为 cogview-3-flash",
+            "type": "string"
+          }
+        },
+        "required": [
+          "prompt"
+        ]
+      }
+    }
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "calculator",
+      "description": "简单计算器，用户计算简单数学算术式，可以计算加减乘除幂运算。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "math_arithmetic_expression": {
+            "description": "数学算术式表达式，例如：1 + 1 / 2",
+            "type": "string"
+          }
+        },
+        "required": [
+          "math_arithmetic_expression"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "write_to_txt",
+      "description": "文件写入，写入格式为文本文件，后缀为 txt 格式。如果用户让保存文件没有指定保存格式，默认使用此工具进行保存",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "description": "需要写入文本的内容",
+            "type": "string"
+          },
+          "file_name": {
+            "description": "保存的文件名，默认为 res.txt",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ]
+      }
+    }
+  }
+]
