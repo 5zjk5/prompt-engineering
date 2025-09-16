@@ -1,0 +1,480 @@
+2025-06-04 11:15:10.968 | INFO     | __main__:<module>:32 - Starting application
+2025-06-04 11:15:10.969 | DEBUG    | __main__:<module>:33 - Debug message
+2025-06-04 11:15:10.969 | WARNING  | __main__:<module>:34 - Warning message
+2025-06-04 11:15:10.969 | ERROR    | __main__:<module>:35 - Error message
+2025-06-04 11:15:10.969 | CRITICAL | __main__:<module>:36 - Critical message
+2025-06-04 11:15:10.969 | ERROR    | __main__:<module>:41 - An error occurred: Test error
+Traceback (most recent call last):
+
+> File "D:\project\研究\data_analysic_agent\logs\logger.py", line 39, in <module>
+    raise ValueError("Test error")
+
+ValueError: Test error
+2025-06-04 14:07:19.548 | INFO     | __main__:<module>:15 - 数据解读，数据探索，从五个维度自行探索分析数据，适用于一张表数据
+2025-06-04 14:08:27.942 | INFO     | __main__:<module>:15 - 数据解读，数据探索，从五个维度自行探索分析数据，适用于一张表数据
+2025-06-04 14:08:27.967 | INFO     | utils.utils:read_data:25 - 读取数据：D:\project\研究\data_analysic_agent\data\大学专业\school.csv，数据量：2856
+2025-06-04 14:08:27.968 | INFO     | utils.utils:data_random_sample:36 - 成功读取随机抽样数据，显示前50行
+2025-06-04 14:33:26.597 | INFO     | __main__:<module>:15 - 正在进行了数据探索....
+2025-06-04 14:33:28.631 | INFO     | utils.utils:read_data:25 - 读取数据：D:\project\研究\data_analysic_agent\data\大学专业\school.csv
+2025-06-04 14:33:28.633 | INFO     | utils.utils:data_random_sample:36 - 成功读取随机抽样数据，显示前50行
+2025-06-04 14:33:28.638 | INFO     | workflow.data_explore:run:17 - 【开始运行】
+✅ 数据读取完成；读取到2856条有效数据
+(还剩下 3 个步骤)
+----
+#### 正在编写数据清洗代码.....
+2025-06-04 14:36:07.243 | INFO     | __main__:<module>:15 - 正在进行了数据探索....
+2025-06-04 14:36:10.287 | INFO     | utils.utils:read_data:25 - 读取数据：D:\project\研究\data_analysic_agent\data\大学专业\school.csv
+2025-06-04 14:36:10.288 | INFO     | utils.utils:data_random_sample:36 - 成功读取随机抽样数据，显示前50行
+2025-06-04 14:36:10.294 | INFO     | workflow.data_explore:run:17 - 【开始运行】
+✅ 数据读取完成；读取到2856条有效数据
+(还剩下 3 个步骤)
+----
+#### 正在编写数据清洗代码.....
+2025-06-04 15:02:07.827 | INFO     | __main__:<module>:15 - 正在进行了数据探索....
+2025-06-04 15:02:07.854 | INFO     | utils.utils:read_data:25 - 读取数据：D:\project\研究\data_analysic_agent\data\大学专业\school.csv
+2025-06-04 15:02:07.854 | INFO     | utils.utils:data_random_sample:36 - 成功读取随机抽样数据，显示前50行
+2025-06-04 15:02:07.870 | INFO     | workflow.data_explore:run:17 - 【开始运行】
+✅ 数据读取完成；读取到2856条有效数据
+(还剩下 3 个步骤)
+----
+#### 正在编写数据清洗代码.....
+2025-06-04 15:31:51.917 | INFO     | __main__:<module>:15 - 正在进行了数据探索....
+2025-06-04 15:31:51.941 | INFO     | utils.utils:read_data:25 - 读取数据：D:\project\研究\data_analysic_agent\data\大学专业\school.csv
+2025-06-04 15:31:51.942 | INFO     | utils.utils:data_random_sample:36 - 成功读取随机抽样数据，显示前50行
+2025-06-04 15:31:51.947 | INFO     | workflow.data_explore:run:19 - 【开始运行】✅ 数据读取完成；读取到2856条有效数据
+2025-06-04 15:31:51.948 | INFO     | workflow.data_explore:general_analysis_dimension:31 - 正在生成数据分析维度.....
+2025-06-04 15:32:18.307 | INFO     | workflow.data_explore:parse_profiles_data_safe:39 - 正在解析分析维度....
+2025-06-04 15:32:18.308 | INFO     | workflow.data_explore:run:23 - 数据分析维度生成完成，共 4 个维度
+2025-06-04 15:32:18.308 | INFO     | workflow.data_explore:run:26 - 正在分析维度.....
+2025-06-04 16:41:37.173 | INFO     | __main__:<module>:15 - 正在进行了数据探索....
+2025-06-04 16:41:37.199 | INFO     | utils.utils:read_data:29 - 读取数据：D:\project\研究\data_analysic_agent\data\大学专业\school.csv
+2025-06-04 16:41:37.201 | ERROR    | utils.utils:read_data:35 - 加载数据失败: 'Logger' object is not callable
+Traceback (most recent call last):
+  File "D:\project\研究\data_analysic_agent\utils\utils.py", line 30, in read_data
+    logger(f"列名: {list(df.columns)}")
+TypeError: 'Logger' object is not callable
+
+2025-06-04 16:41:57.435 | INFO     | __main__:<module>:15 - 正在进行了数据探索....
+2025-06-04 16:41:57.460 | INFO     | utils.utils:read_data:29 - 读取数据：D:\project\研究\data_analysic_agent\data\大学专业\school.csv
+2025-06-04 16:41:57.460 | INFO     | utils.utils:read_data:30 - 列名: ['学校', '省份', '城市', '地址', '水平层次', '办学类别', '办学类型', '985', '211', '双一流', '归属', '开设专业链接']
+2025-06-04 16:41:57.461 | INFO     | utils.utils:data_random_sample:46 - 成功读取随机抽样数据，显示前50行
+2025-06-04 16:41:57.465 | INFO     | workflow.data_explore:run:20 - 【开始运行】✅ 数据读取完成；读取到2856条有效数据
+2025-06-04 16:41:57.465 | INFO     | workflow.data_explore:run:55 - 数据分析维度生成完成，共 4 个维度
+2025-06-04 16:41:57.465 | INFO     | workflow.data_explore:run:58 - 正在分析维度.....
+2025-06-04 16:43:18.995 | INFO     | __main__:<module>:15 - 正在进行了数据探索....
+2025-06-04 16:43:19.019 | INFO     | utils.utils:read_data:29 - 读取数据：D:\project\研究\data_analysic_agent\data\大学专业\school.csv
+2025-06-04 16:43:19.019 | INFO     | utils.utils:read_data:30 - 列名: ['学校', '省份', '城市', '地址', '水平层次', '办学类别', '办学类型', '985', '211', '双一流', '归属', '开设专业链接']
+2025-06-04 16:43:19.020 | INFO     | utils.utils:data_random_sample:46 - 成功读取随机抽样数据，显示前50行
+2025-06-04 16:43:19.027 | INFO     | workflow.data_explore:run:20 - 【开始运行】✅ 数据读取完成；读取到2856条有效数据
+2025-06-04 16:43:19.027 | INFO     | workflow.data_explore:run:55 - 数据分析维度生成完成，共 4 个维度
+2025-06-04 16:43:19.027 | INFO     | workflow.data_explore:run:58 - 正在分析维度.....
+2025-06-04 16:43:19.031 | ERROR    | workflow.data_explore:analysis_dimension:131 - 分析失败: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+
+Traceback (most recent call last):
+  File "D:\project\研究\data_analysic_agent\workflow\data_explore.py", line 98, in analysis_dimension
+    results = analyzer.run_analysis()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\研究\data_analysic_agent\workflow\analysis_dimension.py", line 674, in run_analysis
+    self.preprocess_data()
+  File "D:\project\研究\data_analysic_agent\workflow\analysis_dimension.py", line 301, in preprocess_data
+    self.config = self._parse_config(self.config_json, list(self.df.columns))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\研究\data_analysic_agent\workflow\analysis_dimension.py", line 153, in _parse_config
+    config_dict = json.loads(config_json)
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\zhoujk2\AppData\Local\Programs\Python\Python312\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\zhoujk2\AppData\Local\Programs\Python\Python312\Lib\json\decoder.py", line 338, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\zhoujk2\AppData\Local\Programs\Python\Python312\Lib\json\decoder.py", line 354, in raw_decode
+    obj, end = self.scan_once(s, idx)
+               ^^^^^^^^^^^^^^^^^^^^^^
+json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+
+2025-06-04 16:44:02.334 | INFO     | __main__:<module>:15 - 正在进行了数据探索....
+2025-06-04 16:44:02.360 | INFO     | utils.utils:read_data:29 - 读取数据：D:\project\研究\data_analysic_agent\data\大学专业\school.csv
+2025-06-04 16:44:02.361 | INFO     | utils.utils:read_data:30 - 列名: ['学校', '省份', '城市', '地址', '水平层次', '办学类别', '办学类型', '985', '211', '双一流', '归属', '开设专业链接']
+2025-06-04 16:44:02.362 | INFO     | utils.utils:data_random_sample:46 - 成功读取随机抽样数据，显示前50行
+2025-06-04 16:44:02.366 | INFO     | workflow.data_explore:run:20 - 【开始运行】✅ 数据读取完成；读取到2856条有效数据
+2025-06-04 16:44:02.367 | INFO     | workflow.data_explore:run:55 - 数据分析维度生成完成，共 4 个维度
+2025-06-04 16:44:02.367 | INFO     | workflow.data_explore:run:58 - 正在分析维度.....
+2025-06-04 16:47:45.421 | INFO     | __main__:<module>:15 - 正在进行了数据探索....
+2025-06-04 16:47:45.445 | INFO     | utils.utils:read_data:29 - 读取数据：D:\project\研究\data_analysic_agent\data\大学专业\school.csv
+2025-06-04 16:47:45.445 | INFO     | utils.utils:read_data:30 - 列名: ['学校', '省份', '城市', '地址', '水平层次', '办学类别', '办学类型', '985', '211', '双一流', '归属', '开设专业链接']
+2025-06-04 16:47:45.446 | INFO     | utils.utils:data_random_sample:46 - 成功读取随机抽样数据，显示前50行
+2025-06-04 16:47:45.451 | INFO     | workflow.data_explore:run:20 - 【开始运行】✅ 数据读取完成；读取到2856条有效数据
+2025-06-04 16:47:45.451 | INFO     | workflow.data_explore:run:55 - 数据分析维度生成完成，共 4 个维度
+2025-06-04 16:47:45.451 | INFO     | workflow.data_explore:run:58 - 正在分析维度.....
+2025-06-04 16:47:45.453 | INFO     | workflow.analysis_dimension:preprocess_data:340 - 学校列的数据类型: object
+2025-06-04 16:47:45.454 | INFO     | workflow.analysis_dimension:preprocess_data:341 - 学校列的缺失值数量: 0
+2025-06-04 16:47:45.456 | INFO     | workflow.analysis_dimension:preprocess_data:342 - 学校列的前5个值: 0    河北轨道运输职业技术学院
+1            厦门大学
+2            四川大学
+3            武汉大学
+4            北京大学
+Name: 学校, dtype: object
+2025-06-04 16:47:45.458 | INFO     | workflow.analysis_dimension:preprocess_data:347 - 已将学校列转换为数值类型
+2025-06-04 16:47:45.459 | INFO     | workflow.analysis_dimension:preprocess_data:359 - 省份列的唯一值: ['河北' '福建' '四川' '湖北' '北京' '广东' '湖南' '江苏' '重庆' '浙江' '山东' '天津' '上海' '河南'
+ '吉林' '陕西' '辽宁' '海南' '江西' '黑龙江' '甘肃' '云南' '安徽' '山西' '广西' '贵州' '新疆' '内蒙古'
+ '宁夏' '青海' '西藏' '香港' '澳门']
+2025-06-04 16:47:45.459 | INFO     | workflow.analysis_dimension:preprocess_data:360 - 省份列的缺失值数量: 0
+2025-06-04 16:47:45.459 | INFO     | workflow.analysis_dimension:preprocess_data:365 - 数据预处理完成
+2025-06-04 16:53:14.389 | INFO     | __main__:<module>:15 - 正在进行了数据探索....
+2025-06-04 16:53:14.428 | INFO     | utils.utils:read_data:29 - 读取数据：D:\project\研究\data_analysic_agent\data\大学专业\school.csv
+2025-06-04 16:53:14.429 | INFO     | utils.utils:read_data:30 - 列名: ['学校', '省份', '城市', '地址', '水平层次', '办学类别', '办学类型', '985', '211', '双一流', '归属', '开设专业链接']
+2025-06-04 16:53:54.386 | INFO     | utils.utils:data_random_sample:46 - 成功读取随机抽样数据，显示前50行
+2025-06-04 16:53:54.393 | INFO     | workflow.data_explore:run:20 - 【开始运行】✅ 数据读取完成；读取到2856条有效数据
+2025-06-04 16:53:54.393 | INFO     | workflow.data_explore:run:55 - 数据分析维度生成完成，共 4 个维度
+2025-06-04 16:53:54.393 | INFO     | workflow.data_explore:run:58 - 正在分析维度.....
+2025-06-04 16:54:08.073 | INFO     | workflow.analysis_dimension:preprocess_data:340 - 学校列的数据类型: object
+2025-06-04 16:54:08.073 | INFO     | workflow.analysis_dimension:preprocess_data:341 - 学校列的缺失值数量: 0
+2025-06-04 16:54:08.073 | INFO     | workflow.analysis_dimension:preprocess_data:342 - 学校列的前5个值: 0    河北轨道运输职业技术学院
+1            厦门大学
+2            四川大学
+3            武汉大学
+4            北京大学
+Name: 学校, dtype: object
+2025-06-04 16:54:08.073 | INFO     | workflow.analysis_dimension:preprocess_data:347 - 已将学校列转换为数值类型
+2025-06-04 16:54:59.746 | INFO     | __main__:<module>:15 - 正在进行了数据探索....
+2025-06-04 16:54:59.771 | INFO     | utils.utils:read_data:29 - 读取数据：D:\project\研究\data_analysic_agent\data\大学专业\school.csv
+2025-06-04 16:54:59.772 | INFO     | utils.utils:read_data:30 - 列名: ['学校', '省份', '城市', '地址', '水平层次', '办学类别', '办学类型', '985', '211', '双一流', '归属', '开设专业链接']
+2025-06-04 16:54:59.773 | INFO     | utils.utils:data_random_sample:46 - 成功读取随机抽样数据，显示前50行
+2025-06-04 16:54:59.777 | INFO     | workflow.data_explore:run:20 - 【开始运行】✅ 数据读取完成；读取到2856条有效数据
+2025-06-04 16:54:59.777 | INFO     | workflow.data_explore:run:55 - 数据分析维度生成完成，共 4 个维度
+2025-06-04 16:54:59.777 | INFO     | workflow.data_explore:run:58 - 正在分析维度.....
+2025-06-04 16:54:59.780 | INFO     | workflow.analysis_dimension:preprocess_data:340 - 学校列的数据类型: object
+2025-06-04 16:54:59.781 | INFO     | workflow.analysis_dimension:preprocess_data:341 - 学校列的缺失值数量: 0
+2025-06-04 16:54:59.783 | INFO     | workflow.analysis_dimension:preprocess_data:342 - 学校列的前5个值: 0    河北轨道运输职业技术学院
+1            厦门大学
+2            四川大学
+3            武汉大学
+4            北京大学
+Name: 学校, dtype: object
+2025-06-04 16:54:59.785 | INFO     | workflow.analysis_dimension:preprocess_data:347 - 已将学校列转换为数值类型
+2025-06-04 17:21:25.324 | INFO     | __main__:<module>:15 - 正在进行了数据探索....
+2025-06-04 17:21:25.350 | INFO     | utils.utils:read_data:29 - 读取数据：D:\project\研究\data_analysic_agent\data\大学专业\school.csv
+2025-06-04 17:21:25.350 | INFO     | utils.utils:read_data:30 - 列名: ['学校', '省份', '城市', '地址', '水平层次', '办学类别', '办学类型', '985', '211', '双一流', '归属', '开设专业链接']
+2025-06-04 17:21:25.352 | INFO     | utils.utils:data_random_sample:46 - 成功读取随机抽样数据，显示前50行
+2025-06-04 17:21:25.357 | INFO     | workflow.data_explore:run:20 - 【开始运行】✅ 数据读取完成；读取到2856条有效数据
+2025-06-04 17:21:25.358 | INFO     | workflow.data_explore:run:55 - 数据分析维度生成完成，共 4 个维度
+2025-06-04 17:21:25.358 | INFO     | workflow.data_explore:run:58 - 正在分析维度.....
+2025-06-04 17:21:25.361 | INFO     | workflow.analysis_dimension:preprocess_data:340 - 学校列的数据类型: object
+2025-06-04 17:21:25.361 | INFO     | workflow.analysis_dimension:preprocess_data:341 - 学校列的缺失值数量: 0
+2025-06-04 17:21:25.364 | INFO     | workflow.analysis_dimension:preprocess_data:342 - 学校列的前5个值:
+ 0    河北轨道运输职业技术学院
+1            厦门大学
+2            四川大学
+3            武汉大学
+4            北京大学
+Name: 学校, dtype: object
+2025-06-04 17:21:25.364 | WARNING  | workflow.analysis_dimension:preprocess_data:352 - 警告: 转换学校列为数值类型时出错: could not convert string to float: '河北轨道运输职业技术学院'
+2025-06-04 17:23:23.473 | INFO     | __main__:<module>:15 - 正在进行了数据探索....
+2025-06-04 17:23:23.503 | INFO     | utils.utils:read_data:29 - 读取数据：D:\project\研究\data_analysic_agent\data\大学专业\school.csv
+2025-06-04 17:23:23.503 | INFO     | utils.utils:read_data:30 - 列名: ['学校', '省份', '城市', '地址', '水平层次', '办学类别', '办学类型', '985', '211', '双一流', '归属', '开设专业链接']
+2025-06-04 17:23:23.503 | INFO     | utils.utils:data_random_sample:46 - 成功读取随机抽样数据，显示前50行
+2025-06-04 17:23:23.503 | INFO     | workflow.data_explore:run:20 - 【开始运行】✅ 数据读取完成；读取到2856条有效数据
+2025-06-04 17:23:23.503 | INFO     | workflow.data_explore:run:55 - 数据分析维度生成完成，共 4 个维度
+2025-06-04 17:23:23.503 | INFO     | workflow.data_explore:run:58 - 正在分析维度.....
+2025-06-04 17:23:23.517 | INFO     | workflow.analysis_dimension:preprocess_data:340 - 学校列的数据类型: object
+2025-06-04 17:23:23.517 | INFO     | workflow.analysis_dimension:preprocess_data:341 - 学校列的缺失值数量: 0
+2025-06-04 17:23:23.519 | INFO     | workflow.analysis_dimension:preprocess_data:342 - 学校列的前5个值:
+ 0    河北轨道运输职业技术学院
+1            厦门大学
+2            四川大学
+3            武汉大学
+4            北京大学
+Name: 学校, dtype: object
+2025-06-04 17:23:23.519 | WARNING  | workflow.analysis_dimension:preprocess_data:352 - 警告: 转换学校列为数值类型时出错: could not convert string to float: '河北轨道运输职业技术学院'
+2025-06-04 17:23:23.521 | INFO     | workflow.analysis_dimension:preprocess_data:362 - 省份列的唯一值: ['河北' '福建' '四川' '湖北' '北京' '广东' '湖南' '江苏' '重庆' '浙江' '山东' '天津' '上海' '河南'
+ '吉林' '陕西' '辽宁' '海南' '江西' '黑龙江' '甘肃' '云南' '安徽' '山西' '广西' '贵州' '新疆' '内蒙古'
+ '宁夏' '青海' '西藏' '香港' '澳门']
+2025-06-04 17:23:23.521 | INFO     | workflow.analysis_dimension:preprocess_data:363 - 省份列的缺失值数量: 0
+2025-06-04 17:23:23.522 | INFO     | workflow.analysis_dimension:preprocess_data:368 - 数据预处理完成
+2025-06-04 17:23:23.522 | INFO     | workflow.analysis_dimension:analyze_dimension:413 - 开始分析维度: 省份分布统计
+2025-06-04 17:23:23.522 | INFO     | workflow.analysis_dimension:analyze_dimension:445 - 分组前数据样例:
+2025-06-04 17:23:23.523 | INFO     | workflow.analysis_dimension:analyze_dimension:446 -    省份            学校
+0  河北  河北轨道运输职业技术学院
+1  福建          厦门大学
+2  四川          四川大学
+3  湖北          武汉大学
+4  北京          北京大学
+2025-06-04 17:23:23.545 | INFO     | workflow.analysis_dimension:analyze_dimension:474 - 分组列: ['省份']
+2025-06-04 17:23:23.545 | INFO     | workflow.analysis_dimension:analyze_dimension:475 - 聚合方法: {'学校': 'count'}
+2025-06-04 17:23:23.550 | INFO     | workflow.analysis_dimension:analyze_dimension:487 - 分组聚合结果:
+2025-06-04 17:23:23.550 | INFO     | workflow.analysis_dimension:analyze_dimension:488 -      省份   学校
+0    上海   65
+1    云南   82
+2   内蒙古   56
+3    北京  102
+4    吉林   70
+5    四川  137
+6    天津   62
+7    宁夏   20
+8    安徽  128
+9    山东  160
+10   山西   85
+11   广东  163
+12   广西   85
+13   新疆   56
+14   江苏  174
+15   江西  108
+16   河北  126
+17   河南  158
+18   浙江  111
+19   海南   21
+20   湖北  134
+21   湖南  129
+22   澳门    5
+23   甘肃   52
+24   福建   90
+25   西藏    6
+26   贵州   77
+27   辽宁  110
+28   重庆   73
+29   陕西  104
+30   青海   12
+31   香港   14
+32  黑龙江   81
+2025-06-04 17:23:23.565 | INFO     | workflow.analysis_dimension:analyze_dimension:542 - 警告: 排序列 '学校_count' 不存在，跳过排序
+2025-06-04 17:26:14.549 | INFO     | __main__:<module>:15 - 正在进行了数据探索....
+2025-06-04 17:26:14.580 | INFO     | utils.utils:read_data:29 - 读取数据：D:\project\研究\data_analysic_agent\data\大学专业\school.csv
+2025-06-04 17:26:14.580 | INFO     | utils.utils:read_data:30 - 列名: ['学校', '省份', '城市', '地址', '水平层次', '办学类别', '办学类型', '985', '211', '双一流', '归属', '开设专业链接']
+2025-06-04 17:26:14.580 | INFO     | utils.utils:data_random_sample:46 - 成功读取随机抽样数据，显示前50行
+2025-06-04 17:26:14.580 | INFO     | workflow.data_explore:run:20 - 【开始运行】✅ 数据读取完成；读取到2856条有效数据
+2025-06-04 17:26:14.580 | INFO     | workflow.data_explore:run:55 - 数据分析维度生成完成，共 4 个维度
+2025-06-04 17:26:14.580 | INFO     | workflow.data_explore:run:58 - 正在分析维度.....
+2025-06-04 17:26:14.580 | INFO     | workflow.analysis_dimension:preprocess_data:340 - 学校列的数据类型: object
+2025-06-04 17:26:14.580 | INFO     | workflow.analysis_dimension:preprocess_data:341 - 学校列的缺失值数量: 0
+2025-06-04 17:26:14.580 | INFO     | workflow.analysis_dimension:preprocess_data:342 - 学校列的前5个值:
+ 0    河北轨道运输职业技术学院
+1            厦门大学
+2            四川大学
+3            武汉大学
+4            北京大学
+Name: 学校, dtype: object
+2025-06-04 17:26:14.580 | WARNING  | workflow.analysis_dimension:preprocess_data:352 - 警告: 转换学校列为数值类型时出错: could not convert string to float: '河北轨道运输职业技术学院'
+2025-06-04 17:26:14.580 | INFO     | workflow.analysis_dimension:preprocess_data:362 - 省份列的唯一值: ['河北' '福建' '四川' '湖北' '北京' '广东' '湖南' '江苏' '重庆' '浙江' '山东' '天津' '上海' '河南'
+ '吉林' '陕西' '辽宁' '海南' '江西' '黑龙江' '甘肃' '云南' '安徽' '山西' '广西' '贵州' '新疆' '内蒙古'
+ '宁夏' '青海' '西藏' '香港' '澳门']
+2025-06-04 17:26:14.580 | INFO     | workflow.analysis_dimension:preprocess_data:363 - 省份列的缺失值数量: 0
+2025-06-04 17:26:14.595 | INFO     | workflow.analysis_dimension:preprocess_data:368 - 数据预处理完成
+2025-06-04 17:26:14.595 | INFO     | workflow.analysis_dimension:analyze_dimension:413 - 开始分析维度: 省份分布统计
+2025-06-04 17:26:14.595 | INFO     | workflow.analysis_dimension:analyze_dimension:445 - 分组前数据样例:
+2025-06-04 17:26:14.595 | INFO     | workflow.analysis_dimension:analyze_dimension:446 -    省份            学校
+0  河北  河北轨道运输职业技术学院
+1  福建          厦门大学
+2  四川          四川大学
+3  湖北          武汉大学
+4  北京          北京大学
+2025-06-04 17:26:14.612 | INFO     | workflow.analysis_dimension:analyze_dimension:474 - 分组列: ['省份']
+2025-06-04 17:26:14.612 | INFO     | workflow.analysis_dimension:analyze_dimension:475 - 聚合方法: {'学校': 'count'}
+2025-06-04 17:26:14.627 | INFO     | workflow.analysis_dimension:analyze_dimension:487 - 分组聚合结果:
+2025-06-04 17:26:14.627 | INFO     | workflow.analysis_dimension:analyze_dimension:488 -      省份   学校
+0    上海   65
+1    云南   82
+2   内蒙古   56
+3    北京  102
+4    吉林   70
+5    四川  137
+6    天津   62
+7    宁夏   20
+8    安徽  128
+9    山东  160
+10   山西   85
+11   广东  163
+12   广西   85
+13   新疆   56
+14   江苏  174
+15   江西  108
+16   河北  126
+17   河南  158
+18   浙江  111
+19   海南   21
+20   湖北  134
+21   湖南  129
+22   澳门    5
+23   甘肃   52
+24   福建   90
+25   西藏    6
+26   贵州   77
+27   辽宁  110
+28   重庆   73
+29   陕西  104
+30   青海   12
+31   香港   14
+32  黑龙江   81
+2025-06-04 17:26:14.630 | INFO     | workflow.analysis_dimension:analyze_dimension:542 - 警告: 排序列 '学校_count' 不存在，跳过排序
+2025-06-04 17:26:31.355 | INFO     | workflow.analysis_dimension:preprocess_data:340 - 学校列的数据类型: object
+2025-06-04 17:26:31.355 | INFO     | workflow.analysis_dimension:preprocess_data:341 - 学校列的缺失值数量: 0
+2025-06-04 17:26:31.355 | INFO     | workflow.analysis_dimension:preprocess_data:342 - 学校列的前5个值:
+ 0    河北轨道运输职业技术学院
+1            厦门大学
+2            四川大学
+3            武汉大学
+4            北京大学
+Name: 学校, dtype: object
+2025-06-04 17:26:31.355 | WARNING  | workflow.analysis_dimension:preprocess_data:352 - 警告: 转换学校列为数值类型时出错: could not convert string to float: '河北轨道运输职业技术学院'
+2025-06-04 17:26:31.355 | INFO     | workflow.analysis_dimension:preprocess_data:362 - 办学类型列的唯一值: ['公办' '民办' '中外合作办学']
+2025-06-04 17:26:31.355 | INFO     | workflow.analysis_dimension:preprocess_data:363 - 办学类型列的缺失值数量: 0
+2025-06-04 17:26:31.355 | INFO     | workflow.analysis_dimension:preprocess_data:368 - 数据预处理完成
+2025-06-04 17:26:31.355 | INFO     | workflow.analysis_dimension:analyze_dimension:413 - 开始分析维度: 办学类型分布
+2025-06-04 17:26:31.355 | INFO     | workflow.analysis_dimension:analyze_dimension:445 - 分组前数据样例:
+2025-06-04 17:26:31.355 | INFO     | workflow.analysis_dimension:analyze_dimension:446 -   办学类型            学校
+0   公办  河北轨道运输职业技术学院
+1   公办          厦门大学
+2   公办          四川大学
+3   公办          武汉大学
+4   公办          北京大学
+2025-06-04 17:26:31.370 | INFO     | workflow.analysis_dimension:analyze_dimension:474 - 分组列: ['办学类型']
+2025-06-04 17:26:31.370 | INFO     | workflow.analysis_dimension:analyze_dimension:475 - 聚合方法: {'学校': 'count'}
+2025-06-04 17:26:31.370 | INFO     | workflow.analysis_dimension:analyze_dimension:487 - 分组聚合结果:
+2025-06-04 17:26:31.370 | INFO     | workflow.analysis_dimension:analyze_dimension:488 -      办学类型    学校
+0  中外合作办学    20
+1      公办  2072
+2      民办   764
+2025-06-04 17:26:31.399 | INFO     | workflow.analysis_dimension:analyze_dimension:542 - 警告: 排序列 '学校_count' 不存在，跳过排序
+2025-06-04 17:26:31.400 | INFO     | workflow.analysis_dimension:preprocess_data:340 - 办学类别列的数据类型: object
+2025-06-04 17:26:31.401 | INFO     | workflow.analysis_dimension:preprocess_data:341 - 办学类别列的缺失值数量: 30
+2025-06-04 17:26:31.402 | INFO     | workflow.analysis_dimension:preprocess_data:342 - 办学类别列的前5个值:
+ 0    理工类
+1    综合类
+2    综合类
+3    综合类
+4    综合类
+Name: 办学类别, dtype: object
+2025-06-04 17:26:31.402 | WARNING  | workflow.analysis_dimension:preprocess_data:352 - 警告: 转换办学类别列为数值类型时出错: could not convert string to float: '理工类'
+2025-06-04 17:26:31.403 | INFO     | workflow.analysis_dimension:preprocess_data:362 - 水平层次列的唯一值: ['专科（高职）' '普通本科']
+2025-06-04 17:26:31.403 | INFO     | workflow.analysis_dimension:preprocess_data:363 - 水平层次列的缺失值数量: 0
+2025-06-04 17:26:31.404 | INFO     | workflow.analysis_dimension:preprocess_data:368 - 数据预处理完成
+2025-06-04 17:26:31.404 | INFO     | workflow.analysis_dimension:analyze_dimension:413 - 开始分析维度: 水平层次与办学类别组合
+2025-06-04 17:26:31.404 | INFO     | workflow.analysis_dimension:analyze_dimension:445 - 分组前数据样例:
+2025-06-04 17:26:31.405 | INFO     | workflow.analysis_dimension:analyze_dimension:446 -      水平层次 办学类别
+0  专科（高职）  理工类
+1    普通本科  综合类
+2    普通本科  综合类
+3    普通本科  综合类
+4    普通本科  综合类
+2025-06-04 17:26:31.411 | INFO     | workflow.analysis_dimension:analyze_dimension:474 - 分组列: ['水平层次']
+2025-06-04 17:26:31.411 | INFO     | workflow.analysis_dimension:analyze_dimension:475 - 聚合方法: {'办学类别': 'value_counts'}
+2025-06-04 17:26:31.475 | ERROR    | workflow.data_explore:analysis_dimension:136 - 分析失败: 'DataAnalyzer' object has no attribute 'error'
+
+Traceback (most recent call last):
+  File "D:\project\研究\data_analysic_agent\workflow\analysis_dimension.py", line 484, in analyze_dimension
+    ).reset_index()
+      ^^^^^^^^^^^^^
+  File "C:\Users\zhoujk2\AppData\Local\Programs\Python\Python312\Lib\site-packages\pandas\core\frame.py", line 6472, in reset_index
+    new_obj.insert(
+  File "C:\Users\zhoujk2\AppData\Local\Programs\Python\Python312\Lib\site-packages\pandas\core\frame.py", line 5158, in insert
+    raise ValueError(f"cannot insert {column}, already exists")
+ValueError: cannot insert 办学类别, already exists
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\project\研究\data_analysic_agent\workflow\data_explore.py", line 103, in analysis_dimension
+    results = analyzer.run_analysis()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\研究\data_analysic_agent\workflow\analysis_dimension.py", line 685, in run_analysis
+    result = self.analyze_dimension(dim_config)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\研究\data_analysic_agent\workflow\analysis_dimension.py", line 501, in analyze_dimension
+    self.error(error_msg)
+    ^^^^^^^^^^
+AttributeError: 'DataAnalyzer' object has no attribute 'error'
+
+2025-06-04 17:26:31.486 | INFO     | workflow.analysis_dimension:preprocess_data:340 - 城市列的数据类型: object
+2025-06-04 17:26:31.486 | INFO     | workflow.analysis_dimension:preprocess_data:341 - 城市列的缺失值数量: 0
+2025-06-04 17:26:31.486 | INFO     | workflow.analysis_dimension:preprocess_data:342 - 城市列的前5个值:
+ 0    石家庄市
+1     厦门市
+2     成都市
+3     武汉市
+4     北京市
+Name: 城市, dtype: object
+2025-06-04 17:26:31.486 | WARNING  | workflow.analysis_dimension:preprocess_data:352 - 警告: 转换城市列为数值类型时出错: could not convert string to float: '石家庄市'
+2025-06-04 17:26:31.486 | INFO     | workflow.analysis_dimension:preprocess_data:340 - 学校列的数据类型: object
+2025-06-04 17:26:31.486 | INFO     | workflow.analysis_dimension:preprocess_data:341 - 学校列的缺失值数量: 0
+2025-06-04 17:26:31.491 | INFO     | workflow.analysis_dimension:preprocess_data:342 - 学校列的前5个值:
+ 0    河北轨道运输职业技术学院
+1            厦门大学
+2            四川大学
+3            武汉大学
+4            北京大学
+Name: 学校, dtype: object
+2025-06-04 17:26:31.491 | WARNING  | workflow.analysis_dimension:preprocess_data:352 - 警告: 转换学校列为数值类型时出错: could not convert string to float: '河北轨道运输职业技术学院'
+2025-06-04 17:26:31.492 | INFO     | workflow.analysis_dimension:preprocess_data:362 - 省份列的唯一值: ['河北' '福建' '四川' '湖北' '北京' '广东' '湖南' '江苏' '重庆' '浙江' '山东' '天津' '上海' '河南'
+ '吉林' '陕西' '辽宁' '海南' '江西' '黑龙江' '甘肃' '云南' '安徽' '山西' '广西' '贵州' '新疆' '内蒙古'
+ '宁夏' '青海' '西藏' '香港' '澳门']
+2025-06-04 17:26:31.492 | INFO     | workflow.analysis_dimension:preprocess_data:363 - 省份列的缺失值数量: 0
+2025-06-04 17:26:31.493 | INFO     | workflow.analysis_dimension:preprocess_data:368 - 数据预处理完成
+2025-06-04 17:26:31.493 | INFO     | workflow.analysis_dimension:analyze_dimension:413 - 开始分析维度: 省份与城市组合分布
+2025-06-04 17:26:31.493 | INFO     | workflow.analysis_dimension:analyze_dimension:445 - 分组前数据样例:
+2025-06-04 17:26:31.493 | INFO     | workflow.analysis_dimension:analyze_dimension:446 -    省份    城市            学校
+0  河北  石家庄市  河北轨道运输职业技术学院
+1  福建   厦门市          厦门大学
+2  四川   成都市          四川大学
+3  湖北   武汉市          武汉大学
+4  北京   北京市          北京大学
+2025-06-04 17:26:31.507 | INFO     | workflow.analysis_dimension:analyze_dimension:474 - 分组列: ['省份']
+2025-06-04 17:26:31.507 | INFO     | workflow.analysis_dimension:analyze_dimension:475 - 聚合方法: {'城市': 'nunique', '学校': 'count'}
+2025-06-04 17:26:31.525 | INFO     | workflow.analysis_dimension:analyze_dimension:487 - 分组聚合结果:
+2025-06-04 17:26:31.525 | INFO     | workflow.analysis_dimension:analyze_dimension:488 -      省份  城市   学校
+0    上海   1   65
+1    云南  14   82
+2   内蒙古  12   56
+3    北京   1  102
+4    吉林   9   70
+5    四川  21  137
+6    天津   1   62
+7    宁夏   4   20
+8    安徽  16  128
+9    山东  16  160
+10   山西  11   85
+11   广东  21  163
+12   广西  14   85
+13   新疆  15   56
+14   江苏  13  174
+15   江西  11  108
+16   河北  11  126
+17   河南  18  158
+18   浙江  11  111
+19   海南   3   21
+20   湖北  14  134
+21   湖南  14  129
+22   澳门   2    5
+23   甘肃  14   52
+24   福建   9   90
+25   西藏   2    6
+26   贵州   9   77
+27   辽宁  14  110
+28   重庆   1   73
+29   陕西  10  104
+30   青海   3   12
+31   香港   3   14
+32  黑龙江  13   81
+2025-06-04 17:26:31.526 | INFO     | workflow.analysis_dimension:analyze_dimension:542 - 警告: 排序列 '学校_count' 不存在，跳过排序
+2025-06-04 17:34:06.496 | INFO     | __main__:<module>:15 - 正在进行了数据探索....
+2025-06-04 17:34:06.542 | INFO     | utils.utils:read_data:29 - 读取数据：D:\project\研究\data_analysic_agent\data\大学专业\school.csv
+2025-06-04 17:34:06.542 | INFO     | utils.utils:read_data:30 - 列名: ['学校', '省份', '城市', '地址', '水平层次', '办学类别', '办学类型', '985', '211', '双一流', '归属', '开设专业链接']
+2025-06-04 17:34:06.542 | INFO     | utils.utils:data_random_sample:46 - 成功读取随机抽样数据，显示前50行
+2025-06-04 17:34:06.542 | INFO     | workflow.data_explore:run:20 - 【开始运行】✅ 数据读取完成；读取到2856条有效数据
+2025-06-04 17:34:06.542 | INFO     | workflow.data_explore:run:55 - 数据分析维度生成完成，共 4 个维度
+2025-06-04 17:34:06.542 | INFO     | workflow.data_explore:run:58 - 正在分析维度.....
+2025-06-04 17:34:06.557 | INFO     | workflow.analysis_dimension:preprocess_data:340 - 学校列的数据类型: object
+2025-06-04 17:34:06.557 | INFO     | workflow.analysis_dimension:preprocess_data:341 - 学校列的缺失值数量: 0
+2025-06-04 17:34:06.557 | INFO     | workflow.analysis_dimension:preprocess_data:342 - 学校列的前5个值:
+ 0    河北轨道运输职业技术学院
+1            厦门大学
+2            四川大学
+3            武汉大学
+4            北京大学
+Name: 学校, dtype: object
+2025-06-04 17:34:06.557 | WARNING  | workflow.analysis_dimension:preprocess_data:352 - 警告: 转换学校列为数值类型时出错: could not convert string to float: '河北轨道运输职业技术学院'
+2025-06-04 17:34:06.557 | INFO     | workflow.analysis_dimension:preprocess_data:362 - 省份列的唯一值: ['河北' '福建' '四川' '湖北' '北京' '广东' '湖南' '江苏' '重庆' '浙江' '山东' '天津' '上海' '河南'
+ '吉林' '陕西' '辽宁' '海南' '江西' '黑龙江' '甘肃' '云南' '安徽' '山西' '广西' '贵州' '新疆' '内蒙古'
+ '宁夏' '青海' '西藏' '香港' '澳门']
+2025-06-04 17:34:06.557 | INFO     | workflow.analysis_dimension:preprocess_data:363 - 省份列的缺失值数量: 0
+2025-06-04 17:34:06.557 | INFO     | workflow.analysis_dimension:preprocess_data:368 - 数据预处理完成
+2025-06-04 17:37:29.265 | INFO     | workflow.analysis_dimension:analyze_dimension:413 - 开始分析维度: 省份分布统计
