@@ -1,0 +1,4188 @@
+[
+  {
+    "name": "get_further_contents",
+    "description": "从指定的URL检索详细内容。此工具旨在抓取并提供网页的全面信息，包括文本、图像和其他媒体，使用户对内容有更深入的了解。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "request_url": {
+          "type": "string",
+          "description": "指定要检索详细内容的网页URL。"
+        }
+      },
+      "required": [
+        "request_url"
+      ]
+    }
+  },
+  {
+    "name": "get_nobel_results",
+    "description": "获取诺贝尔奖获奖者详细信息，包括年份、类别、获奖者及其贡献。此工具可用于高效查找特定的诺贝尔奖数据。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "year": {
+          "type": "string",
+          "description": "指定要搜索的诺贝尔奖年份。"
+        },
+        "nobelPrizeCategory": {
+          "type": "string",
+          "description": "从以下选项中选择诺贝尔奖类别：化学（che）、经济学（eco）、文学（lit）、和平（pea）、物理学（phy）和医学（med）。"
+        }
+      },
+      "required": [
+        "year",
+        "nobelPrizeCategory"
+      ]
+    }
+  },
+  {
+    "name": "google_events_search",
+    "description": "根据指定位置搜索事件。此工具检索给定位置发生的事件的详细信息，对于查找本地事件、会议、音乐会等非常有用。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "输入要搜索事件的位置名称，例如 'New York' 或 'San Francisco'"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "wiki_search",
+    "description": "搜索特定实体的详细和相关信息，从维基百科中获取全面的信息，包括历史事实、定义和相关主题，以提供对输入实体的深入了解。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "entity": {
+          "type": "string",
+          "description": "输入查询的关键词或短语。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "如有需要，提供用于认证的API密钥。"
+        }
+      },
+      "required": [
+        "entity"
+      ]
+    }
+  },
+  {
+    "name": "google_autocomplete_search",
+    "description": "使用谷歌自动补全功能自动完成搜索查询。此工具帮助用户预测和推荐搜索词，提高其搜索过程的效率和准确性。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "输入要完成的关键词或短语。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供用于认证的API密钥。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "google_related_question_search",
+    "description": "检索与提供的搜索词相关的其他用户在Google上提出的问题和查询。此工具有助于了解与特定主题或产品相关的常见问题和关注点，从而帮助做出更明智的决策和内容创作。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "指定要搜索相关问题的关键词或短语。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供您的API密钥进行身份验证。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "google_patents_search",
+    "description": "在Google上搜索与提供的查询相关的专利。此工具帮助用户找到有关专利的详细信息，包括描述、发明者和申请日期，以支持研究、创新和知识产权分析。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "输入要搜索的专利的关键词或短语。查询应具体，可以包括地点、发明者或技术术语。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供访问Google专利服务的API密钥。这是可选的，但推荐用于认证和更高频率的搜索。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "google_local_services_search",
+    "description": "根据特定关键词和提供的位置搜索本地服务。此工具帮助用户高效地找到附近的服务，例如餐厅、汽车维修店或美容院。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "输入您想查找的服务关键词，例如 '披萨' 或 '汽车维修'"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供用于身份验证的API密钥"
+        },
+        "location": {
+          "type": "string",
+          "description": "指定要查找附近服务的位置，例如 '纽约' 或 '洛杉矶'"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "google_scholar_search",
+    "description": "在Google Scholar中搜索学术论文、论文和相关学术内容。您可以通过作者、来源和特定年份来细化搜索，还可以执行被引用搜索。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "定义搜索查询。使用类似'author:'或'source:'的辅助器来细化搜索。如果使用'cites'，则'query'变为可选。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供您的API密钥进行身份验证。"
+        },
+        "cites": {
+          "type": "string",
+          "description": "定义文章的唯一ID以执行'被引用'搜索。例如：'cites=1275980731835430123'。使用'cites'与'query'一起搜索引用文章。"
+        },
+        "as_ylo": {
+          "type": "string",
+          "description": "设置搜索结果的起始年份。例如：'as_ylo=2018'将排除2018年之前的搜索结果。可以与'as_yhi'结合使用。"
+        },
+        "num": {
+          "type": "string",
+          "description": "设置要返回的最大结果数，最多20个。默认为10。例如：'num=20'返回20个结果。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "baidu_search",
+    "description": "执行百度搜索引擎的搜索查询，百度是中国领先的搜索引擎之一。此工具根据提供的查询返回搜索结果列表，帮助用户从大量网络内容中找到相关信息。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "提供您要在百度上搜索的查询字符串。"
+        },
+        "num_results": {
+          "type": "integer",
+          "description": "指定要返回的搜索结果数量。如未提供，默认为10。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "google_search",
+    "description": "在谷歌搜索引擎上执行搜索查询。谷歌是全球最受欢迎的搜索引擎，它根据查询字符串返回指定数量的搜索结果，并支持指定搜索结果的显示语言。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "指定要在谷歌上使用的搜索查询字符串。"
+        },
+        "num_results": {
+          "type": "integer",
+          "description": "指定要返回的搜索结果数量。默认为10。"
+        },
+        "language": {
+          "type": "string",
+          "description": "指定搜索结果的显示语言，例如，'en'表示英语或'zh'表示中文。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "bing_search",
+    "description": "在必应搜索引擎上执行搜索查询。此工具根据提供的查询检索结果列表，允许自定义结果数量并应用特定过滤器以细化搜索。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "输入您想在必应上搜索的查询字符串。"
+        },
+        "num_results": {
+          "type": "integer",
+          "description": "指定要返回的搜索结果数量。默认为10。"
+        },
+        "filters": {
+          "type": "string",
+          "description": "应用搜索结果过滤器。例如，使用 'site:.edu' 可将结果限制在教育域名内。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "duckduckgo_search",
+    "description": "执行DuckDuckGo搜索引擎的搜索查询，这是一个注重隐私的搜索引擎。此工具提供搜索结果列表，同时确保用户隐私和数据保护。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "输入您想在DuckDuckGo上搜索的查询字符串。"
+        },
+        "num_results": {
+          "type": "integer",
+          "description": "指定要返回的搜索结果数量。默认为10。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "duckduckgo",
+    "description": "一个强调用户隐私的互联网搜索引擎，通过不个性化搜索结果来避免过滤泡影。它支持各种搜索操作符以进行高级查询。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "engine": {
+          "type": "string",
+          "description": "设置为 'duckduckgo' 以使用 DuckDuckGo API 引擎。"
+        },
+        "q": {
+          "type": "string",
+          "description": "定义搜索的查询内容。使用任何有效的搜索词或操作符（例如，inurl:, site:, intitle:）。"
+        },
+        "kl": {
+          "type": "string",
+          "description": "使用地区代码指定搜索区域（例如，us-en 为美国，uk-en 为英国）。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供 SerpApi 私钥进行身份验证。"
+        }
+      },
+      "required": [
+        "engine",
+        "q",
+        "api_key"
+      ]
+    }
+  },
+  {
+    "name": "naver_search",
+    "description": "在领先的韩国搜索引擎Naver上执行搜索查询。该工具根据提供的查询返回指定数量的搜索结果，帮助用户高效地找到相关信息。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "输入您想在Naver上搜索的查询字符串。"
+        },
+        "num_results": {
+          "type": "integer",
+          "description": "指定要返回的搜索结果数量。默认为10。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "yahoo_search",
+    "description": "在Yahoo上执行搜索查询，Yahoo是一家历史悠久、提供全面搜索引擎的互联网公司。此工具返回与提供的查询相关的结果列表，使用户能够访问Yahoo搜索索引中的广泛信息。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "指定要在Yahoo上搜索的查询字符串。"
+        },
+        "num_results": {
+          "type": "integer",
+          "description": "设置要返回的搜索结果数量。默认为10。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "yelp_search",
+    "description": "在Yelp平台上执行搜索查询，Yelp是一个本地商业评论平台，并返回与搜索标准匹配的商业列表。此工具可以帮助用户找到本地商业，阅读评论，并获取详细信息，如营业时间、联系方式和评分。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "指定搜索查询，例如商业类型、服务或产品。"
+        },
+        "location": {
+          "type": "string",
+          "description": "指定搜索的位置或城市。"
+        },
+        "num_results": {
+          "type": "integer",
+          "description": "指定要返回的搜索结果数量。默认为10。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "bing_news_search",
+    "description": "在Bing上执行针对新闻文章的搜索。此工具根据提供的搜索查询返回相关结果，允许用户通过类别筛选并指定返回的文章数量。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "指定Bing新闻的新闻相关查询字符串。"
+        },
+        "num_results": {
+          "type": "integer",
+          "description": "设置要返回的新闻文章数量。默认为10。"
+        },
+        "category": {
+          "type": "string",
+          "description": "通过类别筛选新闻文章，例如'科技'、'政治'或'健康'。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "baidu_news_search",
+    "description": "在百度新闻上执行有针对性的新闻文章搜索。此工具允许用户根据特定查询检索与新闻相关的结果，并提供指定返回结果数量和新闻类别的选项。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "指定搜索的新闻相关查询字符串。"
+        },
+        "num_results": {
+          "type": "integer",
+          "description": "设置要返回的新闻文章数量。默认为10。"
+        },
+        "category": {
+          "type": "string",
+          "description": "在特定的新闻类别内进行搜索，例如'政治'、'科技'或'财经'。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "bing_image_search",
+    "description": "在Bing上执行特定于图像的搜索查询。根据搜索查询返回图像结果列表。非常适合用于寻找高质量、相关的图像，例如研究、内容创作等。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "指定搜索的图像相关查询字符串。"
+        },
+        "num_results": {
+          "type": "integer",
+          "description": "设置要返回的图像结果数量。默认为10。"
+        },
+        "filters": {
+          "type": "string",
+          "description": "对图像搜索结果应用过滤器，例如 'size:large' 或 'type:photo'。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "yahoo_image_search",
+    "description": "在Yahoo上执行图像搜索查询。根据提供的搜索查询检索图像结果列表，可以选择指定结果数量并应用过滤器。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "输入您想在Yahoo图像上搜索的图像相关查询字符串。"
+        },
+        "num_results": {
+          "type": "integer",
+          "description": "指定要返回的图像结果数量。默认为10。"
+        },
+        "filters": {
+          "type": "string",
+          "description": "对图像搜索结果应用过滤器，例如 'size:medium' 或 'type:illustration'。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "yandex_videos_search",
+    "description": "在Yandex上执行有针对性的视频搜索。根据提供的搜索查询返回视频结果列表。此工具非常适合寻找Yandex上特定视频内容的用户。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "输入您想在Yandex视频上找到的视频内容的搜索词或短语。"
+        },
+        "num_results": {
+          "type": "integer",
+          "description": "指定要返回的视频结果数量。默认为10。"
+        },
+        "filters": {
+          "type": "string",
+          "description": "应用过滤器以细化搜索结果。例如，'duration:long' 或 'quality:high'。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "youtube_search",
+    "description": "在YouTube上执行搜索查询并返回视频结果列表。该工具允许用户使用过滤器精炼搜索结果并指定要返回的结果数量，非常适合快速高效地找到相关内容。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "输入YouTube的搜索查询字符串。"
+        },
+        "num_results": {
+          "type": "integer",
+          "description": "指定要返回的视频结果数量。默认为10。"
+        },
+        "filters": {
+          "type": "string",
+          "description": "应用过滤器以精炼搜索结果，例如 'type:channel' 或 'duration:short'。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "bing_shopping_search",
+    "description": "执行Bing购物搜索，从各种在线零售商那里检索产品信息和定价。此工具有助于比较价格和找到产品上的最佳交易。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "输入要搜索的产品关键词或短语。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供您的API密钥进行身份验证。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "ebay_search",
+    "description": "在eBay上根据提供的查询进行搜索的工具。此工具返回产品列表、价格和其他相关信息，帮助用户做出明智的购买决策。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "输入要搜索eBay产品的关键词或短语。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供用于验证请求的API密钥（可选）。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "yahoo_shopping_search",
+    "description": "在Yahoo购物上进行搜索，根据提供的关键词或短语查找产品。此工具帮助用户找到相关产品，并在Yahoo购物上的不同卖家之间比较价格。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "输入要搜索的产品关键词或短语。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供用于身份验证的API密钥。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "walmart_search",
+    "description": "从沃尔玛平台检索并显示搜索结果，包括产品列表和评论，使用SerpApi服务。此工具支持各种过滤器，如价格范围、商店位置和配送选项，以细化搜索结果。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "定义搜索查询，就像在沃尔玛网站上一样。"
+        },
+        "sort": {
+          "type": "string",
+          "description": "指定结果的排序顺序（例如，price_low、price_high、best_seller、best_match、rating_high、new）。"
+        },
+        "grid": {
+          "type": "string",
+          "description": "选择展示格式：网格（默认）或列表。"
+        },
+        "store_id": {
+          "type": "string",
+          "description": "通过特定商店ID筛选产品。请参阅沃尔玛商店位置以获取支持的商店列表。"
+        },
+        "min_price": {
+          "type": "string",
+          "description": "设置价格范围的最低限。"
+        },
+        "max_price": {
+          "type": "string",
+          "description": "设置价格范围的最高限。"
+        },
+        "nd_en": {
+          "type": "string",
+          "description": "仅显示具有NextDay配送的产品。设置为true启用，默认为false禁用。"
+        },
+        "page": {
+          "type": "string",
+          "description": "指定要检索的结果页码。默认为1。最大为100，每页40个结果。"
+        },
+        "limit": {
+          "type": "string",
+          "description": "设置每次调用返回的结果数量。默认为5。"
+        },
+        "offset": {
+          "type": "string",
+          "description": "设置要跳过的结果数量。默认为0。"
+        },
+        "device": {
+          "type": "string",
+          "description": "选择结果使用的设备类型：桌面（默认）、平板电脑或手机。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供要使用的SerpApi私钥。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "walmart_review_search",
+    "description": "搜索沃尔玛产品的详细评论。此工具根据提供的查询从沃尔玛数据库中获取并返回评论。它通过提供关于产品质量、客户满意度和其他相关反馈的见解，帮助用户做出明智的决定。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "输入关键词或短语以搜索评论。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供您的API密钥进行身份验证。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "yelp_reviews_search",
+    "description": "检索Yelp上列出的企业的详细评论。搜索使用关键词或短语进行，可用于收集客户反馈和做出明智的购买决策。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "输入要搜索评论的关键词或短语。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供您的API密钥进行身份验证。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "get_wolfram_results",
+    "description": "获取Wolfram Alpha查询结果。此工具可用于从数学、物理等多个领域获取计算和事实信息。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "appid": {
+          "type": "string",
+          "description": "提供您的Wolfram Alpha API密钥。"
+        },
+        "query": {
+          "type": "string",
+          "description": "指定搜索查询。"
+        },
+        "includepodid": {
+          "type": "string",
+          "description": "设置为'result'以在响应中包含pod ID。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "google_trends_search",
+    "description": "从Google Trends检索和分析搜索趋势数据。此工具允许用户抓取搜索结果，通过位置、类别和时间段探索趋势主题和模式。它非常适合分析搜索行为和识别流行趋势。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "定义您想要搜索的查询或查询。对于'Interest over time'和'Compared breakdown by region'数据类型，您可以使用最多5个查询。对于其他数据类型，只允许一个查询。"
+        },
+        "geo": {
+          "type": "string",
+          "description": "定义搜索的位置。如果未指定，默认为全球。有关受支持的选项，请参阅Google Trends Locations。"
+        },
+        "region": {
+          "type": "string",
+          "description": "指定区域以获得更详细的结果。使用'COUNTRY'、'REGION'、'DMA'或'CITY'。默认值取决于'geo'参数。适用于'Compared breakdown by region'和'Interest by region'数据类型。"
+        },
+        "data_type": {
+          "type": "string",
+          "description": "定义搜索类型。选项：'TIMESERIES'（默认）、'GEO_MAP'、'GEO_MAP_0'、'RELATED_TOPICS'、'RELATED_QUERIES'。"
+        },
+        "tz": {
+          "type": "string",
+          "description": "定义时区。默认为420（太平洋标准时间）。值范围从-1439到1439分钟。"
+        },
+        "cat": {
+          "type": "string",
+          "description": "定义搜索类别。默认为0（所有类别）。有关受支持的选项，请参阅Google Trends Categories。"
+        },
+        "gprop": {
+          "type": "string",
+          "description": "定义排序结果的属性。默认为'web'。其他选项：'images'、'news'、'froogle'、'youtube'。"
+        },
+        "date": {
+          "type": "string",
+          "description": "定义日期范围。选项：'now 1-H'、'now 4-H'、'now 1-d'、'now 7-d'、'today 1-m'、'today 3-m'、'today 12-m'、'today 5-y'、'all'。自定义范围：'yyyy-mm-dd yyyy-mm-dd'或'yyyy-mm-ddThh yyyy-mm-ddThh'在一周内。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "定义要使用的SerpApi私有密钥。"
+        },
+        "limit": {
+          "type": "string",
+          "description": "每次调用返回的结果数。默认为5。"
+        },
+        "offset": {
+          "type": "string",
+          "description": "要跳过的结果数。默认为0。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "google_trends_autocomplete_search",
+    "description": "从Google Trends搜索页面检索和抓取建议搜索，以探索热门主题和模式。此工具非常适合分析搜索行为和识别流行趋势。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "定义您想要搜索的查询。使用您在常规Google Trends搜索中使用的相同术语来检索建议搜索。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供用于访问Google Trends数据的SerpApi私有密钥。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "current_weather",
+    "description": "使用OpenWeatherMap API获取指定位置的当前天气信息。此工具提供实时天气数据，包括温度、湿度、风速等。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "type": "string",
+          "description": "指定要获取当前天气信息的位置（例如，伦敦，GB）。"
+        },
+        "apikey": {
+          "type": "string",
+          "description": "提供访问OpenWeatherMap API所需的API密钥。"
+        }
+      },
+      "required": [
+        "location"
+      ]
+    }
+  },
+  {
+    "name": "forecast",
+    "description": "提供天气预报的API方法，可预测最多14天的天气情况，包括每日和每小时的天气条件、天文数据和指定位置的天气警报。数据以JSON格式返回，包含温度、降水、风速等详细信息。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "q": {
+          "type": "string",
+          "description": "指定要获取预报的位置。使用以下格式之一：1. 纬度和经度（十进制度数）例如：q=48.8567,2.3508，2. 城市名称例如：q=Paris，3. 美国邮编例如：q=10001，4. 英国邮政编码例如：q=SW1，5. 加拿大邮政编码例如：q=G2J，6. METAR代码例如：q=metar:EGLL，7. IATA代码例如：q=iata:DXB，8. 自动IP查找例如：q=auto:ip，9. IP地址（支持IPv4和IPv6）例如：q=100.0.0.1。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "您的API密钥用于身份验证。"
+        },
+        "lang": {
+          "type": "string",
+          "description": "指定API响应中'condition:text'字段的语言。"
+        },
+        "days": {
+          "type": "string",
+          "description": "指定所需的预报天数。值必须在1到14之间。如果不提供，则只返回今天的天气。"
+        },
+        "dt": {
+          "type": "string",
+          "description": "将预报限制在特定日期，格式为yyyy-MM-dd。日期必须在今天和接下来的14天之间。"
+        },
+        "unixdt": {
+          "type": "string",
+          "description": "使用Unix时间戳将预报限制在特定日期。时间戳必须对应于今天和接下来的14天之间的日期。使用'dt'或'unixdt'之一，不要同时使用。"
+        },
+        "alerts": {
+          "type": "string",
+          "description": "在预报输出中禁用天气警报。"
+        },
+        "aqi": {
+          "type": "string",
+          "description": "在预报输出中启用或禁用空气质量指数数据。"
+        },
+        "tp": {
+          "type": "string",
+          "description": "检索预报的15分钟间隔数据。仅适用于企业客户。"
+        },
+        "hour": {
+          "type": "string",
+          "description": "将预报限制在一天中的特定小时。使用24小时制，例如，17表示下午5点，6表示上午6点。"
+        }
+      },
+      "required": [
+        "q",
+        "days",
+        "aqi"
+      ]
+    }
+  },
+  {
+    "name": "history",
+    "description": "获取指定位置和日期的历史天气数据。数据包括天文细节、日天气预报和每小时天气信息。可用的数据取决于您的价格计划，免费计划仅限于过去七天，付费计划提供从2010年1月1日以来的数据。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "q": {
+          "type": "string",
+          "description": "指定获取天气数据的位置。选项包括：纬度和经度（例如，q=48.8567,2.3508）、城市名称（例如，q=Paris）、美国邮编（例如，q=10001）、英国邮政编码（例如，q=SW1）、加拿大邮政编码（例如，q=G2J）、METAR代码（例如，q=metar:EGLL）、IATA代码（例如，q=iata:DXB）、IP查询（例如，q=auto:ip）或IP地址（例如，q=100.0.0.1）。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "您的API密钥用于身份验证。"
+        },
+        "lang": {
+          "type": "string",
+          "description": "指定API响应中'condition:text'字段的语言。"
+        },
+        "dt": {
+          "type": "string",
+          "description": "指定历史数据的开始日期，格式为yyyy-MM-dd（例如，dt=2010-01-01）。日期必须在2010年1月1日或之后。"
+        },
+        "unixdt": {
+          "type": "string",
+          "description": "指定历史数据的开始日期为Unix时间戳。日期必须在2010年1月1日或之后。使用'dt'或'unixdt'中的一个，不要同时使用。"
+        },
+        "end_dt": {
+          "type": "string",
+          "description": "指定历史数据的结束日期，格式为yyyy-MM-dd（例如，end_dt=2010-01-31）。日期必须在2010年1月1日或之后，并且不能超过开始日期后的30天。仅适用于Pro计划及以上。"
+        },
+        "endunix_dt": {
+          "type": "string",
+          "description": "指定历史数据的结束日期为Unix时间戳。日期必须在2010年1月1日或之后，并且不能超过开始日期后的30天。使用'end_dt'或'endunix_dt'中的一个，不要同时使用。仅适用于Pro计划及以上。"
+        },
+        "tp": {
+          "type": "string",
+          "description": "请求历史数据的15分钟间隔数据。仅适用于企业客户。"
+        },
+        "hour": {
+          "type": "string",
+          "description": "将历史数据限制在给定日期的特定小时。使用24小时制（例如，hour=17为下午5点）。"
+        }
+      },
+      "required": [
+        "q",
+        "dt"
+      ]
+    }
+  },
+  {
+    "name": "marine",
+    "description": "海洋天气API提供最多7天的海洋和航海天气预报以及潮汐数据，具体取决于您的价格计划。它以JSON或XML格式返回数据，包括天文数据、每日天气预报、每小时天气信息和指定海或洋点的潮汐数据。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "q": {
+          "type": "string",
+          "description": "指定需要天气数据的位置。选项包括：纬度和经度、城市名称、美国邮政编码、英国邮政编码、加拿大邮政编码、METAR代码、IATA机场代码、auto:ip用于IP查找或IP地址。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "您的API密钥用于认证。"
+        },
+        "lang": {
+          "type": "string",
+          "description": "设置API响应中'condition:text'字段的语言。"
+        },
+        "tide": {
+          "type": "string",
+          "description": "在海洋API输出中启用或禁用潮汐数据。仅适用于pro+计划。"
+        }
+      },
+      "required": [
+        "q"
+      ]
+    }
+  },
+  {
+    "name": "future",
+    "description": "返回指定日期（今天起14至300天之间）的3小时间隔天气数据。此API方法适用于长期天气规划和预测。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "q": {
+          "type": "string",
+          "description": "指定获取天气数据的位置。选项包括：纬度和经度、城市名称、美国邮政编码、英国邮政编码、加拿大邮政编码、METAR代码、IATA代码、自动IP查找或IP地址。"
+        },
+        "dt": {
+          "type": "string",
+          "description": "指定未来天气数据的日期，格式为yyyy-MM-dd。日期必须在今天起14至300天之间。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供您的API密钥进行身份验证。"
+        },
+        "lang": {
+          "type": "string",
+          "description": "指定响应中'condition:text'字段的语言。"
+        }
+      },
+      "required": [
+        "q",
+        "dt"
+      ]
+    }
+  },
+  {
+    "name": "search",
+    "description": "返回与查询匹配的Location对象数组。查询可以基于各种参数，如纬度和经度、城市名称、美国邮编、英国邮政编码、加拿大邮政编码、METAR代码、IATA代码、IP地址或自动IP查找。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "q": {
+          "type": "string",
+          "description": "指定位置查询参数。选项包括：1. 纬度和经度（十进制度）例如，q=48.8567,2.3508 2. 城市名称例如，q=巴黎 3. 美国邮编例如，q=10001 4. 英国邮政编码例如，q=SW1 5. 加拿大邮政编码例如，q=G2J 6. METAR代码例如，q=metar:EGLL 7. IATA代码例如，q=iata:DXB 8. 自动IP查找例如，q=auto:ip 9. IP地址（支持IPv4和IPv6）例如，q=100.0.0.1"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供您的API密钥进行身份验证。"
+        },
+        "lang": {
+          "type": "string",
+          "description": "指定API响应中'condition:text'字段的语言。"
+        }
+      },
+      "required": [
+        "q"
+      ]
+    }
+  },
+  {
+    "name": "ip_lookup",
+    "description": "该IP查询API方法可以获取IP地址的最新信息，包括位置、天气和其他相关数据，支持JSON或XML格式。此工具适用于需要基于IP地址进行地理位置和天气数据查询的应用。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "q": {
+          "type": "string",
+          "description": "指定查询参数以获取数据。选项包括：纬度和经度（例如，q=48.8567,2.3508）、城市名称（例如，q=Paris）、美国邮编（例如，q=10001）、英国邮政编码（例如，q=SW1）、加拿大邮政编码（例如，q=G2J）、METAR代码（例如，q=metar:EGLL）、IATA代码（例如，q=iata:DXB）、IP查询（例如，q=auto:ip）或IP地址（例如，q=100.0.0.1）。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供您的API密钥进行身份验证。"
+        },
+        "lang": {
+          "type": "string",
+          "description": "指定API响应中'condition:text'字段的语言。"
+        }
+      },
+      "required": [
+        "q"
+      ]
+    }
+  },
+  {
+    "name": "astronomy_info",
+    "description": "获取日出、日落、月升、月落、月相和照度等最新天文学信息的工具。此工具特别适用于需要精确天文学数据的应用。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "q": {
+          "type": "string",
+          "description": "指定获取天文学数据的位置。选项包括：1. 纬度和经度（十进制度数）例如：q=48.8567,2.3508，2. 城市名称例如：q=Paris，3. 美国邮编例如：q=10001，4. 英国邮政编码例如：q=SW1，5. 加拿大邮政编码例如：q=G2J，6. metar:<metar code>例如：q=metar:EGLL，7. iata:<3位机场代码>例如：q=iata:DXB，8. auto:ip进行IP查询例如：q=auto:ip，9. IP地址（支持IPv4和IPv6）例如：q=100.0.0.1。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供您的API密钥以验证请求。"
+        },
+        "lang": {
+          "type": "string",
+          "description": "指定API响应中'condition:text'字段的语言。"
+        }
+      },
+      "required": [
+        "q"
+      ]
+    }
+  },
+  {
+    "name": "time_zone",
+    "description": "获取指定位置或IP地址的最新时区和本地时间信息，以JSON格式返回。此工具支持包括城市名称、坐标、邮政编码和IP地址在内的各种查询方法。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "q": {
+          "type": "string",
+          "description": "指定要获取时区和本地时间信息的位置或IP地址。支持的格式包括：纬度和经度、城市名称、美国邮政编码、英国邮政编码、加拿大邮政编码、METAR代码、IATA机场代码和IP地址（IPv4或IPv6）。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供您的API密钥进行身份验证。"
+        },
+        "lang": {
+          "type": "string",
+          "description": "指定API响应中'condition:text'字段的语言。"
+        }
+      },
+      "required": [
+        "q"
+      ]
+    }
+  },
+  {
+    "name": "sports",
+    "description": "获取所有即将发生的足球、板球和高尔夫运动赛事的列表，无论提供的查询参数是什么，都以JSON格式返回。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "q": {
+          "type": "string",
+          "description": "指定查询参数以获取天气数据。选项包括：纬度和经度、城市名称、美国邮编、英国邮政编码、加拿大邮政编码、METAR代码、IATA代码、IP查询或IP地址。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供您的API密钥进行身份验证。"
+        },
+        "lang": {
+          "type": "string",
+          "description": "设置API响应中'condition:text'字段的语言。"
+        }
+      },
+      "required": [
+        "q"
+      ]
+    }
+  },
+  {
+    "name": "get_news_everything",
+    "description": "根据关键词检索全球新闻文章，可按日期、排序顺序、搜索字段和语言进行筛选。此工具允许进行详细和有针对性的新闻检索，非常适合深入研究实时信息收集。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "type": "string",
+          "description": "提供您的NewsAPI.org API密钥。"
+        },
+        "q": {
+          "type": "string",
+          "description": "指定要搜索的文章标题和正文中的关键词或短语。"
+        },
+        "searchIn": {
+          "type": "string",
+          "description": "将搜索词'q'限制在特定的字段中：标题、描述或内容。"
+        },
+        "sources": {
+          "type": "string",
+          "description": "指定要搜索的新闻来源标识符的逗号分隔列表（最多20个）。"
+        },
+        "domains": {
+          "type": "string",
+          "description": "将搜索限制在特定的域名列表中（例如，bbc.co.uk，techcrunch.com）。"
+        },
+        "excludeDomains": {
+          "type": "string",
+          "description": "排除来自特定域名列表的文章（例如，bbc.co.uk，techcrunch.com）。"
+        },
+        "from_date": {
+          "type": "string",
+          "description": "设置最旧的文章日期，格式为ISO 8601（例如，2023-08-13或2023-08-13T05:32:40）。"
+        },
+        "to_date": {
+          "type": "string",
+          "description": "设置最新的文章日期，格式为ISO 8601（例如，2023-08-13或2023-08-13T05:32:40）。"
+        },
+        "language": {
+          "type": "string",
+          "description": "使用两位字母ISO-639-1代码选择新闻的语言（例如，ar，de，en，es，fr，he，it，nl，no，pt，ru，sv，ud，zh）。"
+        },
+        "sortBy": {
+          "type": "string",
+          "description": "选择按以下顺序排序文章：相关性、流行度或发布时间。"
+        },
+        "pageSize": {
+          "type": "string",
+          "description": "设置每页返回的结果数量。默认值：2。最大值：100。"
+        },
+        "page": {
+          "type": "string",
+          "description": "浏览结果。"
+        }
+      },
+      "required": [
+        "api_key",
+        "q"
+      ]
+    }
+  },
+  {
+    "name": "get_news_headlines",
+    "description": "获取特定国家、类别、单个来源或多个来源的实时头条新闻。可选地，使用关键词搜索文章。文章按最早发布日期排序。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "type": "string",
+          "description": "提供您的NewsAPI.org API密钥。"
+        },
+        "country": {
+          "type": "string",
+          "description": "指定用于头条新闻的国家的2字母ISO 3166-1代码。"
+        },
+        "category": {
+          "type": "string",
+          "description": "选择用于头条新闻的类别。"
+        },
+        "sources": {
+          "type": "string",
+          "description": "列出新闻来源或博客的标识符，用逗号分隔。"
+        },
+        "q": {
+          "type": "string",
+          "description": "输入关键词或短语进行搜索。"
+        },
+        "pageSize": {
+          "type": "string",
+          "description": "设置每页返回的结果数量。默认值：2。最大值：100。"
+        },
+        "page": {
+          "type": "string",
+          "description": "使用此参数遍历结果。"
+        }
+      },
+      "required": [
+        "api_key",
+        "country"
+      ]
+    }
+  },
+  {
+    "name": "get_news_headlines_sources",
+    "description": "获取提供头条新闻的新闻出版商列表。此工具允许您通过国家、类别和语言筛选来源，以获取最相关的新闻出版商。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "type": "string",
+          "description": "提供您的NewsAPI.org API密钥。"
+        },
+        "country": {
+          "type": "string",
+          "description": "指定2位ISO 3166-1国家代码，以获取特定国家的头条新闻。"
+        },
+        "category": {
+          "type": "string",
+          "description": "选择您想要检索的新闻头条类别。选项：business（商业）、entertainment（娱乐）、general（综合）、health（健康）、science（科学）、sports（体育）、technology（技术）。"
+        },
+        "language": {
+          "type": "string",
+          "description": "选择头条新闻的2位ISO-639-1语言代码。选项：ar（阿拉伯语）、de（德语）、en（英语）、es（西班牙语）、fr（法语）、he（希伯来语）、it（意大利语）、nl（荷兰语）、no（挪威语）、pt（葡萄牙语）、ru（俄语）、sv（瑞典语）、ud（未知）、zh（中文）。"
+        }
+      },
+      "required": [
+        "api_key",
+        "country",
+        "category",
+        "language"
+      ]
+    }
+  },
+  {
+    "name": "get_news_list",
+    "description": "获取来自不同来源和地区的金融新闻文章列表。此工具适用于需要最新金融新闻进行分析、研究或了解市场趋势的用户。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "region": {
+          "type": "string",
+          "description": "选择一个地区以过滤新闻文章。允许的值：美国（US）、巴西（BR）、澳大利亚（AU）、加拿大（CA）、法国（FR）、德国（DE）、香港（HK）、印度（IN）、意大利（IT）、西班牙（ES）、英国（GB）、新加坡（SG）。"
+        },
+        "snippetCount": {
+          "type": "int",
+          "description": "指定每个响应中返回的新闻文章数量。这对于分页很有用。"
+        }
+      },
+      "required": [
+        "region",
+        "snippetCount"
+      ]
+    }
+  },
+  {
+    "name": "get_news_articles",
+    "description": "搜索与航天相关的文章和信息。此工具允许用户根据各种标准检索特定文章，例如事件、发射、新闻网站、发布日期等。它是航天爱好者和研究人员的宝贵资源。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "event": {
+          "type": "string",
+          "description": "使用其Launch Library 2 ID搜索与特定事件相关的文档。"
+        },
+        "has_event": {
+          "type": "string",
+          "description": "获取与相关事件相关的文档。"
+        },
+        "has_launch": {
+          "type": "string",
+          "description": "获取与相关发射相关的文档。"
+        },
+        "launch": {
+          "type": "string",
+          "description": "使用其Launch Library 2 ID搜索与特定发射相关的文档。"
+        },
+        "limit": {
+          "type": "string",
+          "description": "指定每页返回的结果数量。"
+        },
+        "news_site": {
+          "type": "string",
+          "description": "搜索来自特定新闻网站的文档。提供以逗号分隔的新闻网站名称列表（不区分大小写）。"
+        },
+        "offset": {
+          "type": "string",
+          "description": "设置从哪个初始索引开始返回结果。"
+        },
+        "ordering": {
+          "type": "string",
+          "description": "指定用于排序结果的字段。"
+        },
+        "published_at_gt": {
+          "type": "string",
+          "description": "获取发布时间在给定ISO8601时间戳之后的文档（不包括）。"
+        },
+        "published_at_gte": {
+          "type": "string",
+          "description": "获取发布时间在给定ISO8601时间戳之后的文档（包括）。"
+        },
+        "published_at_lt": {
+          "type": "string",
+          "description": "获取发布时间在给定ISO8601时间戳之前的文档（不包括）。"
+        },
+        "published_at_lte": {
+          "type": "string",
+          "description": "获取发布时间在给定ISO8601时间戳之前的文档（包括）。"
+        },
+        "search": {
+          "type": "string",
+          "description": "搜索标题或摘要中包含特定短语的文档。"
+        },
+        "summary_contains": {
+          "type": "string",
+          "description": "搜索摘要中包含特定短语的文档。"
+        },
+        "summary_contains_all": {
+          "type": "string",
+          "description": "搜索摘要中包含逗号分隔的关键词列表中所有关键词的文档。"
+        },
+        "summary_contains_one": {
+          "type": "string",
+          "description": "搜索摘要中至少包含逗号分隔的关键词列表中的一个关键词的文档。"
+        },
+        "title_contains": {
+          "type": "string",
+          "description": "搜索标题中包含特定短语的文档。"
+        },
+        "title_contains_all": {
+          "type": "string",
+          "description": "搜索标题中包含逗号分隔的关键词列表中所有关键词的文档。"
+        },
+        "title_contains_one": {
+          "type": "string",
+          "description": "搜索标题中至少包含逗号分隔的关键词列表中的一个关键词的文档。"
+        },
+        "updated_at_gt": {
+          "type": "string",
+          "description": "获取更新时间在给定ISO8601时间戳之后的文档（不包括）。"
+        },
+        "updated_at_gte": {
+          "type": "string",
+          "description": "获取更新时间在给定ISO8601时间戳之后的文档（包括）。"
+        },
+        "updated_at_lt": {
+          "type": "string",
+          "description": "获取更新时间在给定ISO8601时间戳之前的文档（不包括）。"
+        },
+        "updated_at_lte": {
+          "type": "string",
+          "description": "获取更新时间在给定ISO8601时间戳之前的文档（包括）。"
+        }
+      },
+      "required": []
+    }
+  },
+  {
+    "name": "get_news_articles_by_id",
+    "description": "通过文章的唯一ID检索特定航天相关新闻文章的详细信息。此工具是Space_News工具集的一部分，旨在提供关于太空探索和相关主题的全面和最新信息。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "提供要检索的文章的唯一标识符。"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "get_news_blogs",
+    "description": "搜索与航天相关的博客。此工具允许用户检索与太空探索相关的文章、报告和其他内容，为爱好者和研究人员提供详细信息和见解。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "event": {
+          "type": "string",
+          "description": "使用其Launch Library 2 ID搜索与特定事件相关的文档。"
+        },
+        "has_event": {
+          "type": "string",
+          "description": "获取与相关事件相关的文档。"
+        },
+        "has_launch": {
+          "type": "string",
+          "description": "获取与相关发射相关的文档。"
+        },
+        "launch": {
+          "type": "string",
+          "description": "使用其Launch Library 2 ID搜索与特定发射相关的文档。"
+        },
+        "limit": {
+          "type": "string",
+          "description": "指定每页返回的结果数量。"
+        },
+        "news_site": {
+          "type": "string",
+          "description": "搜索来自特定新闻网站的文档。提供以逗号分隔的新闻网站名称列表（不区分大小写）。"
+        },
+        "offset": {
+          "type": "string",
+          "description": "设置从哪个初始索引开始返回结果。"
+        },
+        "ordering": {
+          "type": "string",
+          "description": "指定排序结果时使用的字段。"
+        },
+        "published_at_gt": {
+          "type": "string",
+          "description": "获取发布时间在给定ISO8601时间戳之后的文档（不包括）。"
+        },
+        "published_at_gte": {
+          "type": "string",
+          "description": "获取发布时间在给定ISO8601时间戳之后的文档（包括）。"
+        },
+        "published_at_lt": {
+          "type": "string",
+          "description": "获取发布时间在给定ISO8601时间戳之前的文档（不包括）。"
+        },
+        "published_at_lte": {
+          "type": "string",
+          "description": "获取发布时间在给定ISO8601时间戳之前的文档（包括）。"
+        },
+        "search": {
+          "type": "string",
+          "description": "搜索标题或摘要中包含特定短语的文档。"
+        },
+        "summary_contains": {
+          "type": "string",
+          "description": "搜索摘要中包含特定短语的文档。"
+        },
+        "summary_contains_all": {
+          "type": "string",
+          "description": "搜索摘要中包含逗号分隔的关键字列表中所有关键字的文档。"
+        },
+        "summary_contains_one": {
+          "type": "string",
+          "description": "搜索摘要中至少包含逗号分隔的关键字列表中的一个关键字的文档。"
+        },
+        "title_contains": {
+          "type": "string",
+          "description": "搜索标题中包含特定短语的文档。"
+        },
+        "title_contains_all": {
+          "type": "string",
+          "description": "搜索标题中包含逗号分隔的关键字列表中所有关键字的文档。"
+        },
+        "title_contains_one": {
+          "type": "string",
+          "description": "搜索标题中至少包含逗号分隔的关键字列表中的一个关键字的文档。"
+        },
+        "updated_at_gt": {
+          "type": "string",
+          "description": "获取更新时间在给定ISO8601时间戳之后的文档（不包括）。"
+        },
+        "updated_at_gte": {
+          "type": "string",
+          "description": "获取更新时间在给定ISO8601时间戳之后的文档（包括）。"
+        },
+        "updated_at_lt": {
+          "type": "string",
+          "description": "获取更新时间在给定ISO8601时间戳之前的文档（不包括）。"
+        },
+        "updated_at_lte": {
+          "type": "string",
+          "description": "获取更新时间在给定ISO8601时间戳之前的文档（包括）。"
+        }
+      },
+      "required": []
+    }
+  },
+  {
+    "name": "get_news_blogs_by_id",
+    "description": "通过提供唯一的ID检索与航天相关的特定博客文章。此工具用于访问特定航天文章、博客或报告的详细信息。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "提供博客文章的唯一标识符。"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "get_news_info",
+    "description": "获取与太空飞行新闻相关的详细信息文章。此工具允许用户通过提供相关搜索词或ID来搜索特定的新闻条目，对于太空爱好者和研究人员来说是一个宝贵的资源。",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": []
+    }
+  },
+  {
+    "name": "get_news_reports",
+    "description": "搜索并检索与航天相关的新闻报道。此工具允许用户通过发布日期、新闻来源和标题或摘要中的特定关键词等不同标准筛选和排序新闻文章、博客和报告。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "string",
+          "description": "设置每页返回的结果数量。"
+        },
+        "news_site": {
+          "type": "string",
+          "description": "通过新闻网站筛选文档。提供以逗号分隔的新闻网站名称列表（不区分大小写）。"
+        },
+        "offset": {
+          "type": "string",
+          "description": "设置从哪个初始索引开始返回结果。"
+        },
+        "ordering": {
+          "type": "string",
+          "description": "指定用于排序结果的字段。"
+        },
+        "published_at_gt": {
+          "type": "string",
+          "description": "检索在给定ISO8601时间戳之后发布的文档（不包括）。"
+        },
+        "published_at_gte": {
+          "type": "string",
+          "description": "检索在给定ISO8601时间戳之后发布的文档（包括）。"
+        },
+        "published_at_lt": {
+          "type": "string",
+          "description": "检索在给定ISO8601时间戳之前发布的文档（不包括）。"
+        },
+        "published_at_lte": {
+          "type": "string",
+          "description": "检索在给定ISO8601时间戳之前发布的文档（包括）。"
+        },
+        "search": {
+          "type": "string",
+          "description": "搜索标题或摘要中包含特定短语的文档。"
+        },
+        "summary_contains": {
+          "type": "string",
+          "description": "搜索摘要中包含特定短语的文档。"
+        },
+        "summary_contains_all": {
+          "type": "string",
+          "description": "搜索摘要包含逗号分隔的关键词列表中所有关键词的文档。"
+        },
+        "summary_contains_one": {
+          "type": "string",
+          "description": "搜索摘要包含逗号分隔的关键词列表中至少一个关键词的文档。"
+        },
+        "title_contains": {
+          "type": "string",
+          "description": "搜索标题中包含特定短语的文档。"
+        },
+        "title_contains_all": {
+          "type": "string",
+          "description": "搜索标题包含逗号分隔的关键词列表中所有关键词的文档。"
+        },
+        "title_contains_one": {
+          "type": "string",
+          "description": "搜索标题包含逗号分隔的关键词列表中至少一个关键词的文档。"
+        },
+        "updated_at_gt": {
+          "type": "string",
+          "description": "检索在给定ISO8601时间戳之后更新的文档（不包括）。"
+        },
+        "updated_at_gte": {
+          "type": "string",
+          "description": "检索在给定ISO8601时间戳之后更新的文档（包括）。"
+        },
+        "updated_at_lt": {
+          "type": "string",
+          "description": "检索在给定ISO8601时间戳之前更新的文档（不包括）。"
+        },
+        "updated_at_lte": {
+          "type": "string",
+          "description": "检索在给定ISO8601时间戳之前更新的文档（包括）。"
+        }
+      },
+      "required": []
+    }
+  },
+  {
+    "name": "get_news_reports_by_id",
+    "description": "通过唯一的ID检索详细的航天新闻报告。此工具允许用户访问关于太空探索的特定文章、博客和报告，对于太空爱好者和研究人员来说是一个宝贵的资源。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "提供要检索的报告的唯一ID。"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "arxiv_query",
+    "description": "通过主题或论文ID在arXiv上搜索学术论文。指定要返回的结果数量以进行更精确的搜索。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "search_query": {
+          "type": "string",
+          "description": "指定要搜索的论文主题。"
+        },
+        "id_list": {
+          "type": "string",
+          "description": "提供以逗号分隔的论文ID列表进行搜索。"
+        },
+        "start": {
+          "type": "string",
+          "description": "设置要返回的最小结果数量。"
+        },
+        "max_results": {
+          "type": "string",
+          "description": "设置要返回的最大结果数量。"
+        }
+      },
+      "required": [
+        "search_query"
+      ]
+    }
+  },
+  {
+    "name": "get_paper_complete",
+    "description": "支持通过提供与部分查询匹配的论文的少量信息进行交互式查询补全。此工具特别适用于缩小搜索结果并快速找到相关学术论文。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "输入纯文本部分查询字符串。查询将被截断为前100个字符。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "get_papers_by_keywords",
+    "description": "根据特定关键词和多种搜索过滤器检索论文。此工具旨在通过允许用户找到包含详细信息的相关论文（包括论文ID、URL、年份和作者列表）来方便学术和研究目的。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "输入纯文本搜索查询。不支持特殊查询语法。用空格替换连字符以获得更好的匹配效果。"
+        },
+        "fields": {
+          "type": "string",
+          "description": "指定要返回的字段列表，字段之间用逗号分隔。"
+        },
+        "publicationTypes": {
+          "type": "string",
+          "description": "通过出版类型过滤结果。有效选项：Review、JournalArticle、CaseReport、ClinicalTrial、Dataset、Editorial、LettersAndComments、MetaAnalysis、News、Study、Book、BookSection。使用逗号分隔列表以指定多个类型。"
+        },
+        "openAccessPdf": {
+          "type": "string",
+          "description": "限制结果只包含公开PDF的论文。"
+        },
+        "year": {
+          "type": "string",
+          "description": "限制结果只包含特定范围内的出版年份（包含）。"
+        },
+        "venue": {
+          "type": "string",
+          "description": "通过场所过滤结果。您可以使用ISO4缩写。"
+        },
+        "fieldsOfStudy": {
+          "type": "string",
+          "description": "限制结果只包含特定的研究领域。有效选项：计算机科学、医学、化学等。使用s2FieldsOfStudy论文字段。"
+        },
+        "offset": {
+          "type": "string",
+          "description": "从该位置开始结果列表。默认为0。偏移量和限制的总和必须小于10000。"
+        },
+        "limit": {
+          "type": "string",
+          "description": "设置要返回的最大结果数。默认为100。必须小于或等于100。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "get_paper_details",
+    "description": "检索特定学术论文的详细信息，包括其唯一标识符、URL、出版年份和作者列表。此工具对于深入文献综述和学术研究至关重要。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "paper_id": {
+          "type": "string",
+          "description": "提供论文的唯一ID以检索其详细信息。"
+        },
+        "fields": {
+          "type": "string",
+          "description": "指定要返回的字段，字段之间用逗号分隔（例如，'paperId,url,year,authors'）。"
+        }
+      },
+      "required": [
+        "paper_id"
+      ]
+    }
+  },
+  {
+    "name": "get_author_by_name",
+    "description": "通过作者名称搜索作者列表。结果中的每位作者都包含其唯一的作者ID和名称，使用户能够探索作者的出版作品和详细资料。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "输入要搜索的作者名称。避免使用连字符术语；将连字符替换为空格以获得更好的结果。"
+        },
+        "offset": {
+          "type": "string",
+          "description": "指定结果列表的起始位置。默认为0。偏移量和限制的总和必须小于10000。"
+        },
+        "limit": {
+          "type": "string",
+          "description": "指定要返回的最大结果数。默认为100。必须小于或等于100。"
+        },
+        "fields": {
+          "type": "string",
+          "description": "要在响应中包含的字段列表，用逗号分隔。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "get_author_details",
+    "description": "获取作者详细信息，包括其出版物、所属机构和其他相关数据。此工具专门设计用于支持深入的学术研究和文献综述，通过提供全面的作者档案。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "author_id": {
+          "type": "string",
+          "description": "指定作者的唯一ID。"
+        },
+        "fields": {
+          "type": "string",
+          "description": "选择要包含在响应中的特定字段，字段名之间用逗号分隔。"
+        }
+      },
+      "required": [
+        "author_id"
+      ]
+    }
+  },
+  {
+    "name": "get_author_papers",
+    "description": "检索特定作者发表的文章列表，包括限制结果数量、指定起始点和选择返回特定字段的功能。此工具适用于学术研究、文献综述和收集作者作品的详细信息。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "author_id": {
+          "type": "string",
+          "description": "提供作者的唯一标识符。"
+        },
+        "offset": {
+          "type": "string",
+          "description": "指定结果列表中的起始位置。默认为0。偏移量和限制的总和必须小于10000。"
+        },
+        "limit": {
+          "type": "string",
+          "description": "设置要返回的最大结果数量。默认为100。必须小于或等于100。"
+        },
+        "fields": {
+          "type": "string",
+          "description": "选择要返回的结果中的字段。提供字段名称的逗号分隔列表。"
+        }
+      },
+      "required": [
+        "author_id",
+        "fields"
+      ]
+    }
+  },
+  {
+    "name": "pubmed_query_run",
+    "description": "搜索并检索与物理学、数学、计算机科学、定量生物学、定量金融、统计学、电气工程和经济学相关的PubMed.org科学文章。此工具允许用户通过查询相关科学文献来回答具体问题。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "指定搜索查询以找到相关科学文章。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "current_date",
+    "description": "获取当前日期，包括年、月、日信息。此工具属于实时搜索下的日历类别，旨在提供准确和最新的日期信息。",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": []
+    }
+  },
+  {
+    "name": "available_countries",
+    "description": "获取所有支持查询的国家列表。此工具提供必要信息，以确保您能够访问您感兴趣的国家数据和详细信息。",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": []
+    }
+  },
+  {
+    "name": "country_info",
+    "description": "获取指定国家的详细信息，包括国家名称、时区、货币以及其他相关数据。此工具还可以提供指定国家的公共假日和长周末信息。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "countryCode": {
+          "type": "string",
+          "description": "指定要查询的国家代码。"
+        }
+      },
+      "required": [
+        "countryCode"
+      ]
+    }
+  },
+  {
+    "name": "long_weekend",
+    "description": "获取指定国家的长周末（连续两天以上的假期），包括组成长周末的假期的日期和详细信息。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "year": {
+          "type": "string",
+          "description": "指定要获取长周末的年份。"
+        },
+        "countryCode": {
+          "type": "string",
+          "description": "提供要获取长周末的国家代码。"
+        }
+      },
+      "required": [
+        "year",
+        "countryCode"
+      ]
+    }
+  },
+  {
+    "name": "public_holidays",
+    "description": "获取指定国家和年份的公共假日。此工具提供关于每个假日的详细信息，包括假日的名称和日期。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "year": {
+          "type": "string",
+          "description": "指定要查询的年份。"
+        },
+        "countryCode": {
+          "type": "string",
+          "description": "指定要查询的国家代码。"
+        }
+      },
+      "required": [
+        "year",
+        "countryCode"
+      ]
+    }
+  },
+  {
+    "name": "next_public_holidays",
+    "description": "返回指定国家未来365天内即将到来的公共假期的列表，包括假期的名称和日期。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "countryCode": {
+          "type": "string",
+          "description": "指定要查询的国家代码。"
+        }
+      },
+      "required": [
+        "countryCode"
+      ]
+    }
+  },
+  {
+    "name": "next_public_holidays_worldwide",
+    "description": "返回未来7天内全球或特定国家的即将到来的公共假日列表，包括假日名称和日期。",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": []
+    }
+  },
+  {
+    "name": "job_search",
+    "description": "根据公司名称和职位名称搜索职位。此工具允许用户查找特定的职位列表，并提供详细的职位描述、薪资范围和职位要求等信息，以协助求职过程。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "company": {
+          "type": "string",
+          "description": "指定您感兴趣的公司名称。"
+        },
+        "job_title": {
+          "type": "string",
+          "description": "指定您要寻找的职位名称。"
+        }
+      },
+      "required": [
+        "company",
+        "job_title"
+      ]
+    }
+  },
+  {
+    "name": "estimated_salary",
+    "description": "查询基于指定位置的职位薪资估计范围。此工具帮助用户了解特定地区特定角色的潜在收入，有助于求职和薪资谈判。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "type": "string",
+          "description": "指定薪资估计的位置（例如，'New York'）。"
+        },
+        "job_title": {
+          "type": "string",
+          "description": "输入薪资估计的职位（例如，'Software Engineer'）。"
+        }
+      },
+      "required": [
+        "location",
+        "job_title"
+      ]
+    }
+  },
+  {
+    "name": "company_salary",
+    "description": "查询公司内特定职位的薪资范围。此工具帮助用户了解特定角色的薪酬，有助于薪资谈判和求职申请。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "company": {
+          "type": "string",
+          "description": "指定公司名称。"
+        },
+        "job_title": {
+          "type": "string",
+          "description": "指定职位名称。"
+        }
+      },
+      "required": [
+        "company",
+        "job_title"
+      ]
+    }
+  },
+  {
+    "name": "get_google_autocomplete",
+    "description": "谷歌自动补全API提供针对给定搜索查询的建议，模拟搜索引擎中的自动填充功能。它通过提供实时搜索建议来增强用户体验。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "engine": {
+          "type": "string",
+          "description": "设置为google_autocomplete以使用谷歌自动补全API引擎。"
+        },
+        "q": {
+          "type": "string",
+          "description": "定义要获取补全选项的搜索查询词。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供SerpApi私有密钥进行身份验证。"
+        }
+      },
+      "required": [
+        "engine",
+        "q",
+        "api_key"
+      ]
+    }
+  },
+  {
+    "name": "calculator",
+    "description": "一个通用的计算器，设计用于执行基本的算术运算，如加法、减法、乘法、除法和指数运算。它适用于从学生到专业人士的广泛用户，他们需要快速准确的计算。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "input_query": {
+          "type": "string",
+          "description": "要计算的计算表达式。这应该是一个有效的数学表达式，包含数字和运算符。"
+        }
+      },
+      "required": [
+        "input_query"
+      ]
+    }
+  },
+  {
+    "name": "newton_calculator",
+    "description": "一个强大的工具，用于执行高级数学计算，包括简化、因式分解、微分、积分、求根、求切线、求曲线下的面积以及三角和对数运算。它支持广泛的数学问题，并提供准确的结果、可视化以及详细解释，用于教育、研究和工程目的。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "operation": {
+          "type": "string",
+          "description": "指定要执行的计算数学运算。支持的运算包括：'simplify'（简化）、'factor'（因式分解）、'derive'（微分）、'integrate'（积分）、'zeroes'（求根）、'tangent'（求切线）、'area'（求面积）、'cos'（余弦）、'sin'（正弦）、'tan'（正切）、'arccos'（反余弦）、'arcsin'（反正弦）、'arctan'（反正切）、'abs'（绝对值）、'log'（对数）。"
+        },
+        "expression": {
+          "type": "string",
+          "description": "要计算的计算数学表达式。对于求切线，格式为 'c|f(x)'，其中 'c' 是 x 的值。对于求曲线下的面积，格式为 'c:d|f(x)'，其中 'c' 和 'd' 是起始和结束的 x 值。对于分数，使用 'numerator(over)denominator' 格式。"
+        }
+      },
+      "required": [
+        "operation",
+        "expression"
+      ]
+    }
+  },
+  {
+    "name": "wolfram_alpha_calculator",
+    "description": "计算数学表达式并解决各种科学问题，支持使用自然语言进行广泛的数学和科学查询，包括算术、代数、几何、微积分、线性代数、单位转换、统计分析以及物理定律的应用。它提供准确的结果、可视化效果和详细解释，但不支持开放式的、主观的问题解决。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "input_query": {
+          "type": "string",
+          "description": "要解决或计算的数学表达式或科学问题的自然语言描述。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "用于验证和使用工具的API密钥。"
+        }
+      },
+      "required": [
+        "input_query",
+        "api_key"
+      ]
+    }
+  },
+  {
+    "name": "send",
+    "description": "发送电子邮件给指定的收件人。此工具允许您编写并发送单个电子邮件，包括添加主题、内容和抄送收件人的功能。可选的服务器认证可以提供登录凭据。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "to_email": {
+          "type": "string",
+          "description": "指定收件人的电子邮件地址。"
+        },
+        "subject": {
+          "type": "string",
+          "description": "设置电子邮件的主题。"
+        },
+        "content": {
+          "type": "string",
+          "description": "编写电子邮件的主要内容。"
+        },
+        "cc": {
+          "type": "string",
+          "description": "添加抄送收件人的电子邮件地址。"
+        },
+        "login_email": {
+          "type": "string",
+          "description": "提供服务器登录的电子邮件地址。"
+        },
+        "login_password": {
+          "type": "string",
+          "description": "提供服务器登录的密码。"
+        }
+      },
+      "required": [
+        "to_email",
+        "subject",
+        "content"
+      ]
+    }
+  },
+  {
+    "name": "send_list",
+    "description": "发送电子邮件给一组收件人。此函数旨在通过允许用户同时向多个收件人发送单个电子邮件来提高沟通效率和效果。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "to_email_list": {
+          "type": "string",
+          "description": "指定收件人的电子邮件地址，用逗号分隔。"
+        },
+        "subject": {
+          "type": "string",
+          "description": "设置电子邮件的主题。"
+        },
+        "content": {
+          "type": "string",
+          "description": "编写电子邮件的内容。"
+        },
+        "cc": {
+          "type": "string",
+          "description": "指定要抄送电子邮件地址，用逗号分隔。"
+        },
+        "login_email": {
+          "type": "string",
+          "description": "提供用于登录电子邮件服务器的电子邮件地址。"
+        },
+        "login_password": {
+          "type": "string",
+          "description": "提供用于登录电子邮件服务器的POP3密码。"
+        }
+      },
+      "required": [
+        "to_email_list",
+        "subject",
+        "content"
+      ]
+    }
+  },
+  {
+    "name": "recieve_latest",
+    "description": "从电子邮件服务器获取最新电子邮件。此工具有助于快速访问最新电子邮件，而无需手动检查收件箱。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "login_email": {
+          "type": "string",
+          "description": "提供用于登录电子邮件服务器的电子邮件地址。"
+        },
+        "login_password": {
+          "type": "string",
+          "description": "提供用于登录电子邮件服务器的密码（POP3）。"
+        }
+      },
+      "required": [
+        "login_email",
+        "login_password"
+      ]
+    }
+  },
+  {
+    "name": "recieve_id",
+    "description": "从邮件服务器检索指定ID的电子邮件。此函数用于直接访问特定电子邮件，确保高效和有针对性的邮件管理。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "指定要检索的电子邮件ID。"
+        },
+        "login_email": {
+          "type": "string",
+          "description": "提供用于登录邮件服务器的电子邮件地址。"
+        },
+        "login_password": {
+          "type": "string",
+          "description": "提供用于登录邮件服务器的密码（POP3）。"
+        }
+      },
+      "required": [
+        "id",
+        "login_email",
+        "login_password"
+      ]
+    }
+  },
+  {
+    "name": "recieve_list",
+    "description": "从电子邮件服务器检索电子邮件列表。此工具允许用户通过主题、发件人和电子邮件服务器的登录凭据过滤电子邮件。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subject": {
+          "type": "string",
+          "description": "通过主题过滤电子邮件。"
+        },
+        "sender": {
+          "type": "string",
+          "description": "通过发件人的电子邮件地址过滤电子邮件。"
+        },
+        "login_email": {
+          "type": "string",
+          "description": "提供用于登录电子邮件服务器的电子邮件地址。"
+        },
+        "login_password": {
+          "type": "string",
+          "description": "提供用于登录电子邮件服务器的密码（POP3）。"
+        }
+      },
+      "required": [
+        "login_email",
+        "login_password"
+      ]
+    }
+  },
+  {
+    "name": "lodgingProducts",
+    "description": "检索指定位置附近的住宿资源，如酒店、度假村和其他住宿设施。此功能帮助旅行者在旅行期间找到合适的住宿地点。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "destination": {
+          "type": "string",
+          "description": "指定目的地，可以是城市、地址、机场或地标。"
+        },
+        "exhibit_maxnum": {
+          "type": "string",
+          "description": "设置要显示的住宿选项数量。默认为3。"
+        },
+        "serpapi_key": {
+          "type": "string",
+          "description": "提供SerpApi私钥进行认证。"
+        }
+      },
+      "required": [
+        "destination"
+      ]
+    }
+  },
+  {
+    "name": "flightProducts",
+    "description": "检索两个指定城市之间的详细航班信息和选项，包括出发和返回日期、乘客数量以及要显示的最大航班选项数。此工具有助于高效地计划和预订航班。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "origin": {
+          "type": "string",
+          "description": "指定出发城市。"
+        },
+        "destination": {
+          "type": "string",
+          "description": "指定到达城市。"
+        },
+        "departureDate": {
+          "type": "string",
+          "description": "指定出发日期，格式为 'yyyy-mm-dd'。必须是未来日期。默认：明天。"
+        },
+        "adult_num": {
+          "type": "string",
+          "description": "指定成人乘客数量。默认：1。"
+        },
+        "exhibit_maxnum": {
+          "type": "string",
+          "description": "指定要显示的最大航班选项数。默认：3。"
+        },
+        "amadeus_api_key": {
+          "type": "string",
+          "description": "提供Amadeus API的API密钥进行认证。"
+        },
+        "amadeus_api_secret": {
+          "type": "string",
+          "description": "提供Amadeus API的API密钥进行认证。"
+        }
+      },
+      "required": [
+        "origin",
+        "destination"
+      ]
+    }
+  },
+  {
+    "name": "landscapeProducts",
+    "description": "检索并提供指定目的地的景点详细信息。此功能对希望探索和规划游览景点的旅行者非常有用。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "destination": {
+          "type": "string",
+          "description": "指定您想检索景点信息的城市或目的地。"
+        },
+        "exhibit_maxnum": {
+          "type": "string",
+          "description": "设置要显示的景点最大数量。默认为3。"
+        },
+        "serpapi_key": {
+          "type": "string",
+          "description": "提供用于API请求的SerpApi私有密钥。"
+        }
+      },
+      "required": [
+        "destination"
+      ]
+    }
+  },
+  {
+    "name": "carProducts",
+    "description": "根据指定取车地点，此工具返回附近的汽车租赁选项列表。它旨在简化寻找和比较汽车租赁服务的过程，使旅行物流更加便捷。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "pickup_location": {
+          "type": "string",
+          "description": "指定汽车租赁取车地点的城市名称或位置。"
+        },
+        "exhibit_maxnum": {
+          "type": "string",
+          "description": "设置要显示的租赁汽车选项数量。默认为3。"
+        },
+        "serpapi_key": {
+          "type": "string",
+          "description": "提供您的SerpApi私钥以使用此服务。"
+        }
+      },
+      "required": [
+        "pickup_location"
+      ]
+    }
+  },
+  {
+    "name": "cheapest_tickets",
+    "description": "检索指定航线的最便宜的直飞、一程和两程机票，可选的出发和返回日期过滤器。此工具帮助用户根据他们的旅行计划找到最具成本效益的航班选项。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "origin": {
+          "type": "string",
+          "description": "输入出发城市的IATA代码。"
+        },
+        "destination": {
+          "type": "string",
+          "description": "输入目的地的IATA代码。使用'-'表示所有航线。"
+        },
+        "depart_date": {
+          "type": "string",
+          "description": "指定出发日期（格式：yyyy-mm-dd 或 yyyy-mm）。"
+        },
+        "return_date": {
+          "type": "string",
+          "description": "指定返回日期（格式：yyyy-mm-dd 或 yyyy-mm）。"
+        },
+        "page": {
+          "type": "string",
+          "description": "设置结果页码。默认为1，显示前100个价格。"
+        },
+        "currency": {
+          "type": "string",
+          "description": "设置价格货币。默认为RUB。"
+        },
+        "token": {
+          "type": "string",
+          "description": "提供您的个人travelpayouts API令牌。"
+        }
+      },
+      "required": [
+        "origin",
+        "destination"
+      ]
+    }
+  },
+  {
+    "name": "cheapest_direct_tickets",
+    "description": "返回指定航线的最低直飞机票，可选按出发和返回日期过滤。此工具非常适合寻找经济实惠直飞航班的旅客。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "origin": {
+          "type": "string",
+          "description": "输入出发城市的IATA代码。"
+        },
+        "destination": {
+          "type": "string",
+          "description": "输入目的地的IATA代码。对于所有航线，请使用'-'。"
+        },
+        "depart_date": {
+          "type": "string",
+          "description": "指定出发日期（yyyy-mm-dd）或月份（yyyy-mm）。"
+        },
+        "return_date": {
+          "type": "string",
+          "description": "指定返回日期（yyyy-mm-dd）或月份（yyyy-mm）。"
+        },
+        "currency": {
+          "type": "string",
+          "description": "设置机票价格的货币。默认：RUB。"
+        },
+        "token": {
+          "type": "string",
+          "description": "提供您的个人travelpayouts API令牌。"
+        }
+      },
+      "required": [
+        "origin",
+        "destination"
+      ]
+    }
+  },
+  {
+    "name": "cheapest_tickets_each_day",
+    "description": "获取指定出发日期后30天内每天最便宜的直飞、一程中转和两程中转航班。此工具通过提供成本效益的路线选项，帮助用户规划旅行。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "origin": {
+          "type": "string",
+          "description": "输入出发城市的IATA代码。"
+        },
+        "destination": {
+          "type": "string",
+          "description": "输入目的城市的IATA代码。对于所有路线，请使用'-'。"
+        },
+        "depart_date": {
+          "type": "string",
+          "description": "指定出发日期（格式：yyyy-mm-dd或yyyy-mm）。"
+        },
+        "return_date": {
+          "type": "string",
+          "description": "指定返回日期（格式：yyyy-mm-dd或yyyy-mm）。"
+        },
+        "calendar_type": {
+          "type": "string",
+          "description": "选择构建日历的字段：'departure_date'（默认）或'return_date'。"
+        },
+        "length": {
+          "type": "string",
+          "description": "指定在目的城市的停留时长。"
+        },
+        "currency": {
+          "type": "string",
+          "description": "设置票价货币。默认为RUB。"
+        },
+        "token": {
+          "type": "string",
+          "description": "提供您的个人travelpayouts API令牌。"
+        }
+      },
+      "required": [
+        "origin",
+        "destination"
+      ]
+    }
+  },
+  {
+    "name": "cheapest_tickets_each_month",
+    "description": "返回选定路线的最低价直飞、单程和双程机票，按月份分组。此工具帮助用户全年找到最具成本效益的旅行选项。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "origin": {
+          "type": "string",
+          "description": "输入出发城市的IATA代码。"
+        },
+        "destination": {
+          "type": "string",
+          "description": "输入目的城市的IATA代码。对于所有路线，请输入'-'。"
+        },
+        "currency": {
+          "type": "string",
+          "description": "指定机票价格货币。默认：RUB。"
+        },
+        "token": {
+          "type": "string",
+          "description": "提供您的个人travelpayouts API令牌。"
+        }
+      },
+      "required": [
+        "origin",
+        "destination"
+      ]
+    }
+  },
+  {
+    "name": "popular_airline_routes",
+    "description": "返回给定航空公司的最受欢迎的航班路线，按需求排序。此工具有助于识别最常访问的目的地，并了解特定航空公司的旅行趋势。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "airline_code": {
+          "type": "string",
+          "description": "提供航空公司的IATA代码。"
+        },
+        "limit": {
+          "type": "string",
+          "description": "设置每页返回的最大记录数。默认为10。"
+        },
+        "token": {
+          "type": "string",
+          "description": "提供您的个人travelpayouts API令牌。"
+        }
+      },
+      "required": [
+        "airline_code"
+      ]
+    }
+  },
+  {
+    "name": "popular_directions_from_city",
+    "description": "从指定城市检索最受欢迎的旅行方向，提供常用目的地的见解。此工具对希望识别常见旅行路线的旅行者和寻求了解旅行趋势的旅行规划者都很有用。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "origin": {
+          "type": "string",
+          "description": "指定出发城市的IATA代码。"
+        },
+        "currency": {
+          "type": "string",
+          "description": "设置显示票价所用的货币。默认：RUB。"
+        },
+        "token": {
+          "type": "string",
+          "description": "提供您的个人travelpayouts API令牌。"
+        }
+      },
+      "required": [
+        "origin"
+      ]
+    }
+  },
+  {
+    "name": "prices_calendar_month",
+    "description": "获取并显示一个月中每一天的航班价格，按转机次数分类。此工具有助于规划旅行日期和根据停机次数比较价格。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "origin": {
+          "type": "string",
+          "description": "使用IATA城市代码或国家代码指定出发地。"
+        },
+        "destination": {
+          "type": "string",
+          "description": "使用IATA城市代码或国家代码指定目的地。"
+        },
+        "month": {
+          "type": "string",
+          "description": "以YYYY-MM-DD格式设置月份的开始。"
+        },
+        "currency": {
+          "type": "string",
+          "description": "设置显示的价格的货币。默认为RUB。"
+        },
+        "token": {
+          "type": "string",
+          "description": "提供您的个人Travelpayouts API令牌。"
+        }
+      },
+      "required": [
+        "origin",
+        "destination"
+      ]
+    }
+  },
+  {
+    "name": "direction_prices",
+    "description": "检索最近城市和目标城市之间的航班价格。此工具允许您获取详细的航班价格信息，包括根据日期灵活性和指定点的距离扩展搜索的能力。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "origin": {
+          "type": "string",
+          "description": "使用IATA城市代码或国家代码指定出发地。"
+        },
+        "destination": {
+          "type": "string",
+          "description": "使用IATA城市代码或国家代码指定目的地。"
+        },
+        "depart_date": {
+          "type": "string",
+          "description": "指定出发日期或月份，格式为yyyy-mm-dd或yyyy-mm。"
+        },
+        "return_date": {
+          "type": "string",
+          "description": "指定返回日期或月份，格式为yyyy-mm-dd或yyyy-mm。"
+        },
+        "limit": {
+          "type": "string",
+          "description": "设置返回的变体数量，从1到20。默认为1，仅返回指定点。"
+        },
+        "flexibility": {
+          "type": "string",
+          "description": "设置日期扩展的范围，从0到7。默认为0，仅返回指定日期的变体。"
+        },
+        "distance": {
+          "type": "string",
+          "description": "根据距离设置返回的变体数量，从1到20。默认为1，仅返回指定点。"
+        },
+        "currency": {
+          "type": "string",
+          "description": "设置航班价格的货币。默认为RUB。"
+        },
+        "token": {
+          "type": "string",
+          "description": "提供您的个人Travelpayouts API令牌。"
+        }
+      },
+      "required": [
+        "origin",
+        "destination"
+      ]
+    }
+  },
+  {
+    "name": "prices_calendar_week",
+    "description": "获取指定目标日期最近日期的航班价格，提供一周内出发和返回航班的票价日历。此工具非常适合比较航班费用并确定最经济的旅行日期。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "origin": {
+          "type": "string",
+          "description": "使用IATA城市代码或国家代码指定出发地。"
+        },
+        "destination": {
+          "type": "string",
+          "description": "使用IATA城市代码或国家代码指定目的地。"
+        },
+        "depart_date": {
+          "type": "string",
+          "description": "指定出发日或月份，格式为yyyy-mm-dd或yyyy-mm。"
+        },
+        "return_date": {
+          "type": "string",
+          "description": "指定返回日或月份，格式为yyyy-mm-dd或yyyy-mm。"
+        },
+        "currency": {
+          "type": "string",
+          "description": "指定航班价格的货币。默认为RUB。"
+        },
+        "token": {
+          "type": "string",
+          "description": "提供您的个人travelpayouts API令牌。"
+        }
+      },
+      "required": [
+        "origin",
+        "destination"
+      ]
+    }
+  },
+  {
+    "name": "get_location_by_ip",
+    "description": "根据用户的IP地址检索最近的城市的IATA代码和名称。此工具特别适用于旅行和基于位置的应用程序，以快速识别用户的位置。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "ip": {
+          "type": "string",
+          "description": "指定要确定最近城市的IP地址。如果未提供，系统将使用请求头中的IP地址。"
+        },
+        "token": {
+          "type": "string",
+          "description": "提供您的TravelPayouts API个人令牌进行身份验证。"
+        }
+      },
+      "required": [
+        "ip",
+        "token"
+      ]
+    }
+  },
+  {
+    "name": "search_country",
+    "description": "获取指定国家名称或IATA代码的详细信息。此功能可用于获取关于国家的全面信息，包括其地理、人口和经济数据，这对于研究、旅行规划等非常有用。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "指定国家的名称或IATA代码。"
+        },
+        "key": {
+          "type": "string",
+          "description": "指示查询是名称（默认）还是IATA代码。必须是'name'或'code'之一。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "search_city",
+    "description": "使用城市名称或IATA代码检索有关城市的详细信息。此工具提供全面的数据，包括地理、人口和航空相关的详细信息，对于旅行规划、研究和物流非常有用。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "指定要搜索的城市名称或IATA代码。"
+        },
+        "key": {
+          "type": "string",
+          "description": "指示查询是城市名称（默认）还是IATA代码。使用 'name' 或 'code'。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "search_airport",
+    "description": "根据机场名称或IATA代码检索机场的详细信息。此工具可用于获取机场位置、服务和运营细节等全面数据，以协助旅行规划和物流。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "输入机场的名称或IATA代码。"
+        },
+        "key": {
+          "type": "string",
+          "description": "指定查询是名称还是IATA代码。使用'name'表示机场名称，'code'表示IATA代码。默认为'name'。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "search_airline",
+    "description": "根据提供的查询检索航空公司的详细信息。查询可以是航空公司的名称或IATA代码，该工具将返回包括航空公司详情、运营和相关信息的综合数据。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "提供要搜索的航空公司的名称或IATA代码。"
+        },
+        "key": {
+          "type": "string",
+          "description": "指定查询是名称（默认）还是IATA代码。使用'name'或'code'。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "search_alliance",
+    "description": "根据提供的查询检索有关航空公司联盟的详细信息。该工具支持通过联盟名称或IATA代码进行搜索。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "指定要搜索的联盟的名称或IATA代码。"
+        },
+        "key": {
+          "type": "string",
+          "description": "指示查询是名称（默认）还是IATA代码。必须是'name'或'code'。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "search_airplane",
+    "description": "根据飞机名称或IATA代码检索飞机的详细信息。此工具旨在为航空研究、旅行规划和运营分析提供全面数据。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "指定飞机的名称或IATA代码。"
+        },
+        "key": {
+          "type": "string",
+          "description": "指示查询是名称还是IATA代码。默认为'name'。有效值为'name'或'code'。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "search_routes",
+    "description": "检索符合特定条件的航班路线列表，例如航空公司、出发机场、到达机场和转机次数。此工具可用于规划旅行行程或分析航班运营。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "airline": {
+          "type": "string",
+          "description": "指定航空公司的IATA代码。"
+        },
+        "depart_airport": {
+          "type": "string",
+          "description": "指定出发机场的IATA代码。"
+        },
+        "arrival_airport": {
+          "type": "string",
+          "description": "指定到达机场的IATA代码。"
+        },
+        "max_transfers": {
+          "type": "string",
+          "description": "指定允许的最大转机次数。"
+        },
+        "page": {
+          "type": "string",
+          "description": "指定分页的页码。默认为0（第一页）。"
+        },
+        "page_size": {
+          "type": "string",
+          "description": "指定每页的路线数量。默认为10。"
+        }
+      },
+      "required": [
+        "airline",
+        "depart_airport",
+        "arrival_airport",
+        "max_transfers"
+      ]
+    }
+  },
+  {
+    "name": "get_sites",
+    "description": "获取与酒店数据相关的所有站点名称。此函数用于获取可用站点的完整列表，可用于进一步进行详细查询或数据管理。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "type": "string",
+          "description": "提供访问Rapid API服务的X-RapidAPI-Key。"
+        }
+      },
+      "required": [
+        "api_key"
+      ]
+    }
+  },
+  {
+    "name": "get_meta_data",
+    "description": "获取特定酒店站点的本地化元数据。此函数提供有关站点的详细信息，包括其位置、设施和其他相关数据，可用于管理、预订或旅行规划。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "site": {
+          "type": "string",
+          "description": "指定要检索元数据的站点。此值通常从 `get_sites` 函数中获取。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供访问Rapid API服务的API密钥（X-RapidAPI-Key）。"
+        }
+      },
+      "required": [
+        "site"
+      ]
+    }
+  },
+  {
+    "name": "search_locations",
+    "description": "搜索相关地点和建议，例如附近的酒店、景点和兴趣点。此工具适用于旅行规划和基于位置的推荐。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "指定要搜索的国家、城市、区域或地点名称。"
+        },
+        "siteId": {
+          "type": "string",
+          "description": "提供从get_meta_data函数返回的siteId值。"
+        },
+        "locale": {
+          "type": "string",
+          "description": "设置响应的语言代码，例如en_US。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "输入用于使用Rapid API服务的X-RapidAPI-Key。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "list_properties",
+    "description": "查询全球酒店的信息，包括房间、价格、设施、政策等。此API提供对相关网站/品牌的实时和按需访问公共数据和功能，适用于酒店管理、预订系统和旅行规划。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "dest_regionId": {
+          "type": "string",
+          "description": "指定从search_locations函数返回的区域ID（gaiaId）。"
+        },
+        "check_in_date": {
+          "type": "string",
+          "description": "指定入住日期的格式为[日，月，年]。"
+        },
+        "check_out_date": {
+          "type": "string",
+          "description": "指定退房日期的格式为[日，月，年]。"
+        },
+        "num_adults_list": {
+          "type": "string",
+          "description": "列出每个房间中的成人数量。"
+        },
+        "children_ages_list": {
+          "type": "string",
+          "description": "列出每个房间中的儿童数量和他们的年龄。"
+        },
+        "currency": {
+          "type": "string",
+          "description": "指定货币代码（例如，USD）。"
+        },
+        "eapid": {
+          "type": "string",
+          "description": "指定从get_meta_data函数返回的EAPID值。"
+        },
+        "siteId": {
+          "type": "string",
+          "description": "指定从get_meta_data函数返回的siteId值。"
+        },
+        "locale": {
+          "type": "string",
+          "description": "指定语言代码（例如，en_US）。"
+        },
+        "resultSize": {
+          "type": "string",
+          "description": "设置每个响应中每页的项目数。默认为3。"
+        },
+        "resultStartingIndex": {
+          "type": "string",
+          "description": "设置要忽略的记录偏移量以进行分页。默认为0。"
+        },
+        "dest_coordinates": {
+          "type": "string",
+          "description": "指定目的地的GEO位置，格式为[纬度，经度]。"
+        },
+        "sort": {
+          "type": "string",
+          "description": "按以下之一排序结果：PRICE_RELEVANT（默认），REVIEW，DISTANCE，PRICE_LOW_TO_HIGH，PROPERTY_CLASS，RECOMMENDED。"
+        },
+        "hotelName": {
+          "type": "string",
+          "description": "通过酒店名称过滤结果。'type'必须是HOTEL。"
+        },
+        "price": {
+          "type": "string",
+          "description": "通过价格范围过滤结果，格式为[最小值，最大值]。"
+        },
+        "guestRating": {
+          "type": "string",
+          "description": "通过客人评分过滤结果：35（好 7+），40（非常好 8+），45（奇妙 9+）。"
+        },
+        "accessibility": {
+          "type": "string",
+          "description": "通过无障碍功能过滤结果：SIGN_LANGUAGE_INTERPRETER，STAIR_FREE_PATH，SERVICE_ANIMAL，IN_ROOM_ACCESSIBLE，ROLL_IN_SHOWER，ACCESSIBLE_BATHROOM，ELEVATOR，ACCESSIBLE_PARKING。"
+        },
+        "travelerType": {
+          "type": "string",
+          "description": "通过旅行者类型过滤结果：BUSINESS，FAMILY，LGBT。"
+        },
+        "mealPlan": {
+          "type": "string",
+          "description": "通过餐饮计划过滤结果：FREE_BREAKFAST，HALF_BOARD，FULL_BOARD，ALL_INCLUSIVE。"
+        },
+        "poi": {
+          "type": "string",
+          "description": "通过格式lat,long:regionId的点兴趣周围的属性过滤结果。"
+        },
+        "regionId": {
+          "type": "string",
+          "description": "通过neighborhoods字段中的regionId值使用区域过滤结果。"
+        },
+        "lodging": {
+          "type": "string",
+          "description": "通过住宿类型过滤结果：VILLA，CONDO_RESORT，PENSION，TOWNHOUSE，AGRI_TOURISM，HOTEL_RESORT，HOLIDAY_PARK，CONDO。"
+        },
+        "amenities": {
+          "type": "string",
+          "description": "通过设施过滤结果：FREE_AIRPORT_TRANSPORTATION，OCEAN_VIEW，HOT_TUB，PETS，CASINO，SPA_ON_SITE，CRIB，BALCONY_OR_TERRACE，PARKING，ELECTRIC_CAR，RESTAURANT_IN_HOTEL，KITCHEN_KITCHENETTE，GYM，POOL，WASHER_DRYER，WATER_PARK，AIR_CONDITIONING，WIFI。"
+        },
+        "star": {
+          "type": "string",
+          "description": "通过星级评分过滤结果：10（1星），20（2星），30（3星），40（4星），50（5星）。"
+        },
+        "paymentType": {
+          "type": "string",
+          "description": "通过支付类型过滤结果：FREE_CANCELLATION，PAY_LATER。"
+        },
+        "bedroomFilter": {
+          "type": "string",
+          "description": "通过卧室数量过滤结果：0（工作室），1，2，3，4。"
+        },
+        "availableFilter": {
+          "type": "string",
+          "description": "过滤结果以仅显示可用的属性：SHOW_AVAILABLE_ONLY。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "指定使用Rapid API的X-RapidAPI-Key。"
+        }
+      },
+      "required": [
+        "dest_regionId",
+        "check_in_date",
+        "check_out_date",
+        "num_adults_list",
+        "children_ages_list"
+      ]
+    }
+  },
+  {
+    "name": "get_property_offers",
+    "description": "获取特定房产的详细报价，包括房间类型、价格、可用性以及任何特别优惠或折扣。此工具对于酒店管理和寻找最佳交易方案的旅行者都至关重要。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "propertyId": {
+          "type": "string",
+          "description": "提供由list_properties或search_locations函数返回的房产ID。"
+        },
+        "dest_regionId": {
+          "type": "string",
+          "description": "提供由search_locations函数返回的区域ID（gaiaId）。"
+        },
+        "check_in_date": {
+          "type": "string",
+          "description": "指定入住日期，格式为[日，月，年]。"
+        },
+        "check_out_date": {
+          "type": "string",
+          "description": "指定退房日期，格式为[日，月，年]。"
+        },
+        "num_adults_list": {
+          "type": "string",
+          "description": "提供每个房间中成人人数的列表。"
+        },
+        "children_ages_list": {
+          "type": "string",
+          "description": "提供每个房间中儿童数量及其年龄的列表。"
+        },
+        "currency": {
+          "type": "string",
+          "description": "指定货币代码（例如，USD）。"
+        },
+        "eapid": {
+          "type": "string",
+          "description": "提供由get_meta_data函数返回的EAPID值。"
+        },
+        "siteId": {
+          "type": "string",
+          "description": "提供由get_meta_data函数返回的站点ID。"
+        },
+        "locale": {
+          "type": "string",
+          "description": "指定语言代码（例如，en_US）。"
+        },
+        "dest_coordinates": {
+          "type": "string",
+          "description": "指定目的地位置的地理坐标，格式为[纬度，经度]。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供用于使用Rapid API的X-RapidAPI-Key。"
+        }
+      },
+      "required": [
+        "propertyId",
+        "dest_regionId",
+        "check_in_date",
+        "check_out_date",
+        "num_adults_list",
+        "children_ages_list"
+      ]
+    }
+  },
+  {
+    "name": "resolve_url",
+    "description": "将嵌入在共享链接中的旧酒店ID（例如，hotels.com/ho133528/中的'ho133528'）转换为合并Hotels系统和Expedia时的新酒店ID。此工具对于更新引用和确保过渡期间数据一致性至关重要。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "从共享链接中提取旧酒店ID。例如：从https://www.hoteles.com/ho546370/中提取'ho546370'。"
+        },
+        "siteId": {
+          "type": "string",
+          "description": "使用从get_meta_data函数返回的siteId值。"
+        },
+        "locale": {
+          "type": "string",
+          "description": "指定语言代码。例如：en_US。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供访问Rapid API的X-RapidAPI-Key。"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "get_reviews_summary",
+    "description": "获取特定属性的评论摘要分数。此工具提供了一种快速准确的方法来评估酒店的整体质量和客户满意度，基于汇总的评论数据。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "propertyId": {
+          "type": "string",
+          "description": "提供属性ID，这是list_properties响应中的'id'字段的值或search_locations响应中的'hotelId'字段的值。"
+        },
+        "currency": {
+          "type": "string",
+          "description": "指定评论摘要分数的货币代码（例如，USD），如果适用。"
+        },
+        "eapid": {
+          "type": "string",
+          "description": "提供从get_meta_data函数返回的EAPID值。"
+        },
+        "siteId": {
+          "type": "string",
+          "description": "提供从get_meta_data函数返回的site ID值。"
+        },
+        "locale": {
+          "type": "string",
+          "description": "指定评论摘要分数的语言代码（例如，en_US），如果适用。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供X-RapidAPI-Key，这是使用Rapid API的API密钥。"
+        }
+      },
+      "required": [
+        "propertyId"
+      ]
+    }
+  },
+  {
+    "name": "search_city_hotels",
+    "description": "在特定城市或岛屿中搜索酒店。此工具允许用户通过位置查找酒店，并可选择按城市、酒店或两者进行结果过滤。非常适合希望探索特定地区住宿选择的旅行者。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "指定位置（城市或岛屿），或使用经纬度查找最近的酒店。"
+        },
+        "lookFor": {
+          "type": "string",
+          "description": "选择要显示的结果类型：'city'（城市），'hotel'（酒店），或'both'（默认）。"
+        },
+        "limit": {
+          "type": "string",
+          "description": "设置要返回的结果数量，范围从1到10（默认为10）。"
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "display_hotels_prices",
+    "description": "检索指定期间的酒店房间价格。此工具不提供房间可用性信息，适用于初步价格比较和预算规划。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "type": "string",
+          "description": "使用IATA代码或城市名称指定位置。"
+        },
+        "checkIn": {
+          "type": "string",
+          "description": "以yyyy-mm-dd的格式设置入住日期。如未提供，默认为下一天。"
+        },
+        "checkOut": {
+          "type": "string",
+          "description": "以yyyy-mm-dd的格式设置退房日期。如未提供，默认为入住日期后的3天。"
+        },
+        "hotel": {
+          "type": "string",
+          "description": "指定酒店名称，包括位置。"
+        },
+        "adults": {
+          "type": "string",
+          "description": "成人客人数。默认为2。"
+        },
+        "children": {
+          "type": "string",
+          "description": "儿童数量（2-18岁）。默认为0。"
+        },
+        "infants": {
+          "type": "string",
+          "description": "婴儿数量（0-2岁）。默认为0。"
+        },
+        "limit": {
+          "type": "string",
+          "description": "返回的酒店数量。如果不指定特定酒店，默认为4，从每个星级类别中返回一家酒店。更高的值会增加每个类别中的酒店数量。"
+        },
+        "customerIp": {
+          "type": "string",
+          "description": "如果请求通过代理服务器发送，指定用户的IP地址。"
+        },
+        "currency": {
+          "type": "string",
+          "description": "显示价格的货币（例如，rub，usd，eur）。"
+        }
+      },
+      "required": [
+        "location"
+      ]
+    }
+  },
+  {
+    "name": "hotel_collection",
+    "description": "获取所有可用的酒店集合列表，特别设计用于帮助用户找到有折扣的酒店。此工具对于发现酒店住宿的最佳交易非常有用。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "指定您想要获取酒店集合的城市ID。"
+        },
+        "token": {
+          "type": "string",
+          "description": "提供您的个人Travelpayouts API令牌进行身份验证。"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "search_location",
+    "description": "根据城市名称检索城市的详细信息，包括位置、酒店、设施和相关信息。此功能特别适用于需要在酒店业进行深入研究或统计分析的用户。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "指定要检索数据的城市名称。"
+        },
+        "token": {
+          "type": "string",
+          "description": "提供您的个人Travelpayouts API令牌进行身份验证。"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  },
+  {
+    "name": "list_amenities",
+    "description": "检索并列出指定位置内所有可用的酒店设施。此功能对需要获取酒店设施详细信息的旅行者和酒店业专业人士非常有用。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string",
+          "description": "提供您的travelpayouts API令牌进行身份验证。"
+        }
+      },
+      "required": [
+        "token"
+      ]
+    }
+  },
+  {
+    "name": "search_amenity",
+    "description": "通过名称检索特定酒店设施详细信息。此工具可用于获取关于设施的综合数据，这些数据可用于酒店行业的调查、比较和分析。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "提供要搜索的设施名称。"
+        },
+        "token": {
+          "type": "string",
+          "description": "包含您的个人travelpayouts API令牌以进行身份验证。"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  },
+  {
+    "name": "list_hotels",
+    "description": "检索指定地点的酒店列表，包括酒店名称、地址和设施等详细信息。此功能适用于需要探索特定地区酒店选项的用户，无论是为了旅行规划还是市场研究。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "locationId": {
+          "type": "string",
+          "description": "指定您想要列出酒店的地点ID。"
+        },
+        "page": {
+          "type": "string",
+          "description": "指定结果页码。默认为0，即第一页。"
+        },
+        "page_size": {
+          "type": "string",
+          "description": "指定每页返回的酒店数量。默认为5。"
+        },
+        "token": {
+          "type": "string",
+          "description": "提供您的TravelPayouts API个人令牌进行身份验证。"
+        }
+      },
+      "required": [
+        "locationId"
+      ]
+    }
+  },
+  {
+    "name": "list_room_types",
+    "description": "获取指定位置可用的房间类型全面列表。此功能对旅行者、酒店管理人员和研究人员特别有用，他们需要了解特定地区可用的住宿选项的详细信息。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string",
+          "description": "提供您的TravelPayouts API个人访问令牌进行身份验证。"
+        }
+      },
+      "required": [
+        "token"
+      ]
+    }
+  },
+  {
+    "name": "list_hotel_types",
+    "description": "获取特定位置或全球范围内的酒店类型列表。此功能有助于了解酒店行业中可用的住宿选项种类。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string",
+          "description": "提供您的travelpayouts API令牌进行身份验证。"
+        }
+      },
+      "required": [
+        "token"
+      ]
+    }
+  },
+  {
+    "name": "hotel_photos",
+    "description": "获取一个或多个指定酒店的图片ID。此工具特别适用于访问酒店的研究、促销或分析目的的视觉表示。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "提供您想要获取图片ID的酒店ID。多个ID用逗号分隔。"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  {
+    "name": "city_photo",
+    "description": "获取指定城市的照片URL。该照片可用于各种用途，如旅游指南、网站或宣传材料。用户可以指定照片大小以满足需求。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "city_iata": {
+          "type": "string",
+          "description": "提供城市的IATA代码。"
+        },
+        "photo_size": {
+          "type": "string",
+          "description": "指定照片大小，格式为（宽度，高度）。默认：（960，720）。"
+        }
+      },
+      "required": [
+        "city_iata"
+      ]
+    }
+  },
+  {
+    "name": "indian_railway_search",
+    "description": "通过提供火车编号或火车名称来搜索印度铁路列车。此工具允许用户高效地查找特定列车详细信息。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "search": {
+          "type": "string",
+          "description": "输入火车编号或火车名称以执行搜索。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供访问Rapid API服务的X-RapidAPI-Key。"
+        }
+      },
+      "required": [
+        "search"
+      ]
+    }
+  },
+  {
+    "name": "get_gaode_geocode",
+    "description": "将详细的结构化地址或地标性景点和建筑物的名称转换为高德地图（Gaode）的经纬度坐标。此工具支持将详细地址和地标性位置的名称转换为地理坐标，用于各种应用，如路线规划和基于位置的服务。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "提供您的Amap Key进行认证。"
+        },
+        "address": {
+          "type": "string",
+          "description": "以以下格式输入结构化地址信息：国家，省份，城市，区，镇，村，街道，门牌号，小区，楼宇。例如：北京市朝阳区复外东街6号。"
+        },
+        "city": {
+          "type": "string",
+          "description": "使用中文全称、全拼、城市代码或adcode指定城市。可选。如果不提供，则将在全国范围内进行搜索。"
+        },
+        "output": {
+          "type": "string",
+          "description": "选择输出格式：JSON或XML。JSON以JSON结构返回结果，XML以XML结构返回结果。"
+        }
+      },
+      "required": [
+        "key",
+        "address"
+      ]
+    }
+  },
+  {
+    "name": "get_gaode_walk_route_plan",
+    "description": "使用高德地图规划从起点到终点的步行路线。该工具提供最优步行路线，并可按需返回多条替代路线。支持使用POI ID提高路线规划的准确性。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "提供Amap Key进行认证。"
+        },
+        "origin": {
+          "type": "string",
+          "description": "指定起点坐标，格式为：经度,纬度。确保经纬度不超过6位小数。"
+        },
+        "destination": {
+          "type": "string",
+          "description": "指定终点坐标，格式为：经度,纬度。确保经纬度不超过6位小数。"
+        },
+        "origin_id": {
+          "type": "string",
+          "description": "提供起点POI ID以增强路线规划的准确性。"
+        },
+        "destination_id": {
+          "type": "string",
+          "description": "提供终点POI ID以增强路线规划的准确性。"
+        },
+        "alternative_route": {
+          "type": "int",
+          "description": "指定返回的替代路线数量。选项：1、2或3。如未指定，则只返回一条路线。"
+        },
+        "output": {
+          "type": "string",
+          "description": "设置返回结果的格式。支持的格式仅为JSON。"
+        }
+      },
+      "required": [
+        "key",
+        "origin",
+        "destination"
+      ]
+    }
+  },
+  {
+    "name": "get_gaode_drive_route_plan",
+    "description": "使用高德地图坐标规划两点之间的驾车路线，并提供多个路线选项以供更好的路线选择。此工具适用于需要精确驾驶方向和替代路线建议的用户。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "提供用于认证的Amap Key。"
+        },
+        "origin": {
+          "type": "string",
+          "description": "指定起点坐标，格式为 '经度,纬度'。确保经纬度精确到小数点后6位。"
+        },
+        "destination": {
+          "type": "string",
+          "description": "指定终点坐标，格式为 '经度,纬度'。确保经纬度精确到小数点后6位。"
+        },
+        "origin_id": {
+          "type": "string",
+          "description": "提供起点的POI ID以提高路线规划精度。"
+        },
+        "destination_id": {
+          "type": "string",
+          "description": "提供终点的POI ID以提高路线规划精度。"
+        },
+        "alternative_route": {
+          "type": "int",
+          "description": "指定返回的替代路线数量。选项为1、2或3。如未指定，则只返回一条路线。"
+        },
+        "output": {
+          "type": "string",
+          "description": "指定返回结果的格式。支持的格式仅为JSON。"
+        }
+      },
+      "required": [
+        "key",
+        "origin",
+        "destination"
+      ]
+    }
+  },
+  {
+    "name": "get_gaode_ride_route_plan",
+    "description": "使用高德地图坐标规划从起点到终点的骑行路线。该工具支持使用可选的POI ID进行路线规划以提高准确性，并可返回多个路线选项。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "提供用于认证的Amap Key。"
+        },
+        "origin": {
+          "type": "string",
+          "description": "指定起点坐标，格式为经度，纬度。确保坐标不超过6位小数。"
+        },
+        "destination": {
+          "type": "string",
+          "description": "指定终点坐标，格式为经度，纬度。确保坐标不超过6位小数。"
+        },
+        "origin_id": {
+          "type": "string",
+          "description": "提供起点POI ID以改进路线准确性。"
+        },
+        "destination_id": {
+          "type": "string",
+          "description": "提供终点POI ID以改进路线准确性。"
+        },
+        "alternative_route": {
+          "type": "int",
+          "description": "选择要返回的替代路线数量：1、2或3。如果未指定，默认为1。"
+        },
+        "output": {
+          "type": "string",
+          "description": "选择返回结果的格式。目前支持JSON。"
+        }
+      },
+      "required": [
+        "key",
+        "origin",
+        "destination"
+      ]
+    }
+  },
+  {
+    "name": "get_gaode_geo_distance",
+    "description": "使用高德地图服务测量两个或多个坐标组之间的距离。该工具支持多种距离计算方法，包括直线距离、驾车导航距离和步行距离。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "提供用于认证的Amap Key。"
+        },
+        "origins": {
+          "type": "string",
+          "description": "列出最多100个起点坐标，坐标对之间用'|'分隔。每个坐标对应采用'lon,lat'格式。"
+        },
+        "destination": {
+          "type": "string",
+          "description": "指定目的地坐标，格式为'lon,lat'。"
+        },
+        "type": {
+          "type": "string",
+          "description": "选择路径计算方法：0为直线距离，1为驾车导航距离，3为步行距离。驾车距离考虑交通状况，步行距离限制在5公里内。"
+        },
+        "output": {
+          "type": "string",
+          "description": "选择输出格式：JSON或XML。"
+        }
+      },
+      "required": [
+        "key",
+        "origins",
+        "destination"
+      ]
+    }
+  },
+  {
+    "name": "music_search",
+    "description": "根据用户查询需求搜索音乐相关信息，包括专辑、艺术家、曲目等。同时支持随机生成歌曲名称。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "q": {
+          "type": "string",
+          "description": "输入搜索关键词或短语以找到匹配的音乐相关信息。这是执行搜索的基本条件，不能为空。"
+        },
+        "type": {
+          "type": "string",
+          "description": "指定搜索结果的类型。选项包括 'multi', 'albums', 'artists', 'episodes', 'genres', 'playlists', 'podcasts', 'tracks' 或 'users'。选择 'multi' 以返回多种类型的匹配结果。"
+        },
+        "limit": {
+          "type": "int",
+          "description": "定义每次请求返回的最大结果数，以控制分页和响应大小。"
+        }
+      },
+      "required": [
+        "q"
+      ]
+    }
+  },
+  {
+    "name": "generate_music",
+    "description": "随机生成一首歌曲的独特创意名称。这可以用来激发创作灵感，或者为歌曲提供一个快速、有趣的标题建议。",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": []
+    }
+  },
+  {
+    "name": "books_related_searches",
+    "description": "检索特定书籍的详细信息或根据查询查找相关书籍。此工具可以提供书籍详情，如标题、作者、出版日期等，以及建议类似或相关的书籍。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "q": {
+          "type": "string",
+          "description": "指定要查询的书籍。"
+        },
+        "price": {
+          "type": "string",
+          "description": "按价格过滤结果。使用 '1' 表示免费书籍，'2' 表示付费书籍。"
+        },
+        "api_key": {
+          "type": "string",
+          "description": "提供用于使用serpapi服务的API密钥。"
+        }
+      },
+      "required": [
+        "q"
+      ]
+    }
+  },
+  {
+    "name": "get_recipes",
+    "description": "根据提供的搜索条件检索综合食谱信息表，包括食物或成分的名称和响应的分页设置。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "int",
+          "description": "指定为分页目的而忽略的响应中项目偏移量。"
+        },
+        "size": {
+          "type": "int",
+          "description": "定义每个响应中返回的项目数量。"
+        },
+        "q": {
+          "type": "string",
+          "description": "输入要搜索的食物或成分的名称。"
+        }
+      },
+      "required": [
+        "from",
+        "size",
+        "q"
+      ]
+    }
+  },
+  {
+    "name": "options_data",
+    "description": "提供美国上市证券的实时期权和股票数据。此工具对于需要最新市场信息以做出明智决策的投资者和交易者至关重要。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "ticker": {
+          "type": "string",
+          "description": "指定股票代码，例如 'aapl', 'msft', 'goog', 或 'amzn'。"
+        },
+        "key": {
+          "type": "string",
+          "description": "提供访问股票和期权交易数据提供者的API密钥。"
+        },
+        "Proxy_Secret": {
+          "type": "string",
+          "description": "提供访问股票和期权交易数据提供者的API代理密钥。"
+        }
+      },
+      "required": [
+        "ticker"
+      ]
+    }
+  },
+  {
+    "name": "get_today_date",
+    "description": "获取当前日期，这对于金融交易和市场数据跟踪非常有用。此函数特别有利于投资者、交易员和金融分析师，以确保他们的记录和分析是最新的。",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": []
+    }
+  },
+  {
+    "name": "add_date",
+    "description": "为给定日期添加指定天数。此工具对于计算金融交易、市场事件或其他时间敏感活动的未来日期非常有用。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "description": "要添加天数的日期。格式：'yyyy-mm-dd'"
+        },
+        "days": {
+          "type": "string",
+          "description": "要添加到给定日期的天数"
+        }
+      },
+      "required": [
+        "date",
+        "days"
+      ]
+    }
+  },
+  {
+    "name": "get_daily_prices",
+    "description": "获取特定在股市上市的实体的每日股票价格。此工具提供历史价格数据，对财务分析和投资决策很有用。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "description": "指定您要获取股票价格的实体的股票代码。"
+        },
+        "date": {
+          "type": "string",
+          "description": "提供您要获取股票价格的日期，格式为'yyyy-mm-dd'。"
+        },
+        "key": {
+          "type": "string",
+          "description": "包含您访问Alpha Vantage服务的API密钥。这是可选的，但建议使用以提高请求限制。"
+        }
+      },
+      "required": [
+        "symbol",
+        "date"
+      ]
+    }
+  },
+  {
+    "name": "get_open_info",
+    "description": "获取特定地区的股市状态，以确定其当前是否开放或关闭。此工具对需要了解特定市场交易状态的投资者、交易员和金融分析师非常有用。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "region": {
+          "type": "string",
+          "description": "指定您想检查市场状态的地区名称。"
+        },
+        "key": {
+          "type": "string",
+          "description": "提供访问AlphaVantage数据的API密钥。如果工具已有默认密钥，则此参数为可选。"
+        }
+      },
+      "required": [
+        "region"
+      ]
+    }
+  },
+  {
+    "name": "get_exchange_rate",
+    "description": "获取两种指定货币之间的实时汇率，这些货币可以是实物货币或数字货币（加密货币）。此工具对需要准确和最新汇率信息的投资者、交易员和金融分析师非常有用。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "from_currency": {
+          "type": "string",
+          "description": "指定源货币的货币代码，例如，'CNY', 'USD', 'EUR', 'GBP'"
+        },
+        "to_currency": {
+          "type": "string",
+          "description": "指定目标货币的货币代码，例如，'CNY', 'USD', 'EUR', 'GBP'"
+        },
+        "key": {
+          "type": "string",
+          "description": "提供访问Alpha Vantage服务的API密钥"
+        }
+      },
+      "required": [
+        "from_currency",
+        "to_currency"
+      ]
+    }
+  },
+  {
+    "name": "get_stock_chart",
+    "description": "获取指定股票的历史价格图表数据。此函数允许用户查询和分析股票在不同时间间隔和范围内的表现。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "interval": {
+          "type": "string",
+          "description": "设置价格点的时问间隔。允许的值：1m, 2m, 5m, 15m, 30m, 60m, 1d, 1wk, 1mo。"
+        },
+        "symbol": {
+          "type": "string",
+          "description": "指定股票标识符（通常是股票代码或ID）。"
+        },
+        "range": {
+          "type": "string",
+          "description": "定义数据的时问跨度。允许的值：1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, 10y, ytd, max。注意：此参数不能与`period1`和`period2`一起使用。"
+        },
+        "region": {
+          "type": "string",
+          "description": "设置股票市场的区域代码。允许的值：US, BR, AU, CA, FR, DE, HK, IN, IT, ES, GB, SG。"
+        },
+        "comparisons": {
+          "type": "string",
+          "description": "提供一组用于比较分析的股票代码，用逗号分隔。例如：^GDAXI,^FCHI。"
+        },
+        "includePrePost": {
+          "type": "boolean",
+          "description": "指示是否包含盘前和盘后交易数据。"
+        },
+        "useYfid": {
+          "type": "boolean",
+          "description": "启用Yfid数据源。"
+        },
+        "includeAdjustedClose": {
+          "type": "boolean",
+          "description": "在返回的数据中包含调整后的收盘价。"
+        },
+        "events": {
+          "type": "string",
+          "description": "指定要获取的事件类型，多个事件用逗号分隔。允许的值：capitalGain, div, split, earn, history。例如：capitalGain,split。"
+        }
+      },
+      "required": [
+        "interval",
+        "symbol",
+        "range"
+      ]
+    }
+  },
+  {
+    "name": "currency_converter",
+    "description": "实时将一种货币转换为另一种货币。此工具对于金融交易、国际商业和旅行规划至关重要。它允许用户进行货币转换、访问历史汇率数据以及检索支持的货币列表。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "from_currency": {
+          "type": "string",
+          "description": "基础货币的货币代码（例如，AUD、CAD、EUR、GBP）"
+        },
+        "to_currency": {
+          "type": "string",
+          "description": "目标货币的货币代码（例如，AUD、CAD、EUR、GBP）"
+        },
+        "amount": {
+          "type": "string",
+          "description": "要转换的基础货币金额"
+        },
+        "apikey": {
+          "type": "string",
+          "description": "访问货币转换服务的API密钥"
+        }
+      },
+      "required": [
+        "from_currency",
+        "to_currency",
+        "amount"
+      ]
+    }
+  },
+  {
+    "name": "historical_currency_data",
+    "description": "将一种货币转换为另一种货币，使用指定历史日期的汇率。此工具适用于涉及过去货币转换的金融交易、国际商业和旅行规划。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "from_currency": {
+          "type": "string",
+          "description": "指定基础货币代码（例如，AUD、CAD、EUR、GBP）。"
+        },
+        "to_currency": {
+          "type": "string",
+          "description": "指定目标货币代码（例如，AUD、CAD、EUR、GBP）。"
+        },
+        "amount": {
+          "type": "string",
+          "description": "指定要转换的基础货币金额。"
+        },
+        "date": {
+          "type": "string",
+          "description": "指定汇率的历史日期（格式：YYYY-MM-DD）。"
+        },
+        "apikey": {
+          "type": "string",
+          "description": "提供访问服务的API密钥。"
+        }
+      },
+      "required": [
+        "from_currency",
+        "to_currency",
+        "amount",
+        "date"
+      ]
+    }
+  },
+  {
+    "name": "available_currencies",
+    "description": "获取此API支持的所有货币的完整列表。该列表包括货币代码、名称和符号，对于执行货币转换和汇率查询至关重要。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "apikey": {
+          "type": "string",
+          "description": "提供访问货币信息的API密钥。"
+        }
+      },
+      "required": [
+        "apikey"
+      ]
+    }
+  },
+  {
+    "name": "code_execute",
+    "description": "一个设计用于在REPL（读取-评估-打印循环）环境中执行Python代码的工具。它非常适合编写、测试和调试Python代码片段，验证代码逻辑，尝试新特性以及解决编程问题。该工具支持基本的Python语法和标准库函数，但不支持外部依赖或特定环境配置。它不适用于运行大规模应用程序或长时间运行的程序。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "要执行的Python代码片段。"
+        }
+      },
+      "required": [
+        "code"
+      ]
+    }
+  },
+  {
+    "name": "ocr",
+    "description": "自动识别并提取用户通过图片链接提供的图片中的文本内容。该工具支持多种常见图片格式（如JPEG、PNG、BMP等）并能处理不同语言和字体。适用于文档扫描、图片转文字、信息提取等多种场景。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "image_url": {
+          "type": "string",
+          "description": "提供要处理的图片的URL。"
+        }
+      },
+      "required": [
+        "image_url"
+      ]
+    }
+  },
+  {
+    "name": "bar",
+    "description": "生成基于提供的x轴标签和y轴值的条形图。此工具非常适合数据可视化、报告创建和数据分析，但不支持动态数据更新或交互式图表功能。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "tool_parameters": {
+          "description": "一个对象，包含用于x轴标签的'x_axis'和用于y轴值的'data'，值由英文分号分隔。例如：{'data': '1;2;3;4;5', 'x_axis': 'hello;okay;lalala;1;2'}",
+          "type": "object"
+        }
+      },
+      "required": [
+        "tool_parameters"
+      ]
+    }
+  },
+  {
+    "name": "line",
+    "description": "生成基于提供的x轴和y轴数据的折线图。此工具非常适合可视化数据中的趋势和模式。它支持自定义数据输入，适用于数据可视化、报告创建和数据分析。请注意，它不支持动态数据更新或交互式功能。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "tool_parameters": {
+          "type": "dict",
+          "description": "包含x轴和y轴数据的字典。x轴数据在'x_axis'键下提供，y轴数据在'data'键下提供。数据值应以英文分号分隔。示例：{'data': '1;2;3;4;5', 'x_axis': 'hello;okay;lalala;1;2'}"
+        }
+      },
+      "required": [
+        "tool_parameters"
+      ]
+    }
+  },
+  {
+    "name": "pie",
+    "description": "生成基于类别及其对应数量数据的饼图。此工具非常适合在数据分析、报告和演示中可视化比例和分布。它接受自定义数据输入并支持静态图表生成。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "tool_parameters": {
+          "type": "object",
+          "description": "一个包含类别及其对应数据值的对象。'data'键应包含表示数量的分号分隔值，'categories'键应包含表示类别名称的分号分隔值。例如：{'data': '1;2;3;4;5', 'categories': 'Hello;Okay;Lalala;1;2'}",
+          "required": [
+            "tool_parameters"
+          ]
+        }
+      },
+      "required": [
+        "tool_parameters"
+      ]
+    }
+  },
+  {
+    "name": "baidu_translate",
+    "description": "百度翻译工具，可以将文本从一种语言翻译成另一种语言。用户必须指定翻译结果的目标语言。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "需要翻译的原始文本。"
+        },
+        "to_lang": {
+          "type": "string",
+          "description": "翻译结果的目标语言。支持的语言包括'zh'（中文）、'yue'（粤语）、'en'（英语）、'cht'（繁体中文）等。"
+        }
+      },
+      "required": [
+        "query",
+        "to_lang"
+      ]
+    }
+  },
+  {
+    "name": "text_to_img",
+    "description": "根据用户提供的详细自然语言描述生成图像。该工具支持多种风格和主题，包括现实主义、抽象、卡通等。用户可以通过提供详细场景、人物、颜色和其他元素的描述来获得更符合预期的图像。生成的图像可用于设计灵感、内容创作、视觉辅助等目的。工具将根据描述的复杂性和细节生成相应质量和尺寸的图像。请注意，生成的图像可能存在版权限制，用户应根据具体用途考虑版权问题。此外，该工具将拒绝生成涉及敏感内容或非法信息的图像，以确保合规。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "prompt": {
+          "type": "string",
+          "description": "提供您想要生成的图像的详细自然语言描述。包括关于场景、人物、颜色和其他元素的特定细节，以确保图像与您的预期紧密匹配。"
+        }
+      },
+      "required": [
+        "prompt"
+      ]
+    }
+  },
+  {
+    "name": "blank_word_create",
+    "description": "创建一个空白Word文档，支持文本编辑、格式化、插入图片和表格、文档布局和打印预览。非常适合报告撰写、文档准备和其他办公文档处理任务。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "file_path": {
+          "type": "string",
+          "description": "指定创建的文档将保存的路径。"
+        }
+      },
+      "required": [
+        "file_path"
+      ]
+    }
+  },
+  {
+    "name": "blank_excel_create",
+    "description": "创建一个空白Excel电子表格，支持自定义行数和列数，设置单元格格式，插入公式和函数，以及进行数据分析与可视化。适用于办公文档处理、数据记录与分析、报告撰写。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "file_path": {
+          "type": "string",
+          "description": "指定创建的电子表格的保存路径。"
+        }
+      },
+      "required": [
+        "file_path"
+      ]
+    }
+  },
+  {
+    "name": "aippt",
+    "description": "自动根据用户指定的主题生成PPT大纲，包括标题、主要内容、要点和其他结构化信息。生成的大纲以PPT文件形式保存，不使用预设模板，方便用户进一步编辑和美化。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "presentation_topic": {
+          "type": "string",
+          "description": "指定演示文稿的主题或主题，如特定项目、研究主题或一般主题。"
+        },
+        "slide_count": {
+          "type": "int",
+          "description": "定义演示文稿中所需的幻灯片数量，以控制大纲的详细程度。"
+        },
+        "audience_type": {
+          "type": "int",
+          "description": "选择演示文稿的目标受众（例如，学术、企业或一般），以调整语气和内容重点。"
+        }
+      },
+      "required": [
+        "presentation_topic"
+      ]
+    }
+  },
+  {
+    "name": "feishu_multidimensional_table_create",
+    "description": "创建一个新的飞书多维表格，允许用户定义表格的结构、属性和关系。此工具对于以结构化和高效的方式组织和管理工作中的复杂数据至关重要。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "指定要创建的表格名称。"
+        },
+        "folder_token": {
+          "type": "string",
+          "description": "指定表格将要创建的文件夹的token。如果不提供，表格将在默认位置创建。"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  },
+  {
+    "name": "feishu_multidimensional_table_get_table",
+    "description": "获取飞书多维表格中的数据表格列表，显示其名称和基本属性，便于管理和浏览。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "app_token": {
+          "type": "string",
+          "description": "提供多维表格应用的唯一标识符。"
+        },
+        "page_token": {
+          "type": "string",
+          "description": "使用此分页令牌进行后续请求。初次请求时留空。"
+        },
+        "page_size": {
+          "type": "int",
+          "description": "设置每页返回的项目数量，最多100个。"
+        }
+      },
+      "required": [
+        "app_token"
+      ]
+    }
+  },
+  {
+    "name": "feishu_multidimensional_table_add_table",
+    "description": "向飞书多维表格添加新数据表，允许用户定义表格结构和属性。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "app_token": {
+          "type": "string",
+          "description": "提供多维表格App的唯一标识符。"
+        },
+        "table": {
+          "type": "string",
+          "description": "以JSON格式定义新的表格结构，称为'req_table'。"
+        }
+      },
+      "required": [
+        "app_token"
+      ]
+    }
+  },
+  {
+    "name": "feishu_multidimensional_table_get_metadata",
+    "description": "获取飞书多维表格的整体结构信息，包括表名、字段定义和关系元数据。此函数有助于理解多维表格中的模式和关系。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "app_token": {
+          "type": "string",
+          "description": "提供多维表格App的唯一标识符以访问其元数据。"
+        }
+      },
+      "required": [
+        "app_token"
+      ]
+    }
+  },
+  {
+    "name": "feishu_spreadsheet_create",
+    "description": "创建一个新的飞书平台上的电子表格文档。此工具允许您指定电子表格的标题和创建位置所在的文件夹。",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "设置电子表格的标题。"
+        },
+        "folder_token": {
+          "type": "string",
+          "description": "指定电子表格创建的文件夹token。"
+        }
+      },
+      "required": [
+        "title",
+        "folder_token"
+      ]
+    }
+  }
+]
