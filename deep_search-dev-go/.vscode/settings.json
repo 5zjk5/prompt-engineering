@@ -1,0 +1,22 @@
+{
+    "go.buildOnSave": "workspace",
+    "go.lintOnSave": "workspace",
+    "go.vetOnSave": "workspace",
+    "go.testOnSave": true,
+    "go.coverOnSave": false,
+    "go.useLanguageServer": true,
+    "go.goroot": "",
+    "go.gopath": "",
+    "go.toolsGopath": "",
+    "go.gocodeAutoBuild": true,
+    "go.lintTool": "golint",
+    "go.lintFlags": [],
+    "go.vetFlags": [],
+    "go.testFlags": ["-v"],
+    "go.testTimeout": "30s",
+    "go.inferGopath": true,
+    "go.gotoSymbol.includeImports": true,
+    "go.useCodeSnippetsOnFunctionSuggest": true,
+    "go.formatTool": "goimports",
+    "go.docsTool": "godoc"
+}

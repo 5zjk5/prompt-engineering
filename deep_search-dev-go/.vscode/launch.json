@@ -1,0 +1,50 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "运行主服务 (svs_deepsearch.go)",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/svs_deepsearch.go",
+            "env": {},
+            "args": []
+        },
+        {
+            "name": "测试deepsearch API (test_deepsearch_api.go)",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/test_deepsearch_api.go",
+            "env": {},
+            "args": []
+        },
+        {
+            "name": "测试搜索API (test_search_api.go)",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/test_search_api.go",
+            "env": {},
+            "args": []
+        },
+        {
+            "name": "测试爬虫API (test_crawler_api.go)",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/test_crawler_api.go",
+            "env": {},
+            "args": []
+        },
+        {
+            "name": "测试LLM API (test_llm_api.go)",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/test_llm_api.go",
+            "env": {},
+            "args": []
+        }
+    ]
+}
