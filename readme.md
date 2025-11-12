@@ -128,6 +128,10 @@ langchian 模块代码，这个版本当时这里这个模块主要集成了：
 2、提示词模版，链，工具，记忆，再 v1.0 这些不是重点，好想砍掉了。
 
 
-# 📚 llamaindex
+# 🛠️ langchain-langgraph-V1.0
+官方第一个大版本，基于 V1.0 的代码案例，保存下来当笔记了，这个版本对 agent 支持更多了，更好了。要运行一些示例，环境需匹配其中的 requirements.txt。
+
+
+# ⚙️ llamaindex
 llamaindex rag 使用，忘记哪个版本了。
 
