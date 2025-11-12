@@ -591,7 +591,6 @@ MODEL = "gpt-4.1"
 azure_api_version='2025-03-01-preview'
 azure_endpoint=""
 azure_api_key=""
-
 model = ChatOpenAIModel(
         model=MODEL,
         use_azure=True,  # 使用微软openai接口
