@@ -5,9 +5,9 @@
 
 
 # 🌟 推荐项目
-* 深度搜索(DeepResearch)
+* 深度搜索(DeepResearch)  
   **路径**: `Agent/deep_search-dev/`  
-  **技术**: FastAPI + Playwright + GLM-4.5-flash + 搜索工具
+  **技术**: FastAPI + Playwright + GLM-4.5-flash + 搜索工具  
   **功能**: 基于大模型的深度搜索引擎，支持多轮迭代搜索、智能内容爬取、深度分析总结。能够对用户提出的复杂主题进行全方位信息收集和分析，生成专业的研究报告。适用于市场调研、竞品分析、学术研究等场景。
 * Prompt 自动优化
   **路径**: `Prompt/prompt自动优化/`  
