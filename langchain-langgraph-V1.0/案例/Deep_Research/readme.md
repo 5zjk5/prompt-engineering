@@ -21,3 +21,6 @@
 大模型 api 在 src/llm.py 中，ChatOpenAIModel_LangChian.py 为自定义的 langchain 模型，适配了 openai 的 api，加了返回更多内容（token，请求参数，块统计）
 
 deep_researcher.py 为主文件入口
+
+# langsmith 使用
+langsmith 在这个项目根目录，运行 langgraph dev 命令，即可启动 langsmith 可视化界面。用来查看完整图结构，看流程演示还是可以的。

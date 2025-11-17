@@ -17,6 +17,10 @@
   **路径**: `Rag/tool_retrieval/`  
   **技术**: RAG（稠密，稀疏，关键词，混合） + Fastapi + Chroma 数据库 + 假设性问题  
   **功能**: 一套完整服务，包含服务接口，数据库，检索方法，工具假设性问题生成。用户输入问题后，通过检索假设性问题库，检索工具库，合并排序去重，得到最相关的工具，最终召回率 94%。
+* 深度研究(DeepResearch-langgraph)  
+  **路径**: `langchain-langgraph-V1.0/案例/Deep_Research/`  
+  **技术**: langgraph-V1.0  
+  **功能**: 官方开源，详细介绍看官方介绍就可以，这里拿过来作为学习 langgraph，改了些东西进行了适配 langgraph-v1.0，langchang-v1.0 版本，加了自定义日志，适配了某些参数更新问题，把所有子图都模块化，注释都改成中文了，使用自定义 langchian 兼容 openai 的模型，可以 debug 调试，不依赖 langsmith 可视化。
 
 
 # 🤖 Agent
