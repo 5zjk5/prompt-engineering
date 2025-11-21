@@ -715,6 +715,93 @@ def test_agent():
     print("=" * 50)
 
 
+def test_image():
+    """Test the image methods of the custom model"""
+    print("\n" + "=" * 50)
+    print("Testing image methods")
+    print("=" * 50)
+    
+    import base64
+    def encode_image(image_path: str) -> str:
+        """将图像编码为 base64 字符串"""
+        with open(image_path, "rb") as image_file:
+            return base64.b64encode(image_file.read()).decode('utf-8')
+
+    img_path = r"F:\prompt-engineering\langchain-langgraph-V1.0\案例\Deep_Research\researcher_subgraph.png"
+    img_base64_1 = encode_image(img_path)
+    img_path = r"F:\prompt-engineering\langchain-langgraph-V1.0\案例\Deep_Research\supervisor_subgraph.png"
+    img_base64_2 = encode_image(img_path)
+
+    # 多张图片
+    print("Testing image invoke")
+    print("=" * 50)
+    messages = [
+        HumanMessage(
+            content=[
+                {
+                    "type": "text",
+                    "text": "图中讲了什么",
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url":  f"data:image/jpeg;base64,{img_base64_1}"
+                    },
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url":  f"data:image/jpeg;base64,{img_base64_2}"
+                    },
+                },
+            ]
+        ),
+    ]
+    response = model.invoke(messages)
+    print(response)
+
+    print("Testing image batch")
+    print("=" * 50)
+    # 里面每一个元素都是列表
+    messages = [
+        [
+            HumanMessage(
+                content=[
+                    {
+                        "type": "text",
+                        "text": "图中讲了什么",
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url":  f"data:image/jpeg;base64,{img_base64_1}"
+                        },
+                    },
+                ]
+            )
+        ],
+        [
+            HumanMessage(
+                content=[
+                    {
+                        "type": "text",
+                        "text": "图中讲了什么",
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url":  f"data:image/jpeg;base64,{img_base64_2}"
+                        },
+                    },
+                ]
+            )
+        ],
+    ]
+    response = model.batch(messages)
+    print(response)
+
+
+
 # Run the tests
 if __name__ == "__main__":
     import asyncio
@@ -722,7 +809,7 @@ if __name__ == "__main__":
     # Example usage with GLM API
     # API_KEY = ""
     # BASE_URL = "https://open.bigmodel.cn/api/paas/v4/"
-    # MODEL = "glm-4.5-flash"
+    # MODEL = "GLM-4.5-Flash"  # GLM-4V-Flash 图片理解
     # extra_body={"thinking": {"type": "disabled",},}
 
     # ModelScope
@@ -737,22 +824,22 @@ if __name__ == "__main__":
     # }
 
     # Gemini
-    API_KEY = ""
-    BASE_URL = ""
-    MODEL = "gemini-2.5-flash"
-    extra_body={
-      'extra_body': {
-        "google": {
-          "thinking_config": {
-            "thinking_budget": 512,
-            "include_thoughts": True
-          }
-        }
-      }
-    }
+    # API_KEY = ""
+    # BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
+    # MODEL = "gemini-2.5-flash-lite"
+    # extra_body={
+    #   'extra_body': {
+    #     "google": {
+    #       "thinking_config": {
+    #         "thinking_budget": 0,
+    #         "include_thoughts": True
+    #       }
+    #     }
+    #   }
+    # }
 
     # Azure
-    # MODEL = "gpt-5"
+    # MODEL = "gpt-4.1-nano"
     # azure_api_version='2025-03-01-preview'
     # azure_endpoint=""
     # azure_api_key=""
@@ -771,11 +858,14 @@ if __name__ == "__main__":
     # Run sync tests
     test_sync_methods()
     
-    # # Run async tests
+    # Run async tests
     asyncio.run(test_async_methods())
     
     # # # Run batch tests
     test_batch()
 
-    # # Test langchain agent use
+    # Test langchain agent use
     test_agent()
+
+    # Test image
+    test_image()
