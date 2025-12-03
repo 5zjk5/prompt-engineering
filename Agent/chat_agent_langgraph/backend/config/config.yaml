@@ -1,0 +1,7 @@
+GLM:
+  API_KEY = ""
+  BASE_URL = "https://open.bigmodel.cn/api/paas/v4/"
+  MODEL = "GLM-4.6-Flash"
+  IMG_MODEL = "GLM-4V-Flash"  
+
+
