@@ -1,0 +1,23 @@
+app:
+  title: "LangGraph Agent API"
+  description: "A FastAPI backend for LangGraph Agent chat application"
+  version: "1.0.0"
+
+cors:
+  allow_origins: ["*"]
+  allow_credentials: true
+  allow_methods: ["*"]
+  allow_headers: ["*"]
+
+database:
+  url: "db/chat_agent_langgraph.db"
+
+log:
+  service_log_path: "log/service_log"
+  chat_log_path: "log/chat_log"
+
+GLM:
+  API_KEY: "8b9453e4a7b0c3777771fdc8747cea4d.z1nZ2wohu3hUzDWs"
+  BASE_URL: "https://open.bigmodel.cn/api/paas/v4/"
+  MODEL: "GLM-4.6-Flash"
+  IMG_MODEL: "GLM-4V-Flash"

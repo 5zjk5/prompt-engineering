@@ -807,42 +807,10 @@ if __name__ == "__main__":
     import asyncio
 
     # Example usage with GLM API
-    # API_KEY = ""
-    # BASE_URL = "https://open.bigmodel.cn/api/paas/v4/"
-    # MODEL = "GLM-4.5-Flash"  # GLM-4V-Flash 图片理解
-    # extra_body={"thinking": {"type": "disabled",},}
-
-    # ModelScope
-    # API_KEY = ""
-    # BASE_URL = "https://api-inference.modelscope.cn/v1"
-    # MODEL = "Qwen/Qwen3-32B"
-    # extra_body = {
-    #     # enable thinking, set to False to disable
-    #     "enable_thinking": False,  # true 只支持流式
-    #     # use thinking_budget to contorl num of tokens used for thinking
-    #     # "thinking_budget": 4096
-    # }
-
-    # Gemini
-    # API_KEY = ""
-    # BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
-    # MODEL = "gemini-2.5-flash-lite"
-    # extra_body={
-    #   'extra_body': {
-    #     "google": {
-    #       "thinking_config": {
-    #         "thinking_budget": 0,
-    #         "include_thoughts": True
-    #       }
-    #     }
-    #   }
-    # }
-
-    # Azure
-    # MODEL = "gpt-4.1-nano"
-    # azure_api_version='2025-03-01-preview'
-    # azure_endpoint=""
-    # azure_api_key=""
+    API_KEY = ""
+    BASE_URL = "https://open.bigmodel.cn/api/paas/v4/"
+    MODEL = "GLM-4.5-Flash"  # GLM-4V-Flash 图片理解
+    extra_body={"thinking": {"type": "disabled",},}
 
     model = ChatOpenAIModel(
         api_key=API_KEY,
@@ -850,9 +818,6 @@ if __name__ == "__main__":
         extra_body=extra_body,
         model=MODEL,
         use_azure=False,  # 使用微软openai接口
-        # azure_api_key=azure_api_key,
-        # azure_endpoint=azure_endpoint,
-        # azure_api_version=azure_api_version,
     )
     
     # Run sync tests
@@ -868,4 +833,13 @@ if __name__ == "__main__":
     test_agent()
 
     # Test image
+    MODEL = "GLM-4V-Flash"  # GLM-4V-Flash 图片理解
+    extra_body={"thinking": {"type": "disabled",},}
+    model = ChatOpenAIModel(
+        api_key=API_KEY,
+        base_url=BASE_URL,
+        extra_body=extra_body,
+        model=MODEL,
+        use_azure=False,  # 使用微软openai接口
+    )
     test_image()

@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+python-multipart
+pydantic
+pydantic-settings
+pyyaml
+sqlite3
+requests

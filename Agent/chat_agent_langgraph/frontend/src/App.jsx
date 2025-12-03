@@ -18,7 +18,7 @@ function App() {
   const [showNewUserModal, setShowNewUserModal] = useState(false);
   const [newUserName, setNewUserName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // 用于图片上传的隐藏input
   const fileInputRef = useRef(null);
   // 用于自动滚动到底部
@@ -57,7 +57,7 @@ function App() {
       content: 'PyCharm是专门为Python开发设计的IDE，功能强大但资源消耗较大；VS Code是轻量级编辑器，通过插件扩展功能。'
     }
   ]);
-  
+
   // 编辑状态
   const [editingId, setEditingId] = useState(null);
   const [editingTitle, setEditingTitle] = useState('');
@@ -79,35 +79,35 @@ function App() {
       return conversations;
     }
     const term = searchTerm.toLowerCase();
-    return conversations.filter(conv => 
-      conv.title.toLowerCase().includes(term) || 
+    return conversations.filter(conv =>
+      conv.title.toLowerCase().includes(term) ||
       conv.preview.toLowerCase().includes(term) ||
       conv.content.toLowerCase().includes(term)
     );
   }, [searchTerm, conversations]);
-  
+
   // 删除对话
   const deleteConversation = (id) => {
     setConversations(conversations.filter(conv => conv.id !== id));
   };
-  
+
   // 开始编辑对话标题
   const startEditing = (conversation) => {
     setEditingId(conversation.id);
     setEditingTitle(conversation.title);
   };
-  
+
   // 保存编辑的对话标题
   const saveEditing = () => {
     if (editingId && editingTitle.trim()) {
-      setConversations(conversations.map(conv => 
+      setConversations(conversations.map(conv =>
         conv.id === editingId ? { ...conv, title: editingTitle } : conv
       ));
       setEditingId(null);
       setEditingTitle('');
     }
   };
-  
+
   // 取消编辑
   const cancelEditing = () => {
     setEditingId(null);
@@ -189,21 +189,22 @@ function App() {
     }
   };
 
-  // 从后端数据库获取用户列表（模拟）
+  // 从后端数据库获取用户列表
   const fetchUsers = async () => {
     setIsLoading(true);
     try {
-      // 模拟API请求延迟
-      await new Promise(resolve => setTimeout(resolve, 500));
-      // 模拟从数据库获取的用户数据
-      const mockUsers = [
-        { value: 'langgraph', label: 'LangGraph' },
-        { value: 'user1', label: '用户1' },
-        { value: 'user2', label: '用户2' },
-        { value: 'user3', label: '用户3' },
-        { value: 'admin', label: '管理员' }
-      ];
-      setUsers(mockUsers);
+      // 调用后端API获取用户列表
+      const response = await fetch('http://localhost:8000/user_select');
+      if (!response.ok) {
+        throw new Error('获取用户列表失败');
+      }
+      const usersData = await response.json();
+      // 转换为前端需要的格式
+      const formattedUsers = usersData.map(user => ({
+        value: user.username,
+        label: user.username
+      }));
+      setUsers(formattedUsers);
     } catch (error) {
       console.error('获取用户列表失败:', error);
     } finally {
@@ -214,7 +215,7 @@ function App() {
   // 新建用户
   const handleCreateUser = async () => {
     if (!newUserName.trim()) return;
-    
+
     setIsLoading(true);
     try {
       // 模拟API请求延迟
@@ -244,7 +245,7 @@ function App() {
   useMemo(() => {
     scrollToBottom();
   }, [messages]);
-  
+
   // 组件挂载时获取用户列表
   useMemo(() => {
     fetchUsers();
@@ -266,7 +267,7 @@ function App() {
               </button>
             </div>
           </div>
-          
+
           {/* 搜索框 */}
           {!sidebarCollapsed && searchVisible && (
             <div className="search-container">
@@ -280,10 +281,10 @@ function App() {
               />
             </div>
           )}
-          
+
           {!sidebarCollapsed && !searchVisible && <button className="new-chat-btn">+ 新建对话</button>}
         </div>
-        
+
         {!sidebarCollapsed && (
           <div className="conversation-list">
             {filteredConversations.map((conv) => (
@@ -320,15 +321,15 @@ function App() {
                   </>
                 )}
                 <div className="conversation-actions">
-                  <button 
-                    className="conversation-action-btn" 
+                  <button
+                    className="conversation-action-btn"
                     onClick={() => startEditing(conv)}
                     title="修改命名"
                   >
                     ✏️
                   </button>
-                  <button 
-                    className="conversation-action-btn" 
+                  <button
+                    className="conversation-action-btn"
                     onClick={() => deleteConversation(conv.id)}
                     title="删除"
                   >
@@ -337,7 +338,7 @@ function App() {
                 </div>
               </div>
             ))}
-            
+
             {/* 搜索结果为空时显示 */}
             {searchTerm && filteredConversations.length === 0 && (
               <div className="no-results">
@@ -346,13 +347,13 @@ function App() {
             )}
           </div>
         )}
-        
+
         {!sidebarCollapsed && !searchVisible && (
           <div className="sidebar-footer">
             <div className="user-select-container">
               <div className="user-select">
                 <span className="user-select-label">用户选择：</span>
-                <select 
+                <select
                   className="user-dropdown"
                   value={selectedUser}
                   onChange={(e) => setSelectedUser(e.target.value)}
@@ -365,7 +366,7 @@ function App() {
                   ))}
                 </select>
               </div>
-              <button 
+              <button
                 className="new-user-btn"
                 onClick={() => setShowNewUserModal(true)}
                 disabled={isLoading}
@@ -376,14 +377,14 @@ function App() {
             </div>
           </div>
         )}
-        
+
         {/* 新建用户模态框 */}
         {showNewUserModal && (
           <div className="modal-overlay">
             <div className="modal">
               <div className="modal-header">
                 <h3>新建用户</h3>
-                <button 
+                <button
                   className="modal-close-btn"
                   onClick={() => setShowNewUserModal(false)}
                   disabled={isLoading}
@@ -407,7 +408,7 @@ function App() {
                 />
               </div>
               <div className="modal-footer">
-                <button 
+                <button
                   className="modal-cancel-btn"
                   onClick={() => {
                     setShowNewUserModal(false);
@@ -417,7 +418,7 @@ function App() {
                 >
                   取消
                 </button>
-                <button 
+                <button
                   className="modal-create-btn"
                   onClick={handleCreateUser}
                   disabled={isLoading || !newUserName.trim()}
@@ -464,7 +465,7 @@ function App() {
               {uploadedImages.map(img => (
                 <div key={img.id} className="image-preview-item">
                   <img src={img.url} alt="Upload preview" className="image-preview" />
-                  <button 
+                  <button
                     className="image-remove-btn"
                     onClick={() => removeImage(img.id)}
                     title="删除图片"
@@ -475,7 +476,7 @@ function App() {
               ))}
             </div>
           )}
-          
+
           <div className="input-wrapper short-input">
             <textarea
               className="message-input"
@@ -492,7 +493,7 @@ function App() {
               style={{ height: 'auto' }}
             />
             <div className="input-buttons">
-              <button 
+              <button
                 className="input-btn"
                 onClick={handleImageUploadClick}
                 title="上传图片"
