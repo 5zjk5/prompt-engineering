@@ -5,4 +5,5 @@ pydantic
 pydantic-settings
 pyyaml
 sqlite3
-requests
+requests
+aiosqlite

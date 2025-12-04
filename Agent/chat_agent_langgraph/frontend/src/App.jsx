@@ -73,8 +73,28 @@ function App() {
     }, [searchTerm, conversations]);
 
     // 删除对话
-    const deleteConversation = (id) => {
-        setConversations(conversations.filter(conv => conv.id !== id));
+    const deleteConversation = async (id) => {
+        // 调用后端API删除会话
+        try {
+            await fetch('http://localhost:8000/update_session_title', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user_id: selectedUserId || 'default',
+                    user_name: selectedUser || 'default',
+                    session_id: id,
+                    title: '', // 删除时title可以为空
+                    mode: 'delete'
+                })
+            });
+
+            // 删除成功后，从前端会话列表中移除
+            setConversations(conversations.filter(conv => conv.id !== id));
+        } catch (error) {
+            console.error('删除会话失败:', error);
+        }
     };
 
     // 开始编辑对话标题
@@ -99,8 +119,11 @@ function App() {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
+                        user_id: selectedUserId || 'default',
+                        user_name: selectedUser || 'default',
                         session_id: editingId,
-                        title: editingTitle
+                        title: editingTitle,
+                        mode: 'update'
                     })
                 });
             } catch (error) {
@@ -168,10 +191,16 @@ function App() {
         setInputValue('');
         setUploadedImages([]);
 
-        // 重置输入框高度
+        // 重置输入框高度和滚动条状态
         if (textareaRef.current) {
+            // 先设置为auto，让浏览器自动计算合适的高度
             textareaRef.current.style.height = 'auto';
-            textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 24) + 'px';
+            // 重置为默认的动态高度设置，不固定为24px
+            textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 100) + 'px';
+            // 确保滚动条在顶部
+            textareaRef.current.scrollTop = 0;
+            // 确保overflow-y正确设置
+            textareaRef.current.style.overflowY = 'hidden';
         }
 
         try {
@@ -185,6 +214,7 @@ function App() {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
+                        user_id: selectedUserId || 'default',
                         user_name: selectedUser || 'default'
                     })
                 });
@@ -232,9 +262,15 @@ function App() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    user_id: selectedUser || 'default',
+                    user_id: selectedUserId || 'default',
+                    user_name: selectedUser || 'default',
                     session_id: sessionId,
-                    message: newMessage.content || ''
+                    query: newMessage.content || '',
+                    files: uploadedImages.map(img => ({
+                        name: img.file.name,
+                        type: img.file.type,
+                        url: img.url
+                    }))
                 })
             });
 
@@ -302,14 +338,8 @@ function App() {
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             if (e.shiftKey) {
-                // Shift+Enter 只允许换一行
-                e.preventDefault();
-                // 计算当前换行符数量
-                const newlineCount = (inputValue.match(/\n/g) || []).length;
-                // 只允许一行换行
-                if (newlineCount < 1) {
-                    setInputValue(prev => prev + '\n');
-                }
+                // Shift+Enter 允许多行换行
+                // 不阻止默认行为，允许自然换行
             } else {
                 // Enter 发送消息
                 e.preventDefault();
@@ -383,6 +413,8 @@ function App() {
                 await fetchUsers();
                 // 选择新创建的用户
                 setSelectedUser(newUserName);
+                // 获取用户会话，同时获取用户ID
+                await fetchUserSessions(newUserName);
                 // 关闭模态框并清空输入
                 setShowNewUserModal(false);
                 setNewUserName('');
@@ -396,6 +428,12 @@ function App() {
             };
             setUsers([...users, newUser]);
             setSelectedUser(newUserName.trim());
+            // 尝试获取用户会话，即使后端不可用也可能有本地缓存
+            try {
+                await fetchUserSessions(newUserName.trim());
+            } catch (e) {
+                console.warn('获取用户会话失败:', e);
+            }
             setShowNewUserModal(false);
             setNewUserName('');
         } finally {
@@ -405,7 +443,13 @@ function App() {
 
     // 自动滚动到底部
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        // 使用 requestAnimationFrame 确保 DOM 已经更新
+        requestAnimationFrame(() => {
+            if (messagesEndRef.current) {
+                // 使用 auto 行为确保立即滚动到底部，避免平滑滚动的动画冲突
+                messagesEndRef.current.scrollIntoView({ behavior: 'auto', block: 'end', inline: 'nearest' });
+            }
+        });
     };
 
     // 新建对话
@@ -436,6 +480,7 @@ function App() {
             // 调用后端API创建新会话
             // 确保请求体只包含必要的数据，避免循环引用
             const requestBody = {
+                user_id: selectedUserId || 'default',
                 user_name: String(userToUse || '').trim()
             };
 
@@ -617,7 +662,7 @@ function App() {
                                     </div>
                                 ) : (
                                     <>
-                                        <div className="conversation-title">{conv.title}</div>
+                                        <div className="conversation-title">{conv.title.length > 10 ? conv.title.substring(0, 10) + '...' : conv.title}</div>
                                         <div className="conversation-preview">{conv.preview}</div>
                                     </>
                                 )}
@@ -671,6 +716,8 @@ function App() {
                                                     onClick={() => {
                                                         setSelectedUser(user.value);
                                                         setDropdownExpanded(false);
+                                                        // 获取用户会话，同时获取用户ID
+                                                        fetchUserSessions(user.value);
                                                     }}
                                                 >
                                                     {user.label}
@@ -823,7 +870,12 @@ function App() {
                                 setInputValue(e.target.value);
                                 // 自动调整文本域高度，最多显示5行（约100px）
                                 e.target.style.height = 'auto';
-                                e.target.style.height = Math.min(e.target.scrollHeight, 100) + 'px';
+                                const newHeight = Math.min(e.target.scrollHeight, 100);
+                                e.target.style.height = newHeight + 'px';
+                                // 根据内容高度动态设置overflow-y
+                                e.target.style.overflowY = (e.target.scrollHeight > newHeight) ? 'auto' : 'hidden';
+                                // 确保滚动条在顶部
+                                e.target.scrollTop = 0;
                             }}
                             onKeyDown={handleKeyDown}
                             rows={1}

@@ -1,7 +1,7 @@
 import uvicorn
-import sqlite3
 import uuid
 import json
+import asyncio
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
@@ -9,6 +9,7 @@ from pydantic import BaseModel
 from langchain_core.messages import HumanMessage
 from config.config import config, db_path, service_logger, llm_text, llm_img
 from config.create_db import create_database
+import aiosqlite
 
 
 class UserRequest(BaseModel):
@@ -16,6 +17,7 @@ class UserRequest(BaseModel):
 
 
 class ChatRequest(BaseModel):
+    user_name: str = "default"
     user_id: str
     session_id: str
     query: str
@@ -23,8 +25,10 @@ class ChatRequest(BaseModel):
 
 
 class SessionTitleRequest(BaseModel):
+    user_name: str = "default"
     session_id: str
     title: str
+    mode: str = "update"  # 默认为更新模式，可选值为"update"或"delete"
 
 
 app = FastAPI(
@@ -46,7 +50,7 @@ app.add_middleware(
 
 # 用户选择
 @app.get("/user_select")
-def get_users():
+async def get_users():
     """
     查询数据库中的user_info表，返回所有用户名
     """
@@ -54,27 +58,25 @@ def get_users():
         service_logger.info("查询数据库中的 user_info 表，返回所有用户名")
 
         # 连接数据库，设置超时时间为30秒
-        conn = sqlite3.connect(db_path, timeout=30.0)
-        cursor = conn.cursor()
+        async with aiosqlite.connect(db_path) as conn:
+            async with conn.cursor() as cursor:
+                # 查询所有用户
+                await cursor.execute("SELECT user FROM user_info")
+                rows = await cursor.fetchall()
+                users = [row[0] for row in rows]
+                service_logger.info(
+                    f"成功查询到 {len(users)} 个用户，用户列表为: {users}"
+                )
 
-        try:
-            # 查询所有用户
-            cursor.execute("SELECT user FROM user_info")
-            users = [row[0] for row in cursor.fetchall()]
-            service_logger.info(f"成功查询到 {len(users)} 个用户，用户列表为: {users}")
-
-            return {"users": users}
-        finally:
-            # 确保连接总是被关闭
-            conn.close()
-    except sqlite3.Error as e:
+                return {"users": users}
+    except Exception as e:
         service_logger.error(f"查询用户失败: {str(e)}")
         return {"error": f"查询用户失败: {str(e)}"}
 
 
 # 创建用户
 @app.get("/create_user")
-def create_user(username: str = Query(..., description="用户名")):
+async def create_user(username: str = Query(..., description="用户名")):
     """
     创建新用户，将用户信息保存到user_info表中
 
@@ -91,134 +93,146 @@ def create_user(username: str = Query(..., description="用户名")):
         user_id = str(uuid.uuid4())
 
         # 连接数据库，设置超时时间为30秒
-        conn = sqlite3.connect(db_path, timeout=30.0)
-        cursor = conn.cursor()
+        async with aiosqlite.connect(db_path) as conn:
+            async with conn.cursor() as cursor:
+                # 检查用户名是否已存在
+                await cursor.execute(
+                    "SELECT user FROM user_info WHERE user = ?", (username,)
+                )
+                existing_user = await cursor.fetchone()
 
-        try:
-            # 检查用户名是否已存在
-            cursor.execute("SELECT user FROM user_info WHERE user = ?", (username,))
-            existing_user = cursor.fetchone()
+                if existing_user:
+                    service_logger.error(f"创建用户失败: 用户名 {username} 已存在")
+                    return {"error": "用户名已存在"}
 
-            if existing_user:
-                service_logger.error(f"创建用户失败: 用户名 {username} 已存在")
-                return {"error": "用户名已存在"}
+                # 插入新用户
+                await cursor.execute(
+                    "INSERT INTO user_info (user, user_id) VALUES (?, ?)",
+                    (username, user_id),
+                )
 
-            # 插入新用户
-            cursor.execute(
-                "INSERT INTO user_info (user, user_id) VALUES (?, ?)",
-                (username, user_id),
-            )
+                # 提交更改
+                await conn.commit()
 
-            # 提交更改
-            conn.commit()
+                service_logger.info(f"用户 {username} 成功创建，用户 ID 为: {user_id}")
+                return {"message": "用户创建成功", "user": username, "user_id": user_id}
 
-            service_logger.info(f"用户 {username} 成功创建，用户 ID 为: {user_id}")
-            return {"message": "用户创建成功", "user": username, "user_id": user_id}
-        finally:
-            # 确保连接总是被关闭
-            conn.close()
-
-    except sqlite3.Error as e:
+    except Exception as e:
         service_logger.error(f"创建用户失败: {str(e)}")
         return {"error": f"创建用户失败: {str(e)}"}
 
 
-### 获得用户的所有 session
+# 获得用户的所有 session
 @app.post("/user_session")
-def get_user_session(user: UserRequest):
+async def get_user_session(user: UserRequest):
     try:
         service_logger.info(f"尝试获取用户会话： {user.user_name}")
 
         # 连接数据库，设置超时时间为30秒
-        conn = sqlite3.connect(db_path, timeout=30.0)
-        cursor = conn.cursor()
-
-        try:
-            # 根据用户名查询用户ID
-            cursor.execute(
-                "SELECT user_id FROM user_info WHERE user = ?",
-                (user.user_name,),
-            )
-            result = cursor.fetchone()
-
-            # 如果用户不存在，返回错误
-            if result is None:
-                service_logger.error(f"用户 {user.user_name} 不存在")
-                return {"error": f"用户 {user.user_name} 不存在"}
-
-            user_id = result[0]
-
-            # 查询该用户的所有会话
-            cursor.execute(
-                "SELECT session_id, title, created_at FROM session_info WHERE user_id = ? ORDER BY created_at DESC",
-                (user_id,),
-            )
-            sessions = cursor.fetchall()
-
-            # 格式化会话数据
-            session_list = []
-            for session in sessions:
-                session_id, title, created_at = session
-                session_list.append(
-                    {"session_id": session_id, "title": title, "created_at": created_at}
+        async with aiosqlite.connect(db_path) as conn:
+            async with conn.cursor() as cursor:
+                # 根据用户名查询用户ID
+                await cursor.execute(
+                    "SELECT user_id FROM user_info WHERE user = ?",
+                    (user.user_name,),
                 )
+                result = await cursor.fetchone()
 
-            service_logger.info(
-                f"成功获取用户 {user.user_name} 的 {len(session_list)} 个会话"
-            )
-            return {"user_id": user_id, "sessions": session_list}
+                # 如果用户不存在，返回错误
+                if result is None:
+                    service_logger.error(f"用户 {user.user_name} 不存在")
+                    return {"error": f"用户 {user.user_name} 不存在"}
 
-        finally:
-            conn.close()
+                user_id = result[0]
+
+                # 查询该用户的所有会话
+                await cursor.execute(
+                    "SELECT session_id, title, created_at FROM session_info WHERE user_id = ? ORDER BY created_at DESC",
+                    (user_id,),
+                )
+                sessions = await cursor.fetchall()
+
+                # 格式化会话数据
+                session_list = []
+                for session in sessions:
+                    session_id, title, created_at = session
+                    session_list.append(
+                        {
+                            "session_id": session_id,
+                            "title": title,
+                            "created_at": created_at,
+                        }
+                    )
+
+                service_logger.info(
+                    f"成功获取用户 {user.user_name} 的 {len(session_list)} 个会话，user_id: {user_id}"
+                )
+                return {"user_id": user_id, "sessions": session_list}
 
     except Exception as e:
         service_logger.error(f"获取用户会话失败： {str(e)}")
         return {"error": f"获取用户会话失败： {str(e)}"}
 
 
-# 更新会话标题
+# 更新、删除会话标题
 @app.post("/update_session_title")
-def update_session_title(request: SessionTitleRequest):
+async def update_session_title(request: SessionTitleRequest):
     try:
-        service_logger.info(
-            f"尝试更新会话标题： {request.session_id} -> {request.title}"
-        )
+        # 根据模式记录不同的日志
+        if request.mode == "delete":
+            service_logger.info(
+                f"用户 {request.user_name} 尝试删除会话： {request.session_id}"
+            )
+        else:
+            service_logger.info(
+                f"用户 {request.user_name} 尝试更新会话标题： {request.session_id} -> {request.title}"
+            )
 
         # 连接数据库，设置超时时间为30秒
-        conn = sqlite3.connect(db_path, timeout=30.0)
-        cursor = conn.cursor()
+        async with aiosqlite.connect(db_path) as conn:
+            async with conn.cursor() as cursor:
+                if request.mode == "delete":
+                    # 删除会话
+                    await cursor.execute(
+                        "DELETE FROM session_info WHERE session_id = ?",
+                        (request.session_id,),
+                    )
 
-        try:
-            # 更新会话标题
-            cursor.execute(
-                "UPDATE session_info SET title = ? WHERE session_id = ?",
-                (request.title, request.session_id),
-            )
-                service_logger.info(
-            # 提交更改
-            conn.commit()
+                    # 提交更改
+                    await conn.commit()
 
-            # 检查是否有行被更新
-            if cursor.rowcount == 0:
-                service_logger.error(f"会话 {request.session_id} 不存在")
-                return {"error": f"会话 {request.session_id} 不存在"}
-                )
-            service_logger.info(
-                f"成功更新会话 {request.session_id} 的标题为 {request.title}"
-            )
-            return {"success": True, "message": "会话标题更新成功"}
-                # 检查是否有行被更新
-                if cursor.rowcount == 0:
-                    service_logger.error(f"会话 {request.session_id} 不存在")
-                    return {"error": f"会话 {request.session_id} 不存在"}
+                    # 检查是否有行被删除
+                    if cursor.rowcount == 0:
+                        service_logger.error(
+                            f"用户 {request.user_name} 尝试删除的会话 {request.session_id} 不存在"
+                        )
+                        return {"error": f"会话 {request.session_id} 不存在"}
 
-        service_logger.error(f"更新会话标题失败： {str(e)}")
-        return {"error": f"更新会话标题失败： {str(e)}"}
-                )
-                return {"success": True, "message": "会话标题更新成功"}
+                    service_logger.info(
+                        f"用户 {request.user_name} 成功删除会话 {request.session_id}"
+                    )
+                    return {"success": True, "message": "会话删除成功"}
+                else:
+                    # 更新会话标题
+                    await cursor.execute(
+                        "UPDATE session_info SET title = ? WHERE session_id = ?",
+                        (request.title, request.session_id),
+                    )
 
-        finally:
-            conn.close()
+                    # 提交更改
+                    await conn.commit()
+
+                    # 检查是否有行被更新
+                    if cursor.rowcount == 0:
+                        service_logger.error(
+                            f"用户 {request.user_name} 尝试更新的会话 {request.session_id} 不存在"
+                        )
+                        return {"error": f"会话 {request.session_id} 不存在"}
+
+                    service_logger.info(
+                        f"用户 {request.user_name} 成功更新会话 {request.session_id} 的标题为 {request.title}"
+                    )
+                    return {"success": True, "message": "会话标题更新成功"}
 
     except Exception as e:
         service_logger.error(f"操作会话失败： {str(e)}")
@@ -227,47 +241,47 @@ def update_session_title(request: SessionTitleRequest):
 
 # 新建会话
 @app.post("/create_session")
-def create_session(user: UserRequest):
+async def create_session(user: UserRequest):
     try:
-        service_logger.info(f"尝试创建会话： {user.user_name}")
+        service_logger.info(f"尝试给用户 {user.user_name} 创建新会话")
 
         # 连接数据库，设置超时时间为30秒
-        conn = sqlite3.connect(db_path, timeout=30.0)
-        cursor = conn.cursor()
-
-        try:
-            # 根据用户名查询用户ID
-            cursor.execute(
-                "SELECT user_id FROM user_info WHERE user = ?",
-                (user.user_name,),
-            )
-            result = cursor.fetchone()
-
-            # 如果用户不存在，创建新用户
-            if result is None:
-                service_logger.warning(f"用户 {user.user_name} 不存在，创建新用户")
-                user_id = str(uuid.uuid4())
-                cursor.execute(
-                    "INSERT INTO user_info (user, user_id) VALUES (?, ?)",
-                    (user.user_name, user_id),
+        async with aiosqlite.connect(db_path) as conn:
+            async with conn.cursor() as cursor:
+                # 根据用户名查询用户ID
+                await cursor.execute(
+                    "SELECT user_id FROM user_info WHERE user = ?",
+                    (user.user_name,),
                 )
-            else:
-                user_id = result[0]
+                result = await cursor.fetchone()
 
-            # 生成新的session ID
-            session_id = str(uuid.uuid4())
+                # 如果用户不存在，创建新用户
+                if result is None:
+                    service_logger.warning(f"用户 {user.user_name} 不存在，创建新用户")
+                    user_id = str(uuid.uuid4())
+                    await cursor.execute(
+                        "INSERT INTO user_info (user, user_id) VALUES (?, ?)",
+                        (user.user_name, user_id),
+                    )
+                else:
+                    user_id = result[0]
 
-            # 插入新的session记录
-            cursor.execute(
-                "INSERT INTO session_info (user_id, session_id) VALUES (?, ?)",
-                (user_id, session_id),
-            )
+                # 生成新的session ID
+                session_id = str(uuid.uuid4())
 
-            # 提交更改
-            conn.commit()
-        finally:
-            # 确保连接总是被关闭
-            conn.close()
+                # 插入新的session记录
+                await cursor.execute(
+                    "INSERT INTO session_info (user_id, session_id) VALUES (?, ?)",
+                    (user_id, session_id),
+                )
+
+                # 提交更改
+                await conn.commit()
+
+                # 记录会话创建日志
+                service_logger.info(
+                    f"用户 {user.user_name} (ID: {user_id}) 创建新会话 {session_id}"
+                )
 
         # 返回session ID和用户ID
         return {
@@ -283,7 +297,7 @@ def create_session(user: UserRequest):
 
 # 对话接口
 @app.post("/chat")
-def chat(request: ChatRequest):
+async def chat(request: ChatRequest):
     """
     接收用户ID、会话ID和消息，调用大模型并流式返回结果
 
@@ -294,20 +308,21 @@ def chat(request: ChatRequest):
         流式响应，包含大模型的生成结果
     """
     try:
+        user = request.user_name
         user_id = request.user_id
         session_id = request.session_id
         query = request.query
         files = request.files
 
         service_logger.info(
-            f"收到聊天请求: 用户ID={user_id}, 会话ID={session_id}, 查询={query[:30]}..., 文件数={len(files)}"
+            f"收到聊天请求: 用户={user}, 用户ID={user_id}, 会话ID={session_id}, 文件数={len(files)}, 查询={query}"
         )
 
         # 创建消息列表
         messages = [HumanMessage(content=query)]
 
-        # 定义生成器函数，用于流式返回结果
-        def generate():
+        # 定义异步生成器函数，用于流式返回结果
+        async def generate():
             try:
                 # 调用大模型的流式生成方法
                 for chunk in llm_text.stream(messages):
