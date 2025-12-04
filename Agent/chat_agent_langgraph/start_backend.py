@@ -1,7 +1,7 @@
 import uvicorn
 import uuid
 import json
-import asyncio
+import aiosqlite
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
@@ -9,7 +9,6 @@ from pydantic import BaseModel
 from langchain_core.messages import HumanMessage
 from config.config import config, db_path, service_logger, llm_text, llm_img
 from config.create_db import create_database
-import aiosqlite
 
 
 class UserRequest(BaseModel):
@@ -317,6 +316,7 @@ async def chat(request: ChatRequest):
         service_logger.info(
             f"收到聊天请求: 用户={user}, 用户ID={user_id}, 会话ID={session_id}, 文件数={len(files)}, 查询={query}"
         )
+        service_logger.info(f"对话日志：log/chat_log/{user_id}/{session_id}.log")
 
         # 创建消息列表
         messages = [HumanMessage(content=query)]
@@ -325,17 +325,17 @@ async def chat(request: ChatRequest):
         async def generate():
             try:
                 # 调用大模型的流式生成方法
-                for chunk in llm_text.stream(messages):
+                async for chunk in llm_text.astream(messages):
                     # 提取内容
-                    content = chunk.message.content
+                    content = chunk.content
                     if content:
                         # 构造JSON格式的响应
                         response = {
                             "content": content,
-                            "content_type": chunk.message.response_metadata.get(
+                            "content_type": chunk.response_metadata.get(
                                 "content_type", "content"
                             ),
-                            "chunk_index": chunk.message.response_metadata.get(
+                            "chunk_index": chunk.response_metadata.get(
                                 "chunk_index", "0"
                             ),
                         }
