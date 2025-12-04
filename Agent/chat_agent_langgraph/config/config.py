@@ -18,7 +18,7 @@ def load_config():
 config = load_config()
 
 # 加载大模型
-llm = ChatOpenAIModel(
+llm_text = ChatOpenAIModel(
     api_key=config["GLM"]["API_KEY"],
     base_url=config["GLM"]["BASE_URL"],
     extra_body={

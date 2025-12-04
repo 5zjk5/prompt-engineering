@@ -87,8 +87,8 @@ def start_frontend():
         if os.name == "nt":
             process = subprocess.Popen(
                 ["cmd", "/c", "npm", "run", "dev"],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
+                # stdout=subprocess.PIPE,
+                # stderr=subprocess.PIPE,
                 text=True,
                 creationflags=subprocess.CREATE_NEW_PROCESS_GROUP,
             )
