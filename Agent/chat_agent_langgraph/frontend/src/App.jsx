@@ -1,4 +1,6 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import './App.css'
 
 function App() {
@@ -47,6 +49,10 @@ function App() {
     // 编辑状态
     const [editingId, setEditingId] = useState(null);
     const [editingTitle, setEditingTitle] = useState('');
+
+    // 流式输出状态
+    const [isStreaming, setIsStreaming] = useState(false);
+    const [readerController, setReaderController] = useState(null);
 
     const toggleSidebar = () => {
         setSidebarCollapsed(!sidebarCollapsed);
@@ -106,6 +112,10 @@ function App() {
     // 保存编辑的对话标题
     const saveEditing = async () => {
         if (editingId && editingTitle.trim()) {
+            // 找到要编辑的会话
+            const conversation = conversations.find(conv => conv.id === editingId);
+            if (!conversation) return;
+
             // 更新本地会话标题
             setConversations(conversations.map(conv =>
                 conv.id === editingId ? { ...conv, title: editingTitle } : conv
@@ -121,7 +131,7 @@ function App() {
                     body: JSON.stringify({
                         user_id: selectedUserId || 'default',
                         user_name: selectedUser || 'default',
-                        session_id: editingId,
+                        session_id: conversation.session_id, // 使用session_id而不是id
                         title: editingTitle,
                         mode: 'update'
                     })
@@ -149,6 +159,15 @@ function App() {
 
     const handleImageChange = (e) => {
         const files = Array.from(e.target.files);
+
+        // 检查图片数量限制
+        if (uploadedImages.length + files.length > 5) {
+            alert('最多只能上传5张图片');
+            // 清空input，允许重复选择相同文件
+            e.target.value = '';
+            return;
+        }
+
         const newImages = files.map(file => ({
             id: Date.now() + Math.random(),
             file: file,
@@ -162,6 +181,27 @@ function App() {
     // 删除上传的图片
     const removeImage = (id) => {
         setUploadedImages(uploadedImages.filter(img => img.id !== id));
+    };
+
+    // 将图片转换为base64编码
+    const convertImageToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                // 移除base64前缀，只保留编码部分
+                const base64String = reader.result.split(',')[1];
+                resolve(base64String);
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    };
+
+    // 停止流式输出
+    const stopStreaming = () => {
+        if (readerController) {
+            readerController.abort();
+        }
     };
 
     // 发送消息功能
@@ -187,6 +227,9 @@ function App() {
         // 添加到消息列表
         setMessages([...messages, newMessage]);
 
+        // 保存输入内容用于设置标题
+        const tempInputValue = inputValue;
+
         // 清空输入框和图片
         setInputValue('');
         setUploadedImages([]);
@@ -206,8 +249,10 @@ function App() {
         try {
             // 1. 检查是否有当前会话ID，如果没有则创建新会话
             let sessionId = currentSessionId;
+            let isFirstMessage = false;
+
             if (!sessionId) {
-                // 创建新会话
+                // 使用默认标题创建会话
                 const sessionResponse = await fetch('http://localhost:8000/create_session', {
                     method: 'POST',
                     headers: {
@@ -241,6 +286,48 @@ function App() {
                     },
                     ...prevConversations
                 ]);
+
+                isFirstMessage = true;
+            } else {
+                // 检查当前会话是否有消息，如果没有则是第一条消息
+                const currentConversation = conversations.find(conv => conv.session_id === sessionId);
+                if (currentConversation && currentConversation.title === '新建对话') {
+                    isFirstMessage = true;
+                }
+            }
+
+            // 使用第一条消息作为标题，截取前10个字符，超出部分用省略号表示
+            if (isFirstMessage && tempInputValue) {
+                const title = tempInputValue.length > 10
+                    ? tempInputValue.substring(0, 10) + '...'
+                    : tempInputValue;
+
+                // 更新对话列表中的标题
+                setConversations(prevConversations =>
+                    prevConversations.map(conv =>
+                        conv.session_id === sessionId
+                            ? { ...conv, title: title }
+                            : conv
+                    )
+                );
+
+                // 调用后端API更新会话标题
+                try {
+                    await fetch('http://localhost:8000/update_session_title', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            user_name: selectedUser || 'default',
+                            session_id: sessionId,
+                            title: title,
+                            mode: 'update'
+                        })
+                    });
+                } catch (error) {
+                    console.error('更新会话标题失败:', error);
+                }
             }
 
             // 2. 创建AI回复消息占位符
@@ -255,7 +342,21 @@ function App() {
             };
             setMessages(prev => [...prev, aiReply]);
 
-            // 3. 调用后端/chat接口，处理流式响应
+            // 3. 转换图片为base64编码
+            const filesData = [];
+            for (const img of uploadedImages) {
+                try {
+                    const img_base64 = await convertImageToBase64(img.file);
+                    filesData.push({
+                        img_name: img.file.name,
+                        img_base64: img_base64
+                    });
+                } catch (error) {
+                    console.error('图片转换为base64失败:', error);
+                }
+            }
+
+            // 4. 调用后端/chat接口，处理流式响应
             const response = await fetch('http://localhost:8000/chat', {
                 method: 'POST',
                 headers: {
@@ -266,11 +367,7 @@ function App() {
                     user_name: selectedUser || 'default',
                     session_id: sessionId,
                     query: newMessage.content || '',
-                    files: uploadedImages.map(img => ({
-                        name: img.file.name,
-                        type: img.file.type,
-                        url: img.url
-                    }))
+                    files: filesData
                 })
             });
 
@@ -279,44 +376,75 @@ function App() {
             }
 
             // 4. 处理流式响应
-            const reader = response.body.getReader();
+            setIsStreaming(true);
             const decoder = new TextDecoder();
             let accumulatedContent = '';
 
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
+            // 使用AbortController来控制取消流式响应
+            const controller = new AbortController();
+            const signal = controller.signal;
+            setReaderController(controller);
 
-                const chunk = decoder.decode(value, { stream: true });
-                const lines = chunk.split('\n');
+            try {
+                const reader = response.body.getReader();
 
-                for (const line of lines) {
-                    if (line.trim() === '') continue;
-                    if (line.startsWith('data: ')) {
-                        try {
-                            const data = JSON.parse(line.substring(6));
-                            if (data.content) {
-                                accumulatedContent += data.content;
-                                // 更新AI回复消息内容
-                                setMessages(prev => prev.map(msg =>
-                                    msg.id === aiReplyId
-                                        ? { ...msg, content: accumulatedContent }
-                                        : msg
-                                ));
+                while (true) {
+                    // 检查是否被取消
+                    if (signal.aborted) {
+                        console.log('流式响应已被取消');
+                        await reader.cancel();
+                        break;
+                    }
+
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    const chunk = decoder.decode(value, { stream: true });
+                    const lines = chunk.split('\n');
+
+                    for (const line of lines) {
+                        if (line.trim() === '') continue;
+                        if (line.startsWith('data: ')) {
+                            try {
+                                const data = JSON.parse(line.substring(6));
+                                if (data.content) {
+                                    accumulatedContent += data.content;
+                                    // 更新AI回复消息内容
+                                    setMessages(prev => prev.map(msg =>
+                                        msg.id === aiReplyId
+                                            ? { ...msg, content: accumulatedContent }
+                                            : msg
+                                    ));
+                                }
+                            } catch (e) {
+                                console.error('解析流式数据失败:', e);
                             }
-                        } catch (e) {
-                            console.error('解析流式数据失败:', e);
                         }
                     }
                 }
-            }
 
-            // 5. 流式响应完成，更新消息状态
-            setMessages(prev => prev.map(msg =>
-                msg.id === aiReplyId
-                    ? { ...msg, streaming: false }
-                    : msg
-            ));
+                // 5. 流式响应完成，更新消息状态和时间戳
+                setMessages(prev => prev.map(msg =>
+                    msg.id === aiReplyId
+                        ? { ...msg, streaming: false, timestamp: new Date() }
+                        : msg
+                ));
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    console.log('流式响应被中断');
+                    // 更新AI回复消息状态为已停止
+                    setMessages(prev => prev.map(msg =>
+                        msg.id === aiReplyId
+                            ? { ...msg, streaming: false, timestamp: new Date() }
+                            : msg
+                    ));
+                } else {
+                    console.error('处理流式响应失败:', error);
+                }
+            } finally {
+                setIsStreaming(false);
+                setReaderController(null);
+            }
 
         } catch (error) {
             console.error('发送消息失败:', error);
@@ -482,6 +610,7 @@ function App() {
             const requestBody = {
                 user_id: selectedUserId || 'default',
                 user_name: String(userToUse || '').trim()
+                // 不传递title参数，让后端使用默认值"新建对话"
             };
 
             const response = await fetch('http://localhost:8000/create_session', {
@@ -509,11 +638,12 @@ function App() {
             setHasCreatedSession(true);
 
             // 更新对话列表，添加新创建的会话
+            // 使用后端返回的标题
             setConversations(prevConversations => [
                 {
                     id: data.session_id,
                     session_id: data.session_id,
-                    title: '新建对话',
+                    title: data.title || '新建对话',
                     preview: '',
                     content: ''
                 },
@@ -560,7 +690,7 @@ function App() {
                 const formattedConversations = data.sessions.map(session => ({
                     id: session.session_id,
                     session_id: session.session_id,
-                    title: session.title,
+                    title: session.title || '新建对话', // 确保标题为空时显示"新建对话"
                     preview: '',
                     content: ''
                 }));
@@ -576,6 +706,74 @@ function App() {
         fetchUsers();
     }, []);
 
+    // 加载历史消息
+    const loadHistoryMessages = async (sessionId) => {
+        if (!sessionId) return;
+
+        try {
+            const response = await fetch('http://localhost:8000/session_messages', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    session_id: sessionId,
+                    user_id: selectedUserId || 'default',
+                    user_name: selectedUser || 'default'
+                })
+            });
+            if (!response.ok) {
+                throw new Error('获取历史消息失败');
+            }
+            const data = await response.json();
+
+            if (data.error) {
+                console.error('获取历史消息失败:', data.error);
+                return;
+            }
+
+            // 如果有历史消息，格式化并设置到消息列表
+            if (data.messages && Array.isArray(data.messages)) {
+                const formattedMessages = [];
+                let messageIndex = 0;
+
+                // 处理每一轮问答，创建两条消息：用户消息和AI消息
+                data.messages.forEach((msg, turnIndex) => {
+                    // 创建用户消息
+                    if (msg.query) {
+                        formattedMessages.push({
+                            id: `history-${messageIndex++}`,
+                            type: 'user',
+                            content: msg.query,
+                            timestamp: msg.timestamp || new Date().toISOString(),
+                            streaming: false,
+                            images: []
+                        });
+                    }
+
+                    // 创建AI消息
+                    if (msg.answer) {
+                        formattedMessages.push({
+                            id: `history-${messageIndex++}`,
+                            type: 'ai',
+                            content: msg.answer,
+                            timestamp: msg.timestamp || new Date().toISOString(),
+                            streaming: false,
+                            images: []
+                        });
+                    }
+                });
+
+                setMessages(formattedMessages);
+            } else {
+                setMessages([]);
+            }
+        } catch (error) {
+            console.error('加载历史消息失败:', error);
+            setMessages([]);
+        }
+    };
+
     // 切换会话
     const handleConversationClick = (conversation) => {
         // 更新当前会话ID
@@ -584,6 +782,8 @@ function App() {
         setHasCreatedSession(true);
         // 清空当前消息列表
         setMessages([]);
+        // 加载历史消息
+        loadHistoryMessages(conversation.session_id);
     };
 
     // 当selectedUser变化时，获取该用户的所有会话
@@ -662,7 +862,9 @@ function App() {
                                     </div>
                                 ) : (
                                     <>
-                                        <div className="conversation-title">{conv.title.length > 10 ? conv.title.substring(0, 10) + '...' : conv.title}</div>
+                                        <div className="conversation-title">
+                                            {conv.title.length > 10 ? conv.title.substring(0, 10) + '...' : (conv.title || '新建对话')}
+                                        </div>
                                         <div className="conversation-preview">{conv.preview}</div>
                                     </>
                                 )}
@@ -818,20 +1020,66 @@ function App() {
                             <div className="message-avatar">
                                 {message.type === 'user' ? '👤' : '🤖'}
                             </div>
-                            <div className="message-bubble">
-                                {message.content && <div className="message-content">{message.content}</div>}
-                                {message.streaming && (
-                                    <div className="streaming-indicator">
-                                        <span className="typing-dot"></span>
-                                        <span className="typing-dot"></span>
-                                        <span className="typing-dot"></span>
-                                    </div>
-                                )}
-                                {message.images.length > 0 && (
-                                    <div className="message-images">
-                                        {message.images.map(img => (
-                                            <img key={img.id} src={img.url} alt="Message image" className="message-image" />
-                                        ))}
+                            <div className="message-content-wrapper">
+                                <div className="message-bubble">
+                                    {message.content && <div className="message-content"><ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown></div>}
+                                    {message.streaming && (
+                                        <div className="streaming-indicator">
+                                            <span className="typing-dot"></span>
+                                            <span className="typing-dot"></span>
+                                            <span className="typing-dot"></span>
+                                        </div>
+                                    )}
+                                    {message.images.length > 0 && (
+                                        <div className="message-images">
+                                            {message.images.map(img => {
+                                                // 获取图片名称，处理不同情况
+                                                let fileName = '未知图片';
+                                                if (img.file && img.file.name) {
+                                                    fileName = img.file.name;
+                                                } else if (img.name) {
+                                                    fileName = img.name;
+                                                } else if (img.url) {
+                                                    // 从URL中提取文件名
+                                                    const urlParts = img.url.split('/');
+                                                    fileName = urlParts[urlParts.length - 1];
+                                                    // 去除可能的查询参数
+                                                    fileName = fileName.split('?')[0];
+                                                }
+
+                                                // 处理图片名称，显示更合理的长度
+                                                const ext = fileName.substring(fileName.lastIndexOf('.'));
+                                                const nameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
+
+                                                // 调整截断规则：名称部分最多显示5个字符，加上扩展名
+                                                let displayName;
+                                                if (nameWithoutExt.length > 5) {
+                                                    displayName = nameWithoutExt.substring(0, 5) + '...' + ext;
+                                                } else {
+                                                    displayName = fileName;
+                                                }
+
+                                                return (
+                                                    <div key={img.id} className="message-image-wrapper">
+                                                        <img src={img.url} alt="Message image" className="message-image" />
+                                                        <div className="image-name">{displayName}</div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+                                </div>
+                                {message.timestamp && (
+                                    <div className="message-timestamp">
+                                        {new Date(message.timestamp).toLocaleString('zh-CN', {
+                                            year: 'numeric',
+                                            month: 'numeric',
+                                            day: 'numeric',
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                            second: '2-digit',
+                                            hour12: false
+                                        })}
                                     </div>
                                 )}
                             </div>
@@ -846,18 +1094,34 @@ function App() {
                     {/* 上传图片预览 - 移到对话框上方 */}
                     {uploadedImages.length > 0 && (
                         <div className="image-preview-container">
-                            {uploadedImages.map(img => (
-                                <div key={img.id} className="image-preview-item">
-                                    <img src={img.url} alt="Upload preview" className="image-preview" />
-                                    <button
-                                        className="image-remove-btn"
-                                        onClick={() => removeImage(img.id)}
-                                        title="删除图片"
-                                    >
-                                        ×
-                                    </button>
-                                </div>
-                            ))}
+                            {uploadedImages.map(img => {
+                                // 处理图片名称，显示更合理的长度
+                                const fileName = img.file.name;
+                                const ext = fileName.substring(fileName.lastIndexOf('.'));
+                                const nameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
+
+                                // 调整截断规则：名称部分最多显示5个字符（考虑中文字符），加上扩展名
+                                let displayName;
+                                if (nameWithoutExt.length > 5) {
+                                    displayName = nameWithoutExt.substring(0, 5) + '...' + ext;
+                                } else {
+                                    displayName = fileName;
+                                }
+
+                                return (
+                                    <div key={img.id} className="image-preview-item">
+                                        <img src={img.url} alt="Upload preview" className="image-preview" />
+                                        <div className="image-name">{displayName}</div>
+                                        <button
+                                            className="image-remove-btn"
+                                            onClick={() => removeImage(img.id)}
+                                            title="删除图片"
+                                        >
+                                            ×
+                                        </button>
+                                    </div>
+                                );
+                            })}
                         </div>
                     )}
 
@@ -890,9 +1154,15 @@ function App() {
                             >
                                 🖼️
                             </button>
-                            <button className="send-btn" onClick={sendMessage}>
-                                发送
-                            </button>
+                            {isStreaming ? (
+                                <button className="send-btn stop-btn" onClick={stopStreaming}>
+                                    <div className="loading-spinner"></div>
+                                </button>
+                            ) : (
+                                <button className="send-btn" onClick={sendMessage}>
+                                    发送
+                                </button>
+                            )}
                         </div>
                         {/* 隐藏的文件输入 */}
                         <input

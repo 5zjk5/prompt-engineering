@@ -1,8 +1,8 @@
 import os
 import yaml
 from pathlib import Path
-from llm.ChatOpenAIModel_LangChian import ChatOpenAIModel
-from log.logger import service_log
+from utils.ChatOpenAIModel_LangChian import ChatOpenAIModel
+from utils.logger import service_log
 
 
 # 简单的配置加载函数

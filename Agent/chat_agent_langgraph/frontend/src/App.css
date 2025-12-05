@@ -805,6 +805,42 @@ body {
     background-color: #005a9e;
 }
 
+/* 停止按钮样式 */
+.send-btn.stop-btn {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    background-color: #ff4757;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.send-btn.stop-btn:hover {
+    background-color: #ff3742;
+}
+
+/* 加载动画样式 */
+.loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 /* 消息样式 */
 .message {
     display: flex;
@@ -838,14 +874,14 @@ body {
 }
 
 /* 用户消息气泡 - 靠右 */
-.message.user .message-bubble {
+.message.user .message-content-wrapper {
     order: 1;
     margin-left: auto;
     max-width: 70%;
 }
 
 /* AI消息气泡 - 靠左 */
-.message.ai .message-bubble {
+.message.ai .message-content-wrapper {
     order: 2;
     margin-right: auto;
     max-width: 70%;
@@ -865,11 +901,12 @@ body {
 
 /* 消息气泡 */
 .message-bubble {
-    max-width: 70%;
+    max-width: 100%;
     padding: 12px 16px;
     border-radius: 16px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     word-wrap: break-word;
+    margin-bottom: 4px;
 }
 
 /* 用户消息气泡 - 蓝色背景，靠右 */
@@ -893,6 +930,143 @@ body {
     margin-bottom: 8px;
     line-height: 1.5;
     white-space: pre-wrap;
+}
+
+/* Markdown样式 */
+.message-content h1,
+.message-content h2,
+.message-content h3,
+.message-content h4,
+.message-content h5,
+.message-content h6 {
+    margin-top: 16px;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.message-content h1 {
+    font-size: 1.5em;
+}
+
+.message-content h2 {
+    font-size: 1.3em;
+}
+
+.message-content h3 {
+    font-size: 1.2em;
+}
+
+.message-content h4 {
+    font-size: 1.1em;
+}
+
+.message-content h5 {
+    font-size: 1em;
+}
+
+.message-content h6 {
+    font-size: 0.9em;
+}
+
+.message-content p {
+    margin-bottom: 8px;
+}
+
+.message-content ul,
+.message-content ol {
+    margin-bottom: 8px;
+    padding-left: 20px;
+}
+
+.message-content li {
+    margin-bottom: 4px;
+}
+
+.message-content code {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 0.9em;
+}
+
+.message-content pre {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 8px;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin-bottom: 8px;
+}
+
+.message-content pre code {
+    background-color: transparent;
+    padding: 0;
+}
+
+.message-content blockquote {
+    border-left: 4px solid #ddd;
+    padding-left: 8px;
+    margin: 8px 0;
+    color: #666;
+}
+
+.message-content a {
+    color: #0078d4;
+    text-decoration: none;
+}
+
+.message-content a:hover {
+    text-decoration: underline;
+}
+
+.message-content table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.message-content th,
+.message-content td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.message-content th {
+    background-color: #f2f2f2;
+    font-weight: 600;
+}
+
+/* 消息内容包装器 */
+.message-content-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+/* 用户消息包装器 - 靠右 */
+.message.user .message-content-wrapper {
+    align-items: flex-end;
+}
+
+/* AI消息包装器 - 靠左 */
+.message.ai .message-content-wrapper {
+    align-items: flex-start;
+}
+
+/* 消息时间戳 */
+.message-timestamp {
+    font-size: 14px;
+    color: #999;
+    margin-top: 4px;
+    text-align: right;
+    opacity: 0.8;
+    align-self: flex-end;
+}
+
+/* AI消息时间戳 - 左对齐 */
+.message.ai .message-timestamp {
+    text-align: left;
+    align-self: flex-start;
 }
 
 /* 流式指示器 */
@@ -942,6 +1116,13 @@ body {
     margin-top: 8px;
 }
 
+/* 消息图片包装器 */
+.message-image-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-top: 8px;
+}
+
 /* 消息图片 */
 .message-image {
     max-width: 80px;
@@ -950,8 +1131,43 @@ body {
     height: auto;
     border-radius: 8px;
     object-fit: cover;
-    margin-top: 8px;
     display: block;
+}
+
+/* 图片名称样式 */
+.image-name {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    font-size: 10px;
+    padding: 2px 4px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 上传预览图片的名称样式 */
+.image-preview-item .image-name {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    font-size: 10px;
+    padding: 2px 4px;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* 滚动条样式 */

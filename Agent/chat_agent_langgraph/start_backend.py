@@ -2,13 +2,24 @@ import uvicorn
 import uuid
 import json
 import aiosqlite
+import asyncio
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from langchain_core.messages import HumanMessage
-from config.config import config, db_path, service_logger, llm_text, llm_img
 from config.create_db import create_database
+from utils.logger import chat_log
+from config.config import (
+    config,
+    db_path,
+    service_logger,
+    llm_text,
+    llm_img,
+    chat_log_path,
+)
+
+
 
 
 class UserRequest(BaseModel):
@@ -28,6 +39,12 @@ class SessionTitleRequest(BaseModel):
     session_id: str
     title: str
     mode: str = "update"  # 默认为更新模式，可选值为"update"或"delete"
+
+
+class SessionMessagesRequest(BaseModel):
+    user_name: str
+    user_id: str
+    session_id: str
 
 
 app = FastAPI(
@@ -60,7 +77,8 @@ async def get_users():
         async with aiosqlite.connect(db_path) as conn:
             async with conn.cursor() as cursor:
                 # 查询所有用户
-                await cursor.execute("SELECT user FROM user_info")
+                sql = "SELECT user FROM user_info"
+                await cursor.execute(sql)
                 rows = await cursor.fetchall()
                 users = [row[0] for row in rows]
                 service_logger.info(
@@ -95,9 +113,9 @@ async def create_user(username: str = Query(..., description="用户名")):
         async with aiosqlite.connect(db_path) as conn:
             async with conn.cursor() as cursor:
                 # 检查用户名是否已存在
-                await cursor.execute(
-                    "SELECT user FROM user_info WHERE user = ?", (username,)
-                )
+                sql = "SELECT user FROM user_info WHERE user = ?"
+                params = (username,)
+                await cursor.execute(sql, params)
                 existing_user = await cursor.fetchone()
 
                 if existing_user:
@@ -105,10 +123,9 @@ async def create_user(username: str = Query(..., description="用户名")):
                     return {"error": "用户名已存在"}
 
                 # 插入新用户
-                await cursor.execute(
-                    "INSERT INTO user_info (user, user_id) VALUES (?, ?)",
-                    (username, user_id),
-                )
+                sql = "INSERT INTO user_info (user, user_id) VALUES (?, ?)"
+                params = (username, user_id)
+                await cursor.execute(sql, params)
 
                 # 提交更改
                 await conn.commit()
@@ -131,10 +148,9 @@ async def get_user_session(user: UserRequest):
         async with aiosqlite.connect(db_path) as conn:
             async with conn.cursor() as cursor:
                 # 根据用户名查询用户ID
-                await cursor.execute(
-                    "SELECT user_id FROM user_info WHERE user = ?",
-                    (user.user_name,),
-                )
+                sql = "SELECT user_id FROM user_info WHERE user = ?"
+                params = (user.user_name,)
+                await cursor.execute(sql, params)
                 result = await cursor.fetchone()
 
                 # 如果用户不存在，返回错误
@@ -145,10 +161,9 @@ async def get_user_session(user: UserRequest):
                 user_id = result[0]
 
                 # 查询该用户的所有会话
-                await cursor.execute(
-                    "SELECT session_id, title, created_at FROM session_info WHERE user_id = ? ORDER BY created_at DESC",
-                    (user_id,),
-                )
+                sql = "SELECT session_id, title, created_at FROM session_info WHERE user_id = ? ORDER BY created_at DESC"
+                params = (user_id,)
+                await cursor.execute(sql, params)
                 sessions = await cursor.fetchall()
 
                 # 格式化会话数据
@@ -192,10 +207,9 @@ async def update_session_title(request: SessionTitleRequest):
             async with conn.cursor() as cursor:
                 if request.mode == "delete":
                     # 删除会话
-                    await cursor.execute(
-                        "DELETE FROM session_info WHERE session_id = ?",
-                        (request.session_id,),
-                    )
+                    sql = "DELETE FROM session_info WHERE session_id = ?"
+                    params = (request.session_id,)
+                    await cursor.execute(sql, params)
 
                     # 提交更改
                     await conn.commit()
@@ -213,10 +227,9 @@ async def update_session_title(request: SessionTitleRequest):
                     return {"success": True, "message": "会话删除成功"}
                 else:
                     # 更新会话标题
-                    await cursor.execute(
-                        "UPDATE session_info SET title = ? WHERE session_id = ?",
-                        (request.title, request.session_id),
-                    )
+                    sql = "UPDATE session_info SET title = ? WHERE session_id = ?"
+                    params = (request.title, request.session_id)
+                    await cursor.execute(sql, params)
 
                     # 提交更改
                     await conn.commit()
@@ -248,31 +261,28 @@ async def create_session(user: UserRequest):
         async with aiosqlite.connect(db_path) as conn:
             async with conn.cursor() as cursor:
                 # 根据用户名查询用户ID
-                await cursor.execute(
-                    "SELECT user_id FROM user_info WHERE user = ?",
-                    (user.user_name,),
-                )
+                sql = "SELECT user_id FROM user_info WHERE user = ?"
+                params = (user.user_name,)
+                await cursor.execute(sql, params)
                 result = await cursor.fetchone()
 
                 # 如果用户不存在，创建新用户
                 if result is None:
                     service_logger.warning(f"用户 {user.user_name} 不存在，创建新用户")
                     user_id = str(uuid.uuid4())
-                    await cursor.execute(
-                        "INSERT INTO user_info (user, user_id) VALUES (?, ?)",
-                        (user.user_name, user_id),
-                    )
+                    sql = "INSERT INTO user_info (user, user_id) VALUES (?, ?)"
+                    params = (user.user_name, user_id)
+                    await cursor.execute(sql, params)
                 else:
                     user_id = result[0]
 
                 # 生成新的session ID
                 session_id = str(uuid.uuid4())
 
-                # 插入新的session记录
-                await cursor.execute(
-                    "INSERT INTO session_info (user_id, session_id) VALUES (?, ?)",
-                    (user_id, session_id),
-                )
+                # 插入新的session记录，默认标题为"新建对话"
+                sql = "INSERT INTO session_info (user_id, session_id, title) VALUES (?, ?, ?)"
+                params = (user_id, session_id, "新建对话")
+                await cursor.execute(sql, params)
 
                 # 提交更改
                 await conn.commit()
@@ -282,16 +292,76 @@ async def create_session(user: UserRequest):
                     f"用户 {user.user_name} (ID: {user_id}) 创建新会话 {session_id}"
                 )
 
-        # 返回session ID和用户ID
+        # 返回session ID、用户ID和默认标题
         return {
             "session_id": session_id,
             "user_id": user_id,
             "user_name": user.user_name,
+            "title": "新建对话",
         }
 
     except Exception as e:
         service_logger.error(f"创建会话失败： {str(e)}")
         return {"error": f"创建会话失败： {str(e)}"}
+
+
+# 获取会话历史消息
+@app.post("/session_messages")
+async def get_session_messages(request: SessionMessagesRequest):
+    """
+    获取指定会话的历史消息
+
+    Args:
+        request: 包含用户名、用户ID和会话ID的请求体
+
+    Returns:
+        包含历史消息的JSON响应
+    """
+    try:
+        user_name = request.user_name
+        user_id = request.user_id
+        session_id = request.session_id
+
+        service_logger.info(
+            f"收到获取历史消息请求: 用户名={user_name}, 用户ID={user_id}, 会话ID={session_id}"
+        )
+
+        # 连接数据库
+        async with aiosqlite.connect(db_path) as conn:
+            async with conn.cursor() as cursor:
+                # 查询历史消息，按照turn_id升序排序
+                sql = "SELECT * FROM history_multi_turn WHERE session_id = ? AND user_id = ? ORDER BY turn_id ASC"
+                params = (session_id, user_id)
+                await cursor.execute(sql, params)
+
+                # 获取查询结果
+                rows = await cursor.fetchall()
+
+                # 格式化结果
+                messages = []
+                for row in rows:
+                    messages.append(
+                        {
+                            "session_id": row[0],
+                            "user_id": row[1],
+                            "turn_id": row[2],
+                            "query": row[3],
+                            "answer": row[4],
+                            "timestamp": row[5],
+                        }
+                    )
+
+                service_logger.info(
+                    f"获取历史消息成功: 会话ID={session_id}, 对话轮次数={len(messages)}"
+                )
+                return {"success": True, "messages": messages, "session_id": session_id}
+    except Exception as e:
+        service_logger.error(f"获取历史消息失败: {str(e)}")
+        return {
+            "success": False,
+            "error": f"获取历史消息失败: {str(e)}",
+            "session_id": request.session_id,
+        }
 
 
 # 对话接口
@@ -316,7 +386,15 @@ async def chat(request: ChatRequest):
         service_logger.info(
             f"收到聊天请求: 用户={user}, 用户ID={user_id}, 会话ID={session_id}, 文件数={len(files)}, 查询={query}"
         )
-        service_logger.info(f"对话日志：log/chat_log/{user_id}/{session_id}.log")
+        log_path = f'{chat_log_path}/{user}_{user_id}/{session_id}.log'
+        service_logger.info(f"对话日志：{log_path}")
+
+        # 创建对话日志
+        chat_logger = chat_log(log_path, logfile_level="INFO")
+
+        # 使用chat_logger记录聊天请求信息
+        chat_logger.info(f'==========开始处理聊天请求==========')
+        chat_logger.info(f"收到聊天请求: 查询={query}, 文件数={len(files)}")
 
         # 创建消息列表
         messages = [HumanMessage(content=query)]
@@ -350,15 +428,40 @@ async def chat(request: ChatRequest):
                 }
                 yield f"data: {json.dumps(end_response, ensure_ascii=False)}\n\n"
 
-            except Exception as e:
-                service_logger.error(f"流式生成过程中出错: {str(e)}")
-                error_response = {
-                    "error": f"生成回复时出错: {str(e)}",
-                    "content_type": "error",
-                }
-                yield f"data: {json.dumps(error_response, ensure_ascii=False)}\n\n"
+                chat_logger.info(f"流式输出完成: {user_id}/{session_id}")
 
-        # 返回流式响应
+            except asyncio.CancelledError:
+                # 捕获任务取消异常，这通常是客户端断开连接导致的
+                chat_logger.info(
+                    f"客户端已断开连接，停止流式输出: {user_id}/{session_id}"
+                )
+                chat_logger.info(
+                    f"客户端已断开连接，停止流式输出: {user_id}/{session_id}"
+                )
+                # 直接返回，停止生成器
+                return
+            except Exception as e:
+                # 检查是否是客户端断开连接导致的其他异常
+                if any(
+                    keyword in str(e).lower()
+                    for keyword in ["disconnect", "abort", "reset", "close"]
+                ):
+                    chat_logger.info(
+                        f"客户端已断开连接，停止流式输出: {user_id}/{session_id}"
+                    )
+                    # 不需要返回错误信息，直接终止生成器
+                    return
+                else:
+                    chat_logger.error(f"流式生成过程中出错: {str(e)}")
+                    error_response = {
+                        "error": f"生成回复时出错: {str(e)}",
+                        "content_type": "error",
+                    }
+                    yield f"data: {json.dumps(error_response, ensure_ascii=False)}\n\n"
+            finally:
+                chat_logger.info(f'==========处理聊天请求完成==========')
+
+        # 返回流式响应，添加Response参数以支持取消
         return StreamingResponse(
             generate(),
             media_type="text/plain",

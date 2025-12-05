@@ -78,6 +78,18 @@ def create_database():
             )
         """
 
+        # 创建history_multi_turn表的SQL
+        history_multi_turn_sql = """
+            CREATE TABLE history_multi_turn (
+                session_id TEXT,
+                user_id TEXT,
+                turn_id INTEGER,
+                query TEXT,
+                answer TEXT,
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """
+
         # 创建或检查user_info表
         user_table_created = create_table_if_not_exists(
             cursor, "user_info", user_info_sql, "user_info"
@@ -90,6 +102,11 @@ def create_database():
         # 创建或检查session_info表
         create_table_if_not_exists(
             cursor, "session_info", session_info_sql, "session_info"
+        )
+
+        # 创建或检查history_multi_turn表
+        create_table_if_not_exists(
+            cursor, "history_multi_turn", history_multi_turn_sql, "history_multi_turn"
         )
 
         # 提交更改
