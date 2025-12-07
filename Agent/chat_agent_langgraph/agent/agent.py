@@ -3,6 +3,8 @@ from agent.configuration import Configuration
 from langgraph.graph import END, START, StateGraph
 from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
+from langgraph.config import get_stream_writer
+from langchain_core.messages import AIMessage
 
 
 async def chat(state: AgentState, config: RunnableConfig, runtime: Runtime):
@@ -11,8 +13,19 @@ async def chat(state: AgentState, config: RunnableConfig, runtime: Runtime):
     logger = runtime.context.logger
     logger.info("调用大模型生成回复")
 
-    response = await llm.ainvoke(state['messages'])
-    return {"messages": response}
+    # 获取流写入器
+    writer = get_stream_writer()
+    
+    full_response = ""
+    
+    # 使用 astream 逐 token 获取 LLM 输出
+    async for chunk in llm.astream(state['messages']):
+        token = chunk.content
+        full_response += token
+        # 实时发送每个 token 到客户端
+        writer({"token": token})
+    
+    return {"messages": state["messages"] + [AIMessage(content=full_response)]}
 
 
 async def create_agent_graph():
