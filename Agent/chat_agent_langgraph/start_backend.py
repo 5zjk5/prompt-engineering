@@ -396,6 +396,9 @@ async def chat(request: ChatRequest):
         chat_logger.info(f"==========开始处理聊天请求==========")
         chat_logger.info(f"收到聊天请求: 查询={query}, 文件数={len(files)}")
 
+        # 是否有图片选择模型
+        llm, img_flag = llm_text if not files else llm_img
+
         # 获取历史消息列表
         history_messages = await Memory.get_chat_history(user_id, session_id, chat_logger)
         messages = [SystemMessage(content=system_chat_prompt)] + history_messages + [HumanMessage(content=query)]
@@ -405,7 +408,7 @@ async def chat(request: ChatRequest):
             try:
                 # 调用大模型的流式生成方法
                 final_answer = ""
-                async for chunk in llm_text.astream(messages):
+                async for chunk in llm.astream(messages):
                     # 提取内容
                     content = chunk.content
                     final_answer += content
