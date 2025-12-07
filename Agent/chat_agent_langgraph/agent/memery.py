@@ -1,6 +1,7 @@
 import sqlite3
 from typing import List
 from langchain_core.messages import HumanMessage, AIMessage
+from config.config import db_path
 
 
 class Memory:
@@ -17,7 +18,7 @@ class Memory:
         """
         chat_logger.info(f"获取聊天历史记录...")
         # 连接数据库
-        conn = sqlite3.connect("db/chat_agent_langgraph.db")
+        conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
 
         try:
@@ -56,7 +57,7 @@ class Memory:
         chat_logger.info(f">>> 单独线程保存聊天历史记录...")
 
         # 连接数据库
-        conn = sqlite3.connect("db/chat_agent_langgraph.db")
+        conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
 
         try:
