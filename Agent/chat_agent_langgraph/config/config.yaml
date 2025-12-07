@@ -17,7 +17,7 @@ log:
   chat_log_path: "log/chat_log"
 
 GLM:
-  API_KEY: "8b9453e4a7b0c3777771fdc8747cea4d.z1nZ2wohu3hUzDWs"
+  API_KEY: ""
   BASE_URL: "https://open.bigmodel.cn/api/paas/v4/"
   MODEL: "GLM-4-Flash-250414"
   IMG_MODEL: "GLM-4V-Flash"
