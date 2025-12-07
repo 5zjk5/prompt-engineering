@@ -48,3 +48,6 @@ service_logger = service_log(service_log_path=service_log_path, logfile_level="I
 
 # 对话日志存储路径
 chat_log_path = config["log"]["chat_log_path"]
+
+# 系统对话提示
+system_chat_prompt = config["SYSTEM_CHAT_PROMPT"]

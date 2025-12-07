@@ -1,0 +1,50 @@
+2025-12-07 16:46:04,902 - INFO - [start_backend.py:chat:394] - ==========开始处理聊天请求==========
+2025-12-07 16:46:04,903 - INFO - [start_backend.py:chat:395] - 收到聊天请求: 查询=测试历史插入, 文件数=0
+2025-12-07 16:46:39,087 - ERROR - [start_backend.py:generate:457] - 流式生成过程中出错: name 'Memory' is not defined
+2025-12-07 16:46:39,089 - INFO - [start_backend.py:generate:464] - ==========处理聊天请求完成==========
+2025-12-07 16:49:51,416 - INFO - [start_backend.py:chat:395] - ==========开始处理聊天请求==========
+2025-12-07 16:49:51,416 - INFO - [start_backend.py:chat:396] - 收到聊天请求: 查询=说出数字123，别说别的, 文件数=0
+2025-12-07 16:49:55,391 - INFO - [start_backend.py:generate:465] - ==========处理聊天请求完成==========
+2025-12-07 16:49:55,392 - INFO - [memery.py:save_chat_history:17] - 保存聊天历史记录...
+2025-12-07 16:49:55,393 - INFO - [memery.py:save_chat_history:28] - 当前轮次: 1
+2025-12-07 16:54:08,121 - INFO - [start_backend.py:chat:395] - ==========开始处理聊天请求==========
+2025-12-07 16:54:08,122 - INFO - [start_backend.py:chat:396] - 收到聊天请求: 查询=说出数字123，别说别的, 文件数=0
+2025-12-07 16:54:11,915 - INFO - [start_backend.py:generate:465] - ==========处理聊天请求完成==========
+2025-12-07 16:54:11,916 - INFO - [memery.py:save_chat_history:17] - 保存聊天历史记录...
+2025-12-07 16:54:11,916 - INFO - [memery.py:save_chat_history:28] - 当前轮次: 1
+2025-12-07 16:54:11,921 - INFO - [memery.py:save_chat_history:50] - 保存聊天历史记录成功...
+2025-12-07 16:55:15,842 - INFO - [start_backend.py:chat:395] - ==========开始处理聊天请求==========
+2025-12-07 16:55:15,843 - INFO - [start_backend.py:chat:396] - 收到聊天请求: 查询=说出数字123，别说别的, 文件数=0
+2025-12-07 16:58:06,602 - INFO - [start_backend.py:chat:395] - ==========开始处理聊天请求==========
+2025-12-07 16:58:06,602 - INFO - [start_backend.py:chat:396] - 收到聊天请求: 查询=说出数字123，别说别的, 文件数=0
+2025-12-07 16:58:39,128 - INFO - [start_backend.py:generate:467] - ==========处理聊天请求完成==========
+2025-12-07 16:58:39,130 - INFO - [memery.py:save_chat_history:17] - >>> 单独线程保存聊天历史记录...
+2025-12-07 16:58:39,132 - INFO - [memery.py:save_chat_history:28] - >>> 当前轮次: 1
+2025-12-07 16:58:39,139 - INFO - [memery.py:save_chat_history:50] - >>> 保存聊天历史记录成功...
+2025-12-07 16:58:57,112 - INFO - [start_backend.py:chat:395] - ==========开始处理聊天请求==========
+2025-12-07 16:58:57,113 - INFO - [start_backend.py:chat:396] - 收到聊天请求: 查询=123后面是什么, 文件数=0
+2025-12-07 16:58:58,077 - INFO - [start_backend.py:generate:467] - ==========处理聊天请求完成==========
+2025-12-07 16:58:58,078 - INFO - [memery.py:save_chat_history:17] - >>> 单独线程保存聊天历史记录...
+2025-12-07 16:58:58,079 - INFO - [memery.py:save_chat_history:28] - >>> 当前轮次: 1
+2025-12-07 16:58:58,085 - INFO - [memery.py:save_chat_history:50] - >>> 保存聊天历史记录成功...
+2025-12-07 16:59:48,660 - INFO - [start_backend.py:chat:395] - ==========开始处理聊天请求==========
+2025-12-07 16:59:48,660 - INFO - [start_backend.py:chat:396] - 收到聊天请求: 查询=然后呢, 文件数=0
+2025-12-07 16:59:51,227 - INFO - [start_backend.py:generate:467] - ==========处理聊天请求完成==========
+2025-12-07 16:59:51,228 - INFO - [memery.py:save_chat_history:17] - >>> 单独线程保存聊天历史记录...
+2025-12-07 16:59:51,229 - INFO - [memery.py:save_chat_history:28] - >>> 当前轮次: 1
+2025-12-07 17:08:02,488 - INFO - [start_backend.py:chat:395] - ==========开始处理聊天请求==========
+2025-12-07 17:08:02,489 - INFO - [start_backend.py:chat:396] - 收到聊天请求: 查询=废物品, 文件数=0
+2025-12-07 17:08:02,489 - INFO - [memery.py:get_chat_history:18] - 获取聊天历史记录...
+2025-12-07 17:08:02,491 - INFO - [memery.py:get_chat_history:37] - 获取聊天历史记录成功, 历史记录数: 4
+2025-12-07 17:08:06,108 - INFO - [start_backend.py:generate:468] - ==========处理聊天请求完成==========
+2025-12-07 17:08:06,109 - INFO - [memery.py:save_chat_history:56] - >>> 单独线程保存聊天历史记录...
+2025-12-07 17:08:06,110 - INFO - [memery.py:save_chat_history:67] - >>> 当前轮次: 3
+2025-12-07 17:08:06,115 - INFO - [memery.py:save_chat_history:89] - >>> 保存聊天历史记录成功...
+2025-12-07 17:09:57,789 - INFO - [start_backend.py:chat:395] - ==========开始处理聊天请求==========
+2025-12-07 17:09:57,790 - INFO - [start_backend.py:chat:396] - 收到聊天请求: 查询=我们谈论过什么内容？, 文件数=0
+2025-12-07 17:09:57,791 - INFO - [memery.py:get_chat_history:18] - 获取聊天历史记录...
+2025-12-07 17:09:57,792 - INFO - [memery.py:get_chat_history:37] - 获取聊天历史记录成功, 历史轮次数: 3
+2025-12-07 17:10:01,702 - INFO - [start_backend.py:generate:468] - ==========处理聊天请求完成==========
+2025-12-07 17:10:01,703 - INFO - [memery.py:save_chat_history:56] - >>> 单独线程保存聊天历史记录...
+2025-12-07 17:10:01,705 - INFO - [memery.py:save_chat_history:67] - >>> 当前轮次: 4
+2025-12-07 17:10:01,711 - INFO - [memery.py:save_chat_history:89] - >>> 保存聊天历史记录成功...

@@ -18,6 +18,7 @@ function App() {
     const [newUserName, setNewUserName] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [dropdownExpanded, setDropdownExpanded] = useState(false);
+    const usersFetchedRef = useRef(false); // 使用 ref 来跟踪 fetchUsers 函数是否已经被调用过
     // 会话相关状态
     const [currentSessionId, setCurrentSessionId] = useState(null);
     const [hasCreatedSession, setHasCreatedSession] = useState(false);
@@ -478,6 +479,9 @@ function App() {
 
     // 从后端数据库获取用户列表
     const fetchUsers = async () => {
+        // 防止短时间内重复调用
+        if (isLoading) return;
+
         setIsLoading(true);
         try {
             // 调用后端API获取用户列表
@@ -537,12 +541,15 @@ function App() {
                 // 如果后端返回错误，显示错误信息
                 alert(data.error);
             } else {
-                // 创建成功，刷新用户列表
-                await fetchUsers();
+                // 先将新用户添加到本地users数组，确保选择框能立即显示
+                const newUser = {
+                    value: newUserName,
+                    label: newUserName
+                };
+                setUsers(prevUsers => [...prevUsers, newUser]);
                 // 选择新创建的用户
                 setSelectedUser(newUserName);
-                // 获取用户会话，同时获取用户ID
-                await fetchUserSessions(newUserName);
+                // 不再手动调用 fetchUserSessions，而是通过 useEffect 钩子自动调用
                 // 关闭模态框并清空输入
                 setShowNewUserModal(false);
                 setNewUserName('');
@@ -556,12 +563,7 @@ function App() {
             };
             setUsers([...users, newUser]);
             setSelectedUser(newUserName.trim());
-            // 尝试获取用户会话，即使后端不可用也可能有本地缓存
-            try {
-                await fetchUserSessions(newUserName.trim());
-            } catch (e) {
-                console.warn('获取用户会话失败:', e);
-            }
+            // 不再手动调用 fetchUserSessions，而是通过 useEffect 钩子自动调用
             setShowNewUserModal(false);
             setNewUserName('');
         } finally {
@@ -703,7 +705,11 @@ function App() {
 
     // 组件挂载时获取用户列表
     useEffect(() => {
-        fetchUsers();
+        // 使用 ref 来跟踪 fetchUsers 函数是否已经被调用过，确保只调用一次
+        if (!usersFetchedRef.current) {
+            fetchUsers();
+            usersFetchedRef.current = true;
+        }
     }, []);
 
     // 加载历史消息
@@ -904,7 +910,11 @@ function App() {
                                 <div className="custom-dropdown">
                                     <div
                                         className={`dropdown-header ${dropdownExpanded && users.length > 5 ? 'expanded' : ''}`}
-                                        onClick={() => setDropdownExpanded(!dropdownExpanded)}
+                                        onClick={() => {
+                                            setDropdownExpanded(!dropdownExpanded);
+                                            // 点击下拉框时，重新获取用户列表，确保数据最新
+                                            fetchUsers();
+                                        }}
                                     >
                                         {users.find(user => user.value === selectedUser)?.label || '选择用户'}
                                         <span className="dropdown-arrow">▼</span>
@@ -918,8 +928,6 @@ function App() {
                                                     onClick={() => {
                                                         setSelectedUser(user.value);
                                                         setDropdownExpanded(false);
-                                                        // 获取用户会话，同时获取用户ID
-                                                        fetchUserSessions(user.value);
                                                     }}
                                                 >
                                                     {user.label}

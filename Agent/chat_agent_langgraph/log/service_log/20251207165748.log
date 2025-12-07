@@ -1,0 +1,7 @@
+2025-12-07 16:57:48,930 - INFO - [create_db.py:create_database:118] - 数据库连接成功: db/chat_agent_langgraph.db
+2025-12-07 16:58:06,598 - INFO - [start_backend.py:chat:385] - 收到聊天请求: 用户=李一品, 用户ID=777ff440-ee3c-4de8-bbb6-e07ebf398fce, 会话ID=023d3370-e83f-4629-ab3e-06223ebe0d73, 文件数=0, 查询=说出数字123，别说别的
+2025-12-07 16:58:06,599 - INFO - [start_backend.py:chat:389] - 对话日志：log/chat_log/李一品_777ff440-ee3c-4de8-bbb6-e07ebf398fce/023d3370-e83f-4629-ab3e-06223ebe0d73.log
+2025-12-07 16:58:57,111 - INFO - [start_backend.py:chat:385] - 收到聊天请求: 用户=李一品, 用户ID=777ff440-ee3c-4de8-bbb6-e07ebf398fce, 会话ID=023d3370-e83f-4629-ab3e-06223ebe0d73, 文件数=0, 查询=123后面是什么
+2025-12-07 16:58:57,112 - INFO - [start_backend.py:chat:389] - 对话日志：log/chat_log/李一品_777ff440-ee3c-4de8-bbb6-e07ebf398fce/023d3370-e83f-4629-ab3e-06223ebe0d73.log
+2025-12-07 16:59:48,657 - INFO - [start_backend.py:chat:385] - 收到聊天请求: 用户=李一品, 用户ID=777ff440-ee3c-4de8-bbb6-e07ebf398fce, 会话ID=023d3370-e83f-4629-ab3e-06223ebe0d73, 文件数=0, 查询=然后呢
+2025-12-07 16:59:48,659 - INFO - [start_backend.py:chat:389] - 对话日志：log/chat_log/李一品_777ff440-ee3c-4de8-bbb6-e07ebf398fce/023d3370-e83f-4629-ab3e-06223ebe0d73.log

@@ -1,0 +1,81 @@
+2025-12-05 20:59:28,012 - INFO - [create_db.py:create_database:118] - 数据库连接成功: db/chat_agent_langgraph.db
+2025-12-05 21:01:37,413 - INFO - [start_backend.py:get_users:72] - 查询数据库中的 user_info 表，返回所有用户名
+2025-12-05 21:01:37,417 - INFO - [start_backend.py:get_users:82] - 成功查询到 3 个用户，用户列表为: ['default', 'zzz', 'yyy']
+2025-12-05 21:02:10,004 - INFO - [start_backend.py:get_user_session:143] - 尝试获取用户会话： default
+2025-12-05 21:02:10,009 - INFO - [start_backend.py:get_user_session:179] - 成功获取用户 default 的 0 个会话，user_id: 2643534b-7913-4024-bd16-068e1ffd74dc
+2025-12-05 21:02:22,389 - INFO - [start_backend.py:get_users:72] - 查询数据库中的 user_info 表，返回所有用户名
+2025-12-05 21:02:22,393 - INFO - [start_backend.py:get_users:82] - 成功查询到 3 个用户，用户列表为: ['default', 'zzz', 'yyy']
+2025-12-05 21:02:23,149 - INFO - [start_backend.py:get_users:72] - 查询数据库中的 user_info 表，返回所有用户名
+2025-12-05 21:02:23,153 - INFO - [start_backend.py:get_users:82] - 成功查询到 3 个用户，用户列表为: ['default', 'zzz', 'yyy']
+2025-12-05 21:02:31,647 - INFO - [start_backend.py:create_user:105] - 尝试创建用户： 熊
+2025-12-05 21:02:31,665 - INFO - [start_backend.py:create_user:131] - 用户 熊 成功创建，用户 ID 为: 4af4cf22-ee4a-4736-b466-bd6acc5895e3
+2025-12-05 21:02:31,678 - INFO - [start_backend.py:get_user_session:143] - 尝试获取用户会话： 熊
+2025-12-05 21:02:31,683 - INFO - [start_backend.py:get_user_session:179] - 成功获取用户 熊 的 0 个会话，user_id: 4af4cf22-ee4a-4736-b466-bd6acc5895e3
+2025-12-05 21:02:41,708 - INFO - [start_backend.py:get_users:72] - 查询数据库中的 user_info 表，返回所有用户名
+2025-12-05 21:02:41,712 - INFO - [start_backend.py:get_users:82] - 成功查询到 4 个用户，用户列表为: ['default', 'zzz', 'yyy', '熊']
+2025-12-05 21:02:49,097 - INFO - [start_backend.py:create_user:105] - 尝试创建用户： 李一品
+2025-12-05 21:02:49,107 - INFO - [start_backend.py:create_user:131] - 用户 李一品 成功创建，用户 ID 为: 777ff440-ee3c-4de8-bbb6-e07ebf398fce
+2025-12-05 21:02:49,117 - INFO - [start_backend.py:get_user_session:143] - 尝试获取用户会话： 李一品
+2025-12-05 21:02:49,120 - INFO - [start_backend.py:get_user_session:179] - 成功获取用户 李一品 的 0 个会话，user_id: 777ff440-ee3c-4de8-bbb6-e07ebf398fce
+2025-12-05 21:03:03,378 - INFO - [start_backend.py:get_users:72] - 查询数据库中的 user_info 表，返回所有用户名
+2025-12-05 21:03:03,380 - INFO - [start_backend.py:get_users:82] - 成功查询到 5 个用户，用户列表为: ['default', 'zzz', 'yyy', '熊', '李一品']
+2025-12-05 21:03:09,688 - INFO - [start_backend.py:create_user:105] - 尝试创建用户： user6
+2025-12-05 21:03:09,701 - INFO - [start_backend.py:create_user:131] - 用户 user6 成功创建，用户 ID 为: 20c75ae9-779c-48df-9ccb-fb084fd03511
+2025-12-05 21:03:09,715 - INFO - [start_backend.py:get_user_session:143] - 尝试获取用户会话： user6
+2025-12-05 21:03:09,720 - INFO - [start_backend.py:get_user_session:179] - 成功获取用户 user6 的 0 个会话，user_id: 20c75ae9-779c-48df-9ccb-fb084fd03511
+2025-12-05 21:03:10,998 - INFO - [start_backend.py:get_users:72] - 查询数据库中的 user_info 表，返回所有用户名
+2025-12-05 21:03:11,004 - INFO - [start_backend.py:get_users:82] - 成功查询到 6 个用户，用户列表为: ['default', 'zzz', 'yyy', '熊', '李一品', 'user6']
+2025-12-05 21:03:25,162 - INFO - [start_backend.py:get_users:72] - 查询数据库中的 user_info 表，返回所有用户名
+2025-12-05 21:03:25,166 - INFO - [start_backend.py:get_users:82] - 成功查询到 6 个用户，用户列表为: ['default', 'zzz', 'yyy', '熊', '李一品', 'user6']
+2025-12-05 21:03:27,250 - INFO - [start_backend.py:get_user_session:143] - 尝试获取用户会话： default
+2025-12-05 21:03:27,255 - INFO - [start_backend.py:get_user_session:179] - 成功获取用户 default 的 0 个会话，user_id: 2643534b-7913-4024-bd16-068e1ffd74dc
+2025-12-05 21:03:36,311 - INFO - [start_backend.py:create_session:256] - 尝试给用户 default 创建新会话
+2025-12-05 21:03:36,320 - INFO - [start_backend.py:create_session:289] - 用户 default (ID: 2643534b-7913-4024-bd16-068e1ffd74dc) 创建新会话 971b3ad1-90e5-401c-ae79-ac9dbe817136
+2025-12-05 21:03:36,350 - INFO - [start_backend.py:update_session_title:199] - 用户 default 尝试更新会话标题： 971b3ad1-90e5-401c-ae79-ac9dbe817136 -> 你好
+2025-12-05 21:03:36,363 - INFO - [start_backend.py:update_session_title:242] - 用户 default 成功更新会话 971b3ad1-90e5-401c-ae79-ac9dbe817136 的标题为 你好
+2025-12-05 21:03:36,391 - INFO - [start_backend.py:chat:384] - 收到聊天请求: 用户=default, 用户ID=2643534b-7913-4024-bd16-068e1ffd74dc, 会话ID=971b3ad1-90e5-401c-ae79-ac9dbe817136, 文件数=0, 查询=你好
+2025-12-05 21:03:36,392 - INFO - [start_backend.py:chat:388] - 对话日志：log/chat_log/default_2643534b-7913-4024-bd16-068e1ffd74dc/971b3ad1-90e5-401c-ae79-ac9dbe817136.log
+2025-12-05 21:04:29,397 - INFO - [start_backend.py:chat:384] - 收到聊天请求: 用户=default, 用户ID=2643534b-7913-4024-bd16-068e1ffd74dc, 会话ID=971b3ad1-90e5-401c-ae79-ac9dbe817136, 文件数=0, 查询=哈哈
+2025-12-05 21:04:29,398 - INFO - [start_backend.py:chat:388] - 对话日志：log/chat_log/default_2643534b-7913-4024-bd16-068e1ffd74dc/971b3ad1-90e5-401c-ae79-ac9dbe817136.log
+2025-12-05 21:04:38,599 - INFO - [start_backend.py:create_session:256] - 尝试给用户 default 创建新会话
+2025-12-05 21:04:38,615 - INFO - [start_backend.py:create_session:289] - 用户 default (ID: 2643534b-7913-4024-bd16-068e1ffd74dc) 创建新会话 5fed00c1-d8e5-4ffa-bc4a-a4f1367fcb16
+2025-12-05 21:04:45,423 - INFO - [start_backend.py:update_session_title:199] - 用户 default 尝试更新会话标题： 5fed00c1-d8e5-4ffa-bc4a-a4f1367fcb16 -> 你是谁？
+2025-12-05 21:04:45,437 - INFO - [start_backend.py:update_session_title:242] - 用户 default 成功更新会话 5fed00c1-d8e5-4ffa-bc4a-a4f1367fcb16 的标题为 你是谁？
+2025-12-05 21:04:45,443 - INFO - [start_backend.py:chat:384] - 收到聊天请求: 用户=default, 用户ID=2643534b-7913-4024-bd16-068e1ffd74dc, 会话ID=5fed00c1-d8e5-4ffa-bc4a-a4f1367fcb16, 文件数=0, 查询=你是谁？
+2025-12-05 21:04:45,444 - INFO - [start_backend.py:chat:388] - 对话日志：log/chat_log/default_2643534b-7913-4024-bd16-068e1ffd74dc/5fed00c1-d8e5-4ffa-bc4a-a4f1367fcb16.log
+2025-12-05 21:05:12,979 - INFO - [start_backend.py:get_session_messages:323] - 收到获取历史消息请求: 用户名=default, 用户ID=2643534b-7913-4024-bd16-068e1ffd74dc, 会话ID=971b3ad1-90e5-401c-ae79-ac9dbe817136
+2025-12-05 21:05:12,983 - INFO - [start_backend.py:get_session_messages:352] - 获取历史消息成功: 会话ID=971b3ad1-90e5-401c-ae79-ac9dbe817136, 对话轮次数=0
+2025-12-05 21:05:19,874 - INFO - [start_backend.py:get_session_messages:323] - 收到获取历史消息请求: 用户名=default, 用户ID=2643534b-7913-4024-bd16-068e1ffd74dc, 会话ID=5fed00c1-d8e5-4ffa-bc4a-a4f1367fcb16
+2025-12-05 21:05:19,877 - INFO - [start_backend.py:get_session_messages:352] - 获取历史消息成功: 会话ID=5fed00c1-d8e5-4ffa-bc4a-a4f1367fcb16, 对话轮次数=0
+2025-12-05 21:05:20,302 - INFO - [start_backend.py:get_session_messages:323] - 收到获取历史消息请求: 用户名=default, 用户ID=2643534b-7913-4024-bd16-068e1ffd74dc, 会话ID=971b3ad1-90e5-401c-ae79-ac9dbe817136
+2025-12-05 21:05:20,308 - INFO - [start_backend.py:get_session_messages:352] - 获取历史消息成功: 会话ID=971b3ad1-90e5-401c-ae79-ac9dbe817136, 对话轮次数=0
+2025-12-05 21:06:39,792 - INFO - [start_backend.py:chat:384] - 收到聊天请求: 用户=default, 用户ID=2643534b-7913-4024-bd16-068e1ffd74dc, 会话ID=971b3ad1-90e5-401c-ae79-ac9dbe817136, 文件数=0, 查询=支付手段更好的烦死了看哈你困啦支付手段更好的烦死了看哈你困啦支付手段更好的烦死了看哈你困啦支付手段更好的烦死了看哈你困啦支付手段更好的烦死了看哈你困啦支付手段更好的烦死了看哈你困啦支付手段更好的烦死了看哈你困啦支付手段更好的烦死了看哈你困啦支付手段更好的烦死了看哈你困啦支付手段更好的烦死了看哈你困啦支付手段更好的烦死了看哈你困啦支付手段更好的烦死了看哈你困啦支付手段更好的烦死了看哈你困啦
+2025-12-05 21:06:39,794 - INFO - [start_backend.py:chat:388] - 对话日志：log/chat_log/default_2643534b-7913-4024-bd16-068e1ffd74dc/971b3ad1-90e5-401c-ae79-ac9dbe817136.log
+2025-12-05 21:06:46,841 - INFO - [start_backend.py:get_session_messages:323] - 收到获取历史消息请求: 用户名=default, 用户ID=2643534b-7913-4024-bd16-068e1ffd74dc, 会话ID=5fed00c1-d8e5-4ffa-bc4a-a4f1367fcb16
+2025-12-05 21:06:46,846 - INFO - [start_backend.py:get_session_messages:352] - 获取历史消息成功: 会话ID=5fed00c1-d8e5-4ffa-bc4a-a4f1367fcb16, 对话轮次数=0
+2025-12-05 21:06:48,282 - INFO - [start_backend.py:get_session_messages:323] - 收到获取历史消息请求: 用户名=default, 用户ID=2643534b-7913-4024-bd16-068e1ffd74dc, 会话ID=971b3ad1-90e5-401c-ae79-ac9dbe817136
+2025-12-05 21:06:48,287 - INFO - [start_backend.py:get_session_messages:352] - 获取历史消息成功: 会话ID=971b3ad1-90e5-401c-ae79-ac9dbe817136, 对话轮次数=0
+2025-12-05 21:22:17,778 - INFO - [start_backend.py:get_users:72] - 查询数据库中的 user_info 表，返回所有用户名
+2025-12-05 21:22:17,782 - INFO - [start_backend.py:get_users:82] - 成功查询到 6 个用户，用户列表为: ['default', 'zzz', 'yyy', '熊', '李一品', 'user6']
+2025-12-05 21:22:17,900 - INFO - [start_backend.py:get_users:72] - 查询数据库中的 user_info 表，返回所有用户名
+2025-12-05 21:22:17,904 - INFO - [start_backend.py:get_users:82] - 成功查询到 6 个用户，用户列表为: ['default', 'zzz', 'yyy', '熊', '李一品', 'user6']
+2025-12-06 04:01:22,763 - INFO - [start_backend.py:get_users:72] - 查询数据库中的 user_info 表，返回所有用户名
+2025-12-06 04:01:22,768 - INFO - [start_backend.py:get_users:82] - 成功查询到 6 个用户，用户列表为: ['default', 'zzz', 'yyy', '熊', '李一品', 'user6']
+2025-12-06 04:01:23,778 - INFO - [start_backend.py:get_users:72] - 查询数据库中的 user_info 表，返回所有用户名
+2025-12-06 04:01:23,783 - INFO - [start_backend.py:get_users:82] - 成功查询到 6 个用户，用户列表为: ['default', 'zzz', 'yyy', '熊', '李一品', 'user6']
+2025-12-06 13:46:26,690 - INFO - [start_backend.py:get_users:72] - 查询数据库中的 user_info 表，返回所有用户名
+2025-12-06 13:46:26,696 - INFO - [start_backend.py:get_users:82] - 成功查询到 6 个用户，用户列表为: ['default', 'zzz', 'yyy', '熊', '李一品', 'user6']
+2025-12-06 13:46:26,767 - INFO - [start_backend.py:get_users:72] - 查询数据库中的 user_info 表，返回所有用户名
+2025-12-06 13:46:26,771 - INFO - [start_backend.py:get_users:82] - 成功查询到 6 个用户，用户列表为: ['default', 'zzz', 'yyy', '熊', '李一品', 'user6']
+2025-12-07 09:51:43,094 - INFO - [start_backend.py:get_users:72] - 查询数据库中的 user_info 表，返回所有用户名
+2025-12-07 09:51:43,100 - INFO - [start_backend.py:get_users:82] - 成功查询到 6 个用户，用户列表为: ['default', 'zzz', 'yyy', '熊', '李一品', 'user6']
+2025-12-07 10:12:03,801 - INFO - [start_backend.py:get_users:72] - 查询数据库中的 user_info 表，返回所有用户名
+2025-12-07 10:12:03,807 - INFO - [start_backend.py:get_users:82] - 成功查询到 6 个用户，用户列表为: ['default', 'zzz', 'yyy', '熊', '李一品', 'user6']
+2025-12-07 15:40:57,570 - INFO - [start_backend.py:get_users:72] - 查询数据库中的 user_info 表，返回所有用户名
+2025-12-07 15:40:57,574 - INFO - [start_backend.py:get_users:82] - 成功查询到 6 个用户，用户列表为: ['default', 'zzz', 'yyy', '熊', '李一品', 'user6']
+2025-12-07 15:40:57,663 - INFO - [start_backend.py:get_users:72] - 查询数据库中的 user_info 表，返回所有用户名
+2025-12-07 15:40:57,667 - INFO - [start_backend.py:get_users:82] - 成功查询到 6 个用户，用户列表为: ['default', 'zzz', 'yyy', '熊', '李一品', 'user6']
+2025-12-07 16:09:36,459 - INFO - [start_backend.py:get_users:72] - 查询数据库中的 user_info 表，返回所有用户名
+2025-12-07 16:09:36,463 - INFO - [start_backend.py:get_users:82] - 成功查询到 6 个用户，用户列表为: ['default', 'zzz', 'yyy', '熊', '李一品', 'user6']
+2025-12-07 16:09:36,566 - INFO - [start_backend.py:get_users:72] - 查询数据库中的 user_info 表，返回所有用户名
+2025-12-07 16:09:36,570 - INFO - [start_backend.py:get_users:82] - 成功查询到 6 个用户，用户列表为: ['default', 'zzz', 'yyy', '熊', '李一品', 'user6']

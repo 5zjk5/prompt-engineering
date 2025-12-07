@@ -7,9 +7,10 @@ from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from config.create_db import create_database
 from utils.logger import chat_log
+from agent.memery import Memory
 from config.config import (
     config,
     db_path,
@@ -17,9 +18,8 @@ from config.config import (
     llm_text,
     llm_img,
     chat_log_path,
+    system_chat_prompt,
 )
-
-
 
 
 class UserRequest(BaseModel):
@@ -386,26 +386,29 @@ async def chat(request: ChatRequest):
         service_logger.info(
             f"收到聊天请求: 用户={user}, 用户ID={user_id}, 会话ID={session_id}, 文件数={len(files)}, 查询={query}"
         )
-        log_path = f'{chat_log_path}/{user}_{user_id}/{session_id}.log'
+        log_path = f"{chat_log_path}/{user}_{user_id}/{session_id}.log"
         service_logger.info(f"对话日志：{log_path}")
 
         # 创建对话日志
         chat_logger = chat_log(log_path, logfile_level="INFO")
 
         # 使用chat_logger记录聊天请求信息
-        chat_logger.info(f'==========开始处理聊天请求==========')
+        chat_logger.info(f"==========开始处理聊天请求==========")
         chat_logger.info(f"收到聊天请求: 查询={query}, 文件数={len(files)}")
 
-        # 创建消息列表
-        messages = [HumanMessage(content=query)]
+        # 获取历史消息列表
+        history_messages = await Memory.get_chat_history(user_id, session_id, chat_logger)
+        messages = [SystemMessage(content=system_chat_prompt)] + history_messages + [HumanMessage(content=query)]
 
         # 定义异步生成器函数，用于流式返回结果
         async def generate():
             try:
                 # 调用大模型的流式生成方法
+                final_answer = ""
                 async for chunk in llm_text.astream(messages):
                     # 提取内容
                     content = chunk.content
+                    final_answer += content
                     if content:
                         # 构造JSON格式的响应
                         response = {
@@ -428,7 +431,11 @@ async def chat(request: ChatRequest):
                 }
                 yield f"data: {json.dumps(end_response, ensure_ascii=False)}\n\n"
 
-                chat_logger.info(f"流式输出完成: {user_id}/{session_id}")
+                # 保存历史消息，使用 asyncio.create_task 创建一个异步任务，不等待其完成
+                messages.append(AIMessage(content=final_answer))
+                asyncio.create_task(
+                    Memory.save_chat_history(user_id, session_id, messages, chat_logger)
+                )
 
             except asyncio.CancelledError:
                 # 捕获任务取消异常，这通常是客户端断开连接导致的
@@ -459,7 +466,7 @@ async def chat(request: ChatRequest):
                     }
                     yield f"data: {json.dumps(error_response, ensure_ascii=False)}\n\n"
             finally:
-                chat_logger.info(f'==========处理聊天请求完成==========')
+                chat_logger.info(f"==========处理聊天请求完成==========")
 
         # 返回流式响应，添加Response参数以支持取消
         return StreamingResponse(

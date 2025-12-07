@@ -1,0 +1,11 @@
+2025-12-07 16:45:28,404 - INFO - [create_db.py:create_database:118] - 数据库连接成功: db/chat_agent_langgraph.db
+2025-12-07 16:45:47,359 - INFO - [start_backend.py:get_users:72] - 查询数据库中的 user_info 表，返回所有用户名
+2025-12-07 16:45:47,369 - INFO - [start_backend.py:get_users:82] - 成功查询到 6 个用户，用户列表为: ['default', 'zzz', 'yyy', '熊', '李一品', 'user6']
+2025-12-07 16:45:49,092 - INFO - [start_backend.py:get_user_session:143] - 尝试获取用户会话： 李一品
+2025-12-07 16:45:49,101 - INFO - [start_backend.py:get_user_session:179] - 成功获取用户 李一品 的 0 个会话，user_id: 777ff440-ee3c-4de8-bbb6-e07ebf398fce
+2025-12-07 16:46:04,849 - INFO - [start_backend.py:create_session:256] - 尝试给用户 李一品 创建新会话
+2025-12-07 16:46:04,860 - INFO - [start_backend.py:create_session:289] - 用户 李一品 (ID: 777ff440-ee3c-4de8-bbb6-e07ebf398fce) 创建新会话 023d3370-e83f-4629-ab3e-06223ebe0d73
+2025-12-07 16:46:04,869 - INFO - [start_backend.py:update_session_title:199] - 用户 李一品 尝试更新会话标题： 023d3370-e83f-4629-ab3e-06223ebe0d73 -> 测试历史插入
+2025-12-07 16:46:04,883 - INFO - [start_backend.py:update_session_title:242] - 用户 李一品 成功更新会话 023d3370-e83f-4629-ab3e-06223ebe0d73 的标题为 测试历史插入
+2025-12-07 16:46:04,898 - INFO - [start_backend.py:chat:384] - 收到聊天请求: 用户=李一品, 用户ID=777ff440-ee3c-4de8-bbb6-e07ebf398fce, 会话ID=023d3370-e83f-4629-ab3e-06223ebe0d73, 文件数=0, 查询=测试历史插入
+2025-12-07 16:46:04,899 - INFO - [start_backend.py:chat:388] - 对话日志：log/chat_log/李一品_777ff440-ee3c-4de8-bbb6-e07ebf398fce/023d3370-e83f-4629-ab3e-06223ebe0d73.log

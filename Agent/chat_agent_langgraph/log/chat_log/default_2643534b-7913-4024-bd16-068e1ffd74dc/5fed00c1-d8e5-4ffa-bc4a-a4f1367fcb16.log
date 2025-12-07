@@ -1,0 +1,4 @@
+2025-12-05 21:04:45,447 - INFO - [start_backend.py:chat:394] - ==========开始处理聊天请求==========
+2025-12-05 21:04:45,447 - INFO - [start_backend.py:chat:395] - 收到聊天请求: 查询=你是谁？, 文件数=0
+2025-12-05 21:04:46,806 - INFO - [start_backend.py:generate:429] - 流式输出完成: 2643534b-7913-4024-bd16-068e1ffd74dc/5fed00c1-d8e5-4ffa-bc4a-a4f1367fcb16
+2025-12-05 21:04:46,809 - INFO - [start_backend.py:generate:460] - ==========处理聊天请求完成==========
