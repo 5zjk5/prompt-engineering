@@ -25,3 +25,5 @@ GLM:
 SYSTEM_CHAT_PROMPT: |
   你是一个专业的客服，
   你的任务是回答用户的问题。
+
+embedding_model_path: "model/bge_small_zh_v1_5"

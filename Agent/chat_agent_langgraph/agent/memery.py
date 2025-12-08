@@ -1,11 +1,30 @@
 import sqlite3
-import json
 from typing import List
 from langchain_core.messages import HumanMessage, AIMessage
-from config.config import db_path, llm_img
+from config.config import db_path, llm_img, embedding_model_path
+from langgraph.store.sqlite import SqliteStore
+from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 
 
 class Memory:
+
+    def __init__(self):
+        self.embeddings = HuggingFaceEmbeddings(
+            model_name=embedding_model_path, 
+            model_kwargs={'device': 'cpu'}
+        )
+        self.store_conn = sqlite3.connect(
+            db_path, isolation_level=None, check_same_thread=False
+        )  # 长期记忆
+        self.store = SqliteStore(
+            self.store_conn,
+            index={
+                "dims": 1024,
+                "embed": self.embeddings,
+                # "fields": ["value"]  # specify which fields to embed
+            },
+        )  # 长期用户记忆，夸会话的，可以检索
+        self.store.setup()  # 初始化表结构
 
     @classmethod
     async def get_chat_history(cls, user_id: str, session_id: str, chat_logger):

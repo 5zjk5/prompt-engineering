@@ -5,6 +5,7 @@ from langchain_core.runnables import RunnableConfig
 from langgraph.runtime import Runtime
 from langgraph.config import get_stream_writer
 from langchain_core.messages import AIMessage
+from agent.memery import Memory
 
 
 async def chat(state: AgentState, config: RunnableConfig, runtime: Runtime):
@@ -43,7 +44,7 @@ def create_agent_graph():
     agent_graph.add_edge("chat", END)
 
     # 编译
-    agent_graph = agent_graph.compile()
+    agent_graph = agent_graph.compile(store=Memory().store)
 
     # 可视化图，需要 vpn
     png_data = agent_graph.get_graph(xray=True).draw_mermaid_png()

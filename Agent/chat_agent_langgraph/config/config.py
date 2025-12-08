@@ -51,3 +51,6 @@ chat_log_path = config["log"]["chat_log_path"]
 
 # 系统对话提示
 system_chat_prompt = config["SYSTEM_CHAT_PROMPT"]
+
+# 嵌入模型
+embedding_model_path = config["embedding_model_path"]
