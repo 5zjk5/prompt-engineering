@@ -747,10 +747,16 @@ function App() {
                 data.messages.forEach((msg, turnIndex) => {
                     // 创建用户消息
                     if (msg.query) {
+                        // 处理图片内容，如果有图片，按照格式添加到用户输入中
+                        let userContent = msg.query;
+                        if (msg.img_content) {
+                            userContent += `\n\n用户上传的图片：\n${msg.img_content}`;
+                        }
+
                         formattedMessages.push({
                             id: `history-${messageIndex++}`,
                             type: 'user',
-                            content: msg.query,
+                            content: userContent,
                             timestamp: msg.timestamp || new Date().toISOString(),
                             streaming: false,
                             images: []
@@ -1030,7 +1036,7 @@ function App() {
                             </div>
                             <div className="message-content-wrapper">
                                 <div className="message-bubble">
-                                    {message.content && <div className="message-content"><ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown></div>}
+                                    {message.content && <div className="message-content" style={{ whiteSpace: 'pre-wrap' }}>{message.content}</div>}
                                     {message.streaming && (
                                         <div className="streaming-indicator">
                                             <span className="typing-dot"></span>

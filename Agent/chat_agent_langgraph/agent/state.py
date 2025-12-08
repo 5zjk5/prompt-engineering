@@ -43,7 +43,7 @@ class AgentInputState(MessagesState):
 
 
 class AgentState(MessagesState):
-    """主代理状态，包含消息和研究数据"""
+    """主代理中间状态"""
     supervisor_messages: Annotated[list[MessageLikeRepresentation], override_reducer]
     research_brief: Optional[str]
     raw_notes: Annotated[list[str], override_reducer]

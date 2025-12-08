@@ -25,14 +25,16 @@ class Memory:
         try:
             # 查询历史记录
             cursor.execute(
-                "SELECT query, answer FROM history_multi_turn WHERE session_id = ? AND user_id = ? ORDER BY turn_id",
+                "SELECT query, answer, img_content FROM history_multi_turn WHERE session_id = ? AND user_id = ? ORDER BY turn_id",
                 (session_id, user_id),
             )
             rows = cursor.fetchall()
 
             # 格式化历史记录
             history_messages = []
-            for query, answer in rows:
+            for query, answer, img_content in rows:
+                if img_content:
+                    query += f"\n用户上传的图片：\n{img_content}"
                 history_messages.append(HumanMessage(content=query))
                 history_messages.append(AIMessage(content=answer))
 
@@ -98,7 +100,9 @@ class Memory:
                     formatted_parts = []
 
                     for i, content in enumerate(img_contents):
-                        formatted_parts.append(f"* 第{i + 1}张图片：\n{content}")
+                        formatted_parts.append(
+                            f"第{i + 1}张图片：\n{content.replace('\n', '')}"
+                        )
 
                     img_content = "\n".join(formatted_parts)
                     chat_logger.info(f">>> 图片识别完成")

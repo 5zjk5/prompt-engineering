@@ -353,7 +353,8 @@ async def get_session_messages(request: SessionMessagesRequest):
                             "turn_id": row[2],
                             "query": row[3],
                             "answer": row[4],
-                            "timestamp": row[5],
+                            "img_content": row[5],
+                            "timestamp": row[6],
                         }
                     )
 
@@ -406,7 +407,9 @@ async def chat(request: ChatRequest):
         llm = llm_text if not files else llm_img
 
         # 获取历史消息列表
-        history_messages = await Memory.get_chat_history(user_id, session_id, chat_logger)
+        history_messages = await Memory.get_chat_history(
+            user_id, session_id, chat_logger
+        )
         messages = [SystemMessage(content=system_chat_prompt)] + history_messages
 
         # 拼接当前 messages
@@ -499,6 +502,7 @@ async def chat(request: ChatRequest):
 
     except Exception as e:
         import traceback
+
         service_logger.error(traceback.format_exc())
         service_logger.error(f"处理聊天请求时出错: {str(e)}")
         return {"error": f"处理请求时出错: {str(e)}"}
