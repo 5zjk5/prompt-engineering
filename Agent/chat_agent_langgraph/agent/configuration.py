@@ -13,3 +13,13 @@ class Configuration(BaseModel):
     llm: Any = Field(
         description="大模型实例对象"
     )  
+
+    user_id: str = Field(
+        default="",
+        description="用户ID"
+    )
+
+    session_id: str = Field(
+        default="",
+        description="会话ID"
+    )

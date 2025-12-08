@@ -425,7 +425,7 @@ async def chat(request: ChatRequest):
                 async for chunk in agent_graph.astream(
                     {"messages": messages},
                     stream_mode="messages",
-                    context=Configuration(llm=llm),
+                    context=Configuration(llm=llm, logger=chat_logger, user_id=user_id, session_id=session_id),
                 ):
                     # 提取内容
                     content = chunk[0].content
