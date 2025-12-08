@@ -7,3 +7,4 @@ pyyaml
 sqlite3
 requests
 aiosqlite
+Pillow

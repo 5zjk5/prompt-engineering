@@ -86,6 +86,7 @@ def create_database():
                 turn_id INTEGER,
                 query TEXT,
                 answer TEXT,
+                img_content TEXT,
                 timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         """

@@ -7,10 +7,13 @@ from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
+from langchain_core.messages import AIMessage, SystemMessage
 from config.create_db import create_database
 from utils.logger import chat_log
 from agent.memery import Memory
+from agent.agent import create_agent_graph
+from agent.utils import get_messages
+from agent.configuration import Configuration
 from config.config import (
     config,
     db_path,
@@ -62,6 +65,9 @@ app.add_middleware(
     allow_methods=config["cors"]["allow_methods"],
     allow_headers=config["cors"]["allow_headers"],
 )
+
+# 初始化 agent
+app.state.agent_graph = create_agent_graph()
 
 
 # 用户选择
@@ -397,29 +403,38 @@ async def chat(request: ChatRequest):
         chat_logger.info(f"收到聊天请求: 查询={query}, 文件数={len(files)}")
 
         # 是否有图片选择模型
-        llm, img_flag = llm_text if not files else llm_img
+        llm = llm_text if not files else llm_img
 
         # 获取历史消息列表
         history_messages = await Memory.get_chat_history(user_id, session_id, chat_logger)
-        messages = [SystemMessage(content=system_chat_prompt)] + history_messages + [HumanMessage(content=query)]
+        messages = [SystemMessage(content=system_chat_prompt)] + history_messages
+
+        # 拼接当前 messages
+        current_message = get_messages(query, files)
+        messages += current_message
 
         # 定义异步生成器函数，用于流式返回结果
         async def generate():
             try:
                 # 调用大模型的流式生成方法
+                agent_graph = app.state.agent_graph
                 final_answer = ""
-                async for chunk in llm.astream(messages):
+                async for chunk in agent_graph.astream(
+                    {"messages": messages},
+                    stream_mode="messages",
+                    context=Configuration(llm=llm),
+                ):
                     # 提取内容
-                    content = chunk.content
+                    content = chunk[0].content
                     final_answer += content
                     if content:
                         # 构造JSON格式的响应
                         response = {
                             "content": content,
-                            "content_type": chunk.response_metadata.get(
+                            "content_type": chunk[0].response_metadata.get(
                                 "content_type", "content"
                             ),
-                            "chunk_index": chunk.response_metadata.get(
+                            "chunk_index": chunk[0].response_metadata.get(
                                 "chunk_index", "0"
                             ),
                         }
@@ -483,6 +498,8 @@ async def chat(request: ChatRequest):
         )
 
     except Exception as e:
+        import traceback
+        service_logger.error(traceback.format_exc())
         service_logger.error(f"处理聊天请求时出错: {str(e)}")
         return {"error": f"处理请求时出错: {str(e)}"}
 

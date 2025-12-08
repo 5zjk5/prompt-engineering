@@ -28,7 +28,7 @@ async def chat(state: AgentState, config: RunnableConfig, runtime: Runtime):
     return {"messages": state["messages"] + [AIMessage(content=full_response)]}
 
 
-async def create_agent_graph():
+def create_agent_graph():
     agent_graph = StateGraph(
         state_schema=AgentState,  # 定义状态类型，包含所有研究相关的信息，即中间过程信息存储
         input_schema=AgentInputState,  # 设置输入接收的数据类型，接受那些字段，会自动校验输入是否符合定义
@@ -45,7 +45,7 @@ async def create_agent_graph():
     # 编译
     agent_graph = agent_graph.compile()
 
-    # 可视化图
+    # 可视化图，需要 vpn
     png_data = agent_graph.get_graph(xray=True).draw_mermaid_png()
     filename = "./agent_graph.png"
     with open(filename, "wb") as f:
