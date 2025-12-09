@@ -214,7 +214,10 @@ function App() {
 
     // 发送消息功能
     const sendMessage = async () => {
-        if (!inputValue.trim() && uploadedImages.length === 0) return;
+        if (!inputValue.trim()) {
+            alert('请输入消息内容');
+            return;
+        }
 
         // 检查用户是否已选择
         // selectedUser 为 null、undefined 或空字符串时都表示未选择用户

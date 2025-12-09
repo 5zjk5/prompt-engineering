@@ -489,6 +489,8 @@ async def chat(request: ChatRequest):
                     # 不需要返回错误信息，直接终止生成器
                     return
                 else:
+                    import traceback
+                    chat_logger.error(traceback.format_exc())
                     chat_logger.error(f"流式生成过程中出错: {str(e)}")
                     error_response = {
                         "error": f"生成回复时出错: {str(e)}",
