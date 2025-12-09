@@ -99,6 +99,13 @@ function App() {
 
             // 删除成功后，从前端会话列表中移除
             setConversations(conversations.filter(conv => conv.id !== id));
+
+            // 如果删除的是当前选中的会话，重置为新对话状态
+            if (id === currentSessionId) {
+                setMessages([]);
+                setCurrentSessionId(null);
+                setHasCreatedSession(true);
+            }
         } catch (error) {
             console.error('删除会话失败:', error);
         }
