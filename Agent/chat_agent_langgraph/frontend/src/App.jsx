@@ -99,6 +99,13 @@ function App() {
 
             // 删除成功后，从前端会话列表中移除
             setConversations(conversations.filter(conv => conv.id !== id));
+
+            // 如果删除的是当前选中的会话，重置为新对话状态
+            if (id === currentSessionId) {
+                setMessages([]);
+                setCurrentSessionId(null);
+                setHasCreatedSession(true);
+            }
         } catch (error) {
             console.error('删除会话失败:', error);
         }
@@ -207,7 +214,10 @@ function App() {
 
     // 发送消息功能
     const sendMessage = async () => {
-        if (!inputValue.trim() && uploadedImages.length === 0) return;
+        if (!inputValue.trim()) {
+            alert('请输入消息内容');
+            return;
+        }
 
         // 检查用户是否已选择
         // selectedUser 为 null、undefined 或空字符串时都表示未选择用户

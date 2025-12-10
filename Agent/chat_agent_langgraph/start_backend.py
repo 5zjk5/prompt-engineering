@@ -217,6 +217,10 @@ async def update_session_title(request: SessionTitleRequest):
                     params = (request.session_id,)
                     await cursor.execute(sql, params)
 
+                    # 同时删除 history_multi_turn 表中对应 session_id 的记录
+                    sql_history = "DELETE FROM history_multi_turn WHERE session_id = ?"
+                    await cursor.execute(sql_history, params)
+
                     # 提交更改
                     await conn.commit()
 
@@ -425,7 +429,12 @@ async def chat(request: ChatRequest):
                 async for chunk in agent_graph.astream(
                     {"messages": messages},
                     stream_mode="messages",
-                    context=Configuration(llm=llm, logger=chat_logger, user_id=user_id, session_id=session_id),
+                    context=Configuration(
+                        llm=llm,
+                        logger=chat_logger,
+                        user_id=user_id,
+                        session_id=session_id,
+                    ),
                 ):
                     # 提取内容
                     content = chunk[0].content
@@ -480,6 +489,8 @@ async def chat(request: ChatRequest):
                     # 不需要返回错误信息，直接终止生成器
                     return
                 else:
+                    import traceback
+                    chat_logger.error(traceback.format_exc())
                     chat_logger.error(f"流式生成过程中出错: {str(e)}")
                     error_response = {
                         "error": f"生成回复时出错: {str(e)}",
