@@ -21,9 +21,18 @@
   **路径**: `langchain-langgraph-V1.0/案例/Deep_Research/`  
   **技术**: langgraph-V1.0  
   **功能**: 官方开源，详细介绍看官方介绍就可以，这里拿过来作为学习 langgraph，改了些东西进行了适配 langgraph-v1.0，langchang-v1.0 版本，加了自定义日志，适配了某些参数更新问题，把所有子图都模块化，注释都改成中文了，使用自定义 langchian 兼容 openai 的模型，可以 debug 调试，不依赖 langsmith 可视化。
+* Chat Agent Langgraph 
+  **路径**: `Agent/chat_agent_langgraph/`  
+  **技术**: 前端对话界面 + 后端fastapi + sqlite + langgraph-v1.0   
+  **功能**: 纯用 AI 编写，后端 python 人工把控，使用 langgraph 搭建图片理解多轮对话 agent，搭配前端界面包含用户管理，会话管理等功能，多轮对话历史保存，langgraph 中长期记忆的使用，长期记忆的检索。  
 
 
 # 🤖 Agent
+* Chat Agent Langgraph 
+  **路径**: `Agent/chat_agent_langgraph/`  
+  **技术**: 前端对话界面 + 后端fastapi + sqlite + langgraph-v1.0   
+  **功能**: 纯用 AI 编写，后端 python 人工把控，使用 langgraph 搭建图片理解多轮对话 agent，搭配前端界面包含用户管理，会话管理等功能，多轮对话历史保存，langgraph 中长期记忆的使用，长期记忆的检索。 
+---
 * React Agent  
   **路径**: `Agent/自定义 React Agant/`  
   **技术**: React Agent 框架  
