@@ -94,9 +94,33 @@ class ChatOpenAIModel(BaseChatModel):
             if isinstance(message, HumanMessage):
                 openai_messages.append({"role": "user", "content": message.content})
             elif isinstance(message, AIMessage):
-                openai_messages.append({"role": "assistant", "content": message.content})
+                msg = {"role": "assistant", "content": message.content}
+                # Check for tool_calls and convert them to OpenAI format
+                if hasattr(message, 'tool_calls') and message.tool_calls:
+                    openai_tool_calls = []
+                    for tc in message.tool_calls:
+                        openai_tool_calls.append(
+                            {
+                                "id": tc["id"],
+                                "type": "function",
+                                "function": {
+                                    "name": tc["name"],
+                                    "arguments": json.dumps(tc["args"]),
+                                },
+                            }
+                        )
+                    msg["tool_calls"] = openai_tool_calls
+                openai_messages.append(msg)
             elif isinstance(message, SystemMessage):
                 openai_messages.append({"role": "system", "content": message.content})
+            elif isinstance(message, ToolMessage):
+                openai_messages.append(
+                    {
+                        "role": "tool",
+                        "tool_call_id": message.tool_call_id,
+                        "content": message.content,
+                    }
+                )
             else:
                 openai_messages.append({"role": "user", "content": message.content})
         return openai_messages
