@@ -1,0 +1,23 @@
+{
+  "task_name": "学术论文专业分类",
+  "mode": "offline",
+  "generator_model": "GLM-4-Flash",
+  "reflector_model": "GLM-4-Flash",
+  "curator_model": "GLM-4-Flash",
+  "config": {
+    "num_epochs": 1,
+    "max_num_rounds": 1,
+    "curator_frequency": 1,
+    "eval_steps": 50,
+    "save_steps": 15,
+    "playbook_token_budget": 80000,
+    "task_name": "学术论文专业分类",
+    "mode": "offline",
+    "no_ground_truth": false,
+    "save_dir": "offline\\results\\学术论文专业分类_20260119_165834",
+    "test_workers": 20,
+    "initial_playbook_path": "C:\\Users\\\\zhoujk2\\\\Desktop\\\\prompt-engineering\\\\Agent自进化\\\\offline\\\\results\\\\学术论文专业分类_20260119_104304\\\\intermediate_playbooks\\\\epoch_1_step_70_playbook.txt",
+    "use_bulletpoint_analyzer": true,
+    "bulletpoint_analyzer_threshold": 0.7
+  }
+}

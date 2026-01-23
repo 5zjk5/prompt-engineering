@@ -1,0 +1,43 @@
+2026-01-22 09:34:08,673 - INFO - [logger.py:define_log_level:53] - Log directory: offline\results\指代消解_20260122_093408
+2026-01-22 09:34:08,673 - INFO - [run_offline.py:main:286] - ============================================================
+2026-01-22 09:34:08,674 - INFO - [run_offline.py:main:287] - ACE SYSTEM
+2026-01-22 09:34:08,674 - INFO - [run_offline.py:main:288] - ============================================================
+2026-01-22 09:34:08,674 - INFO - [run_offline.py:main:289] - Task: 指代消解
+2026-01-22 09:34:08,676 - INFO - [run_offline.py:main:290] - Mode: EVAL ONLY
+2026-01-22 09:34:08,676 - INFO - [run_offline.py:main:291] - ============================================================
+2026-01-22 09:34:08,685 - INFO - [run_offline.py:load_data:222] - Loaded 976 test samples from ./data/data_process\指代消解\test.jsonl
+2026-01-22 09:34:08,697 - INFO - [run_offline.py:main:302] - Loaded initial playbook from C:\Users\\zhoujk2\\Desktop\\prompt-engineering\\Agent自进化\\offline\\results\\指代消解_train\\best_playbook.txt
+2026-01-22 09:34:09,614 - INFO - [ace.py:__init__:71] - ✓ BulletpointAnalyzer initialized (threshold=0.7)
+2026-01-22 09:34:09,616 - INFO - [run_offline.py:main:359] - Config: {'num_epochs': 2, 'max_num_rounds': 1, 'curator_frequency': 1, 'eval_steps': 20, 'save_steps': 15, 'playbook_token_budget': 80000, 'task_name': '指代消解', 'mode': 'eval_only', 'no_ground_truth': False, 'save_dir': 'offline\\results\\指代消解_20260122_093408', 'test_workers': 200, 'initial_playbook_path': 'C:\\Users\\\\zhoujk2\\\\Desktop\\\\prompt-engineering\\\\Agent自进化\\\\offline\\\\results\\\\指代消解_train\\\\best_playbook.txt', 'use_bulletpoint_analyzer': True, 'bulletpoint_analyzer_threshold': 0.7}
+2026-01-22 09:34:09,644 - INFO - [ace.py:run:237] - ============================================================
+2026-01-22 09:34:09,645 - INFO - [ace.py:run:238] - ACE SYSTEM - EVAL ONLY MODE
+2026-01-22 09:34:09,648 - INFO - [ace.py:run:239] - ============================================================
+2026-01-22 09:34:09,649 - INFO - [ace.py:run:240] - Task: 指代消解
+2026-01-22 09:34:09,649 - INFO - [ace.py:run:247] - Test samples: 976
+2026-01-22 09:34:09,649 - INFO - [ace.py:run:248] - ============================================================
+2026-01-22 09:34:09,650 - INFO - [ace.py:run:272] - ============================================================
+2026-01-22 09:34:09,651 - INFO - [ace.py:run:273] - RUNNING TEST
+2026-01-22 09:34:09,651 - INFO - [ace.py:run:274] - ============================================================
+2026-01-22 09:34:09,652 - INFO - [utils.py:evaluate_test_set_for_eval_only:336] - system_prompt_template: 
+你是一个具备自我进化能力的智能助手，通过持续学习和经验积累不断提升性能。
+
+【核心能力】
+- 自我进化：从每次交互中学习，不断优化自身的回答策略
+- 策略调整：根据不同任务特点，灵活运用已有经验进行调整
+- 持续改进：通过策略经验，持续提升回答的准确性和效率
+
+【策略经验】
+{playbook}
+
+【任务要求】
+根据给定的问题和上下文，解析出问题的答案。在回答时，充分利用上述策略经验，结合具体问题特点进行策略的参考使用。
+2026-01-22 09:34:09,652 - INFO - [utils.py:evaluate_test_set_for_eval_only:338] - ========================================
+2026-01-22 09:34:09,653 - INFO - [utils.py:evaluate_test_set_for_eval_only:339] - EVALUATING TEST SET - 976 samples, 200 workers
+2026-01-22 09:34:09,654 - INFO - [utils.py:evaluate_test_set_for_eval_only:342] - ========================================
+2026-01-22 09:34:22,981 - INFO - [utils.py:evaluate_test_set_for_eval_only:415] - Progress: 200/976, Accuracy: 0.475
+2026-01-22 09:34:35,556 - INFO - [utils.py:evaluate_test_set_for_eval_only:415] - Progress: 400/976, Accuracy: 0.502
+2026-01-22 09:34:48,184 - INFO - [utils.py:evaluate_test_set_for_eval_only:415] - Progress: 600/976, Accuracy: 0.512
+2026-01-22 09:35:01,937 - INFO - [utils.py:evaluate_test_set_for_eval_only:415] - Progress: 800/976, Accuracy: 0.527
+2026-01-22 09:35:13,195 - INFO - [utils.py:evaluate_test_set_for_eval_only:415] - Progress: 976/976, Accuracy: 0.568
+2026-01-22 09:35:13,197 - INFO - [utils.py:evaluate_test_set_for_eval_only:436] - 📊 Final Accuracy: 0.568 (554/976)
+2026-01-22 09:35:13,228 - INFO - [run_offline.py:main:373] - ACE system execution completed. Total time: 63.61 seconds

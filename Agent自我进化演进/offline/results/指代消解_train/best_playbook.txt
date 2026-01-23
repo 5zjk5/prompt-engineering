@@ -1,0 +1,24 @@
+## STRATEGIES & INSIGHTS (strategies_and_insights)
+
+[sai-00001] helpful=219 harmful=24 :: [Update the existing heuristic to comprehensively analyze pronoun resolution by incorporating cultural linguistic nuances, perspective shifts, honorifics, usage patterns, contextual ambiguity, direct references, narrative continuity, verb tense, comparative language, alternative referents, antecedent distance, grammatical function, recent noun context, anaphoric reference, distinct descriptions, similarity or dissimilarity to potential antecedents, and develop a formula for pronoun reference likelihood. This formula should consider syntactic and semantic relationships, multiple interpretations, context impact, and evaluate pronoun reference likelihood based on recent noun context and temporal proximity.]
+[sai-00121] helpful=15 harmful=1 :: [Identify, interpret colloquial expressions like '俺' in Chinese narratives, and incorporate analysis steps to maintain referent consistency.]
+[sai-00161] helpful=33 harmful=6 :: [Update the existing bullet to include the new content and combine helpful and harmful counts.]
+[Incorporate a step to consider the potential for cultural and linguistic nuances that might affect pronoun resolution, such as honorifics or specific usage patterns that are common in the language or genre being analyzed.]
+[sai-00191] helpful=24 harmful=1 :: [Develop a strategy and formula for identifying and evaluating potential referents, including unmentioned characters, considering narrative context and the absence of explicit mention.]
+[sai-00192] helpful=1 harmful=0 :: [Add a new bullet point to the STRATEGIES & INSIGHTS section with the following content:]
+[sai-00201] helpful=13 harmful=1 :: [Implement a finalization step in the reasoning process to confirm conclusions and output final answers consistently.]
+[sai-00229] helpful=9 harmful=0 :: [The model should remember to consider the potential ambiguity of context and the existence of multiple plausible interpretations when inferring pronoun references.]
+[sai-00233] helpful=8 harmful=1 :: [sai-00230] helpful=1 harmful=0 :: [Incorporate a step in the reasoning process to explicitly analyze the grammatical function of pronouns and their relationship to the sentence structure. This step should help differentiate between a pronoun referring to a noun phrase that is the subject of the sentence versus a pronoun referring to content within that noun phrase.]
+[sai-00254] helpful=0 harmful=0 :: [Incorporate a step in the reasoning process to analyze the connotations of pronouns, considering the cultural and social context in which they are used.]
+## FORMULAS & CALCULATIONS (formulas_and_calculations)
+
+## CODE SNIPPETS & TEMPLATES (code_snippets_and_templates)
+
+## COMMON MISTAKES TO AVOID (common_mistakes_to_avoid)
+
+## PROBLEM-SOLVING HEURISTICS (problem_solving_heuristics)
+
+[prob-00203] helpful=3 harmful=1 :: [If the reasoning process is complete and no further information is needed, immediately output the final answer without delay.]
+## CONTEXT CLUES & INDICATORS (context_clues_and_indicators)
+
+## OTHERS (misc)

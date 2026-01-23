@@ -1,0 +1,51 @@
+2026-01-21 09:43:49,178 - INFO - [logger.py:define_log_level:53] - Log directory: offline\results\自然语言推理_20260121_094349
+2026-01-21 09:43:49,179 - INFO - [run_offline.py:main:286] - ============================================================
+2026-01-21 09:43:49,179 - INFO - [run_offline.py:main:287] - ACE SYSTEM
+2026-01-21 09:43:49,180 - INFO - [run_offline.py:main:288] - ============================================================
+2026-01-21 09:43:49,181 - INFO - [run_offline.py:main:289] - Task: 自然语言推理
+2026-01-21 09:43:49,182 - INFO - [run_offline.py:main:290] - Mode: EVAL ONLY
+2026-01-21 09:43:49,182 - INFO - [run_offline.py:main:291] - ============================================================
+2026-01-21 09:43:49,208 - INFO - [run_offline.py:load_data:222] - Loaded 2520 test samples from ./data/data_process\自然语言推理\test.jsonl
+2026-01-21 09:43:49,211 - INFO - [run_offline.py:main:304] - Using empty playbook as initial playbook
+2026-01-21 09:43:50,345 - INFO - [ace.py:__init__:71] - ✓ BulletpointAnalyzer initialized (threshold=0.7)
+2026-01-21 09:43:50,362 - INFO - [run_offline.py:main:359] - Config: {'num_epochs': 2, 'max_num_rounds': 1, 'curator_frequency': 1, 'eval_steps': 20, 'save_steps': 15, 'playbook_token_budget': 80000, 'task_name': '自然语言推理', 'mode': 'eval_only', 'no_ground_truth': False, 'save_dir': 'offline\\results\\自然语言推理_20260121_094349', 'test_workers': 200, 'initial_playbook_path': None, 'use_bulletpoint_analyzer': True, 'bulletpoint_analyzer_threshold': 0.7}
+2026-01-21 09:43:50,394 - INFO - [ace.py:run:237] - ============================================================
+2026-01-21 09:43:50,395 - INFO - [ace.py:run:238] - ACE SYSTEM - EVAL ONLY MODE
+2026-01-21 09:43:50,397 - INFO - [ace.py:run:239] - ============================================================
+2026-01-21 09:43:50,398 - INFO - [ace.py:run:240] - Task: 自然语言推理
+2026-01-21 09:43:50,399 - INFO - [ace.py:run:247] - Test samples: 2520
+2026-01-21 09:43:50,400 - INFO - [ace.py:run:248] - ============================================================
+2026-01-21 09:43:50,402 - INFO - [ace.py:run:272] - ============================================================
+2026-01-21 09:43:50,402 - INFO - [ace.py:run:273] - RUNNING TEST
+2026-01-21 09:43:50,406 - INFO - [ace.py:run:274] - ============================================================
+2026-01-21 09:43:50,429 - INFO - [utils.py:evaluate_test_set_for_eval_only:336] - system_prompt_template: 
+你是一个具备自我进化能力的智能助手，通过持续学习和经验积累不断提升性能。
+
+【核心能力】
+- 自我进化：从每次交互中学习，不断优化自身的回答策略
+- 策略调整：根据不同任务特点，灵活运用已有经验进行调整
+- 持续改进：通过策略经验，持续提升回答的准确性和效率
+
+【策略经验】
+{playbook}
+
+【任务要求】
+根据给定的问题和上下文，解析出问题的答案。在回答时，充分利用上述策略经验，结合具体问题特点进行策略的参考使用。
+2026-01-21 09:43:50,432 - INFO - [utils.py:evaluate_test_set_for_eval_only:338] - ========================================
+2026-01-21 09:43:50,449 - INFO - [utils.py:evaluate_test_set_for_eval_only:339] - EVALUATING TEST SET - 2520 samples, 200 workers
+2026-01-21 09:43:50,460 - INFO - [utils.py:evaluate_test_set_for_eval_only:342] - ========================================
+2026-01-21 09:44:21,436 - INFO - [utils.py:evaluate_test_set_for_eval_only:415] - Progress: 200/2520, Accuracy: 0.680
+2026-01-21 09:44:49,187 - INFO - [utils.py:evaluate_test_set_for_eval_only:415] - Progress: 400/2520, Accuracy: 0.693
+2026-01-21 09:45:14,810 - INFO - [utils.py:evaluate_test_set_for_eval_only:415] - Progress: 600/2520, Accuracy: 0.667
+2026-01-21 09:45:41,024 - INFO - [utils.py:evaluate_test_set_for_eval_only:415] - Progress: 800/2520, Accuracy: 0.682
+2026-01-21 09:46:13,224 - INFO - [utils.py:evaluate_test_set_for_eval_only:415] - Progress: 1000/2520, Accuracy: 0.680
+2026-01-21 09:46:52,042 - INFO - [utils.py:evaluate_test_set_for_eval_only:415] - Progress: 1200/2520, Accuracy: 0.692
+2026-01-21 09:47:32,238 - INFO - [utils.py:evaluate_test_set_for_eval_only:415] - Progress: 1400/2520, Accuracy: 0.700
+2026-01-21 09:48:03,423 - INFO - [utils.py:evaluate_test_set_for_eval_only:415] - Progress: 1600/2520, Accuracy: 0.696
+2026-01-21 09:48:35,771 - INFO - [utils.py:evaluate_test_set_for_eval_only:415] - Progress: 1800/2520, Accuracy: 0.699
+2026-01-21 09:49:09,869 - INFO - [utils.py:evaluate_test_set_for_eval_only:415] - Progress: 2000/2520, Accuracy: 0.698
+2026-01-21 09:49:43,006 - INFO - [utils.py:evaluate_test_set_for_eval_only:415] - Progress: 2200/2520, Accuracy: 0.693
+2026-01-21 09:50:11,923 - INFO - [utils.py:evaluate_test_set_for_eval_only:415] - Progress: 2400/2520, Accuracy: 0.696
+2026-01-21 09:50:30,336 - INFO - [utils.py:evaluate_test_set_for_eval_only:415] - Progress: 2520/2520, Accuracy: 0.697
+2026-01-21 09:50:30,346 - INFO - [utils.py:evaluate_test_set_for_eval_only:436] - 📊 Final Accuracy: 0.697 (1757/2520)
+2026-01-21 09:50:30,422 - INFO - [run_offline.py:main:373] - ACE system execution completed. Total time: 400.05 seconds
