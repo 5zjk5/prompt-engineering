@@ -1,0 +1,50 @@
+# 🚀 AI 搜索 Query 模板
+
+**搜索日期范围**: {date_range}
+
+---
+
+### 1. 核心必搜 (推荐 6 次执行)
+
+# 1.1 英文聚合与深度报道 (Kagi, TLDR, VentureBeat)
+# 聚焦高质量摘要与深度分析 (Agent/安全)
+({date_range}) (AI news OR highlights) site:kite.kagi.com OR site:tldr.tech OR site:venturebeat.com
+
+# 1.2 中文聚合与垂直媒体 (AIBase, 机器之心, 量子位)
+# 聚焦国内核心信源，过滤噪音
+({date_range}) (AI 新闻 OR 要闻) site:news.aibase.com OR site:jiqizhixin.com OR site:qbitai.com
+
+# 1.3 海外大厂动态 (OpenAI, Anthropic, Google, Microsoft)
+# 直接抓取核心更新
+({date_range}) (release OR update OR launch) site:openai.com OR site:anthropic.com OR site:blog.google OR site:microsoft.com
+
+# 1.4 国内大厂与模型 (DeepSeek, 智谱, 通义, 豆包)
+# 覆盖国产模型最新动态
+({date_range}) (GLM-5 OR DeepSeek OR Qwen OR 豆包) (发布 OR 更新) site:zhipuai.cn OR site:deepseek.com OR site:qwenlm.github.io OR site:volcengine.com
+
+# 1.5 AI Agent 与 前沿安全 (VentureBeat, Ars Technica)
+# 专注 Agent 落地与安全漏洞
+({date_range}) (AI agent OR agentic security OR framework) site:venturebeat.com OR site:arstechnica.com
+
+# 1.6 开发者工具 (Cursor, LangChain, Ollama)
+# 覆盖代码生成与本地运行时
+({date_range}) (Cursor OR Claude Code OR LangChain OR Ollama) (update OR changelog OR feature)
+
+---
+
+### 2. 深度补充 (仅在核心搜索信息不足时使用)
+
+# 2.1 现象级开源项目 (GitHub Trending)
+# 捕捉全球开发者都在 Star 的项目
+({date_range}) (trending OR stars) (AI OR LLM) site:github.com
+
+# 2.2 中文开发者社区热度 (V2EX, 掘金)
+# 捕捉国内“龙虾”级热度项目 (基于参考网页 1, 8)
+({date_range}) (开源 OR 项目) (AI OR LLM) site:v2ex.com OR site:juejin.cn
+
+# 2.3 特定热门项目 Release (精准抓取)
+# 针对已知头部项目的直接更新
+({date_range}) (release notes) repo:langchain-ai/langchain OR repo:ollama/ollama OR repo:cursorsh/cursor
+
+# 2.4 前沿论文与技术 (arXiv, Hugging Face)
+({date_range}) (LLM paper OR SOTA) site:arxiv.org OR site:huggingface.co/papers
