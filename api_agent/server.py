@@ -210,35 +210,35 @@ async def api_list_providers():
     from config import _load_config
     config = _load_config()
     providers = get_all_providers()
-    active_model = config.get("active_model")
-    return {"providers": [p.model_dump() for p in providers], "active_model": active_model}
+    active_name = config.get("active_name")
+    return {"providers": [p.model_dump() for p in providers], "active_name": active_name}
 
 
 @app.post("/api/providers")
 async def api_add_provider(provider: ProviderConfig):
     if not add_provider(provider):
-        raise HTTPException(status_code=409, detail=f"Model '{provider.model}' already exists")
+        raise HTTPException(status_code=409, detail=f"供应商 '{provider.name}' 已存在")
     return {"ok": True}
 
 
-@app.put("/api/providers/{model}")
-async def api_update_provider(model: str, provider: ProviderConfig):
-    if not update_provider(model, provider):
-        raise HTTPException(status_code=404, detail=f"Model '{model}' not found")
+@app.put("/api/providers/{name}")
+async def api_update_provider(name: str, provider: ProviderConfig):
+    if not update_provider(name, provider):
+        raise HTTPException(status_code=404, detail=f"供应商 '{name}' 不存在")
     return {"ok": True}
 
 
-@app.delete("/api/providers/{model}")
-async def api_delete_provider(model: str):
-    if not delete_provider(model):
-        raise HTTPException(status_code=404, detail=f"Model '{model}' not found")
+@app.delete("/api/providers/{name}")
+async def api_delete_provider(name: str):
+    if not delete_provider(name):
+        raise HTTPException(status_code=404, detail=f"供应商 '{name}' 不存在")
     return {"ok": True}
 
 
-@app.post("/api/providers/{model}/activate")
-async def api_activate_provider(model: str):
-    if not set_active_provider(model):
-        raise HTTPException(status_code=404, detail=f"Model '{model}' not found")
+@app.post("/api/providers/{name}/activate")
+async def api_activate_provider(name: str):
+    if not set_active_provider(name):
+        raise HTTPException(status_code=404, detail=f"供应商 '{name}' 不存在")
     return {"ok": True}
 
 
@@ -451,7 +451,7 @@ HTML_CONTENT = r"""<!DOCTYPE html>
 
 <script>
 const BASE = location.origin;
-let editingModel = null;
+let editingName = null;
 let logRefreshTimer = null;
 
 document.getElementById('endpointUrl').textContent = BASE + '/v1';
@@ -469,14 +469,14 @@ async function loadProviders() {
   const res = await fetch('/api/providers');
   const data = await res.json();
   const providers = data.providers || [];
-  const activeModel = data.active_model;
+  const activeName = data.active_name;
   const list = document.getElementById('providerList');
   if (!providers.length) {
     list.innerHTML = '<div class="empty-state"><p>暂无供应商配置，点击下方按钮添加</p></div>';
     return;
   }
   list.innerHTML = providers.map(p => {
-    const isActive = p.model === activeModel;
+    const isActive = p.name === activeName;
     return `
     <div class="card ${isActive ? 'active-card' : ''}">
       <div class="card-header">
@@ -486,9 +486,9 @@ async function loadProviders() {
           <div class="card-model">${esc(p.model)}</div>
         </div>
         <div class="actions">
-          ${!isActive ? `<button class="btn btn-success" onclick="activateProvider('${esc(p.model)}')">启用</button>` : ''}
-          <button class="btn btn-outline" onclick="editProvider('${esc(p.model)}')">编辑</button>
-          <button class="btn btn-danger" onclick="delProvider('${esc(p.model)}')">删除</button>
+          ${!isActive ? `<button class="btn btn-success" onclick="activateProvider('${esc(p.name)}')">启用</button>` : ''}
+          <button class="btn btn-outline" onclick="editProvider('${esc(p.name)}')">编辑</button>
+          <button class="btn btn-danger" onclick="delProvider('${esc(p.name)}')">删除</button>
         </div>
       </div>
       <div class="card-detail"><span>URL: </span>${esc(p.base_url)}</div>
@@ -500,19 +500,19 @@ async function loadProviders() {
 function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
 function openModal(provider = null) {
-  editingModel = provider ? provider.model : null;
+  editingName = provider ? provider.name : null;
   document.getElementById('modalTitle').textContent = provider ? '编辑供应商' : '添加供应商';
   document.getElementById('fName').value = provider ? provider.name : '';
   document.getElementById('fUrl').value = provider ? provider.base_url : '';
   document.getElementById('fKey').value = provider ? provider.api_key : '';
   document.getElementById('fModel').value = provider ? provider.model : '';
-  document.getElementById('fModel').disabled = !!provider;
+  document.getElementById('fName').disabled = !!provider;
   document.getElementById('modal').classList.add('active');
 }
 
 function closeModal() {
   document.getElementById('modal').classList.remove('active');
-  editingModel = null;
+  editingName = null;
 }
 
 async function saveProvider() {
@@ -525,35 +525,35 @@ async function saveProvider() {
   if (!data.name || !data.base_url || !data.api_key || !data.model) {
     alert('请填写所有字段'); return;
   }
-  if (editingModel) {
-    await fetch('/api/providers/' + encodeURIComponent(editingModel), {
+  if (editingName) {
+    await fetch('/api/providers/' + encodeURIComponent(editingName), {
       method: 'PUT', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)
     });
   } else {
     const res = await fetch('/api/providers', {
       method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)
     });
-    if (res.status === 409) { alert('该模型名称已存在'); return; }
+    if (res.status === 409) { alert('该供应商名称已存在'); return; }
   }
   closeModal();
   loadProviders();
 }
 
-async function activateProvider(model) {
-  await fetch('/api/providers/' + encodeURIComponent(model) + '/activate', { method: 'POST' });
+async function activateProvider(name) {
+  await fetch('/api/providers/' + encodeURIComponent(name) + '/activate', { method: 'POST' });
   loadProviders();
 }
 
-async function editProvider(model) {
+async function editProvider(name) {
   const res = await fetch('/api/providers');
   const data = await res.json();
-  const p = (data.providers || []).find(x => x.model === model);
+  const p = (data.providers || []).find(x => x.name === name);
   if (p) openModal(p);
 }
 
-async function delProvider(model) {
-  if (!confirm('确定删除 ' + model + ' ?')) return;
-  await fetch('/api/providers/' + encodeURIComponent(model), { method: 'DELETE' });
+async function delProvider(name) {
+  if (!confirm('确定删除 ' + name + ' ?')) return;
+  await fetch('/api/providers/' + encodeURIComponent(name), { method: 'DELETE' });
   loadProviders();
 }
 
