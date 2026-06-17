@@ -11,8 +11,6 @@ args = [
     "--windowed",
     "--noconfirm",
     "--clean",
-    f"--add-data={os.path.join(ROOT, 'server.py')};.",
-    f"--add-data={os.path.join(ROOT, 'config.py')};.",
     "--hidden-import=uvicorn.logging",
     "--hidden-import=uvicorn.loops.auto",
     "--hidden-import=uvicorn.protocols",

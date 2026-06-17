@@ -21,8 +21,9 @@ PORT = 12345
 def start_server():
     """在后台线程启动 FastAPI 服务器"""
     import uvicorn
+    from server import app
     uvicorn.run(
-        "server:app",
+        app,
         host=HOST,
         port=PORT,
         log_level="warning",

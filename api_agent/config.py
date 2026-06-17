@@ -26,12 +26,12 @@ CONFIG_FILE = os.path.join(_get_config_dir(), "providers.json")
 
 def _load_config() -> dict:
     if not os.path.exists(CONFIG_FILE):
-        return {"providers": [], "active_model": None}
+        return {"providers": [], "active_name": None}
     try:
         with open(CONFIG_FILE, "r", encoding="utf-8") as f:
             return json.load(f)
     except Exception:
-        return {"providers": [], "active_model": None}
+        return {"providers": [], "active_name": None}
 
 
 def _save_config(config: dict):
