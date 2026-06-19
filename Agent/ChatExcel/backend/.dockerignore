@@ -1,0 +1,20 @@
+# Python 缓存与虚拟环境
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+.env.local
+
+# 运行时产生的数据，不打包进镜像（由 compose 挂载 volume 持久化）
+storage/db/*.db
+storage/db/*.db-journal
+storage/uploads/
+storage/duckdb/
+storage/static/images/
+logs/
+
+# 临时文件
+*.log
+*.tmp
+.DS_Store

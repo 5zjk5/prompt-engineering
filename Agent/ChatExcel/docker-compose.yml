@@ -1,0 +1,45 @@
+# ── Chat Excel Docker Compose 编排 ──────────────────────────
+# 一键启动：docker compose up -d --build
+# 一键停止：docker compose down
+# 查看日志：docker compose logs -f
+#
+# 启动后访问：
+#   前端：  http://localhost:3030
+#   后端：  http://localhost:7396
+#   接口文档：http://localhost:7396/docs
+
+services:
+  # ── 后端：FastAPI 服务 ────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: chatexcel-backend
+    # 从本地 .env 注入环境变量，修改后重启容器即可生效，无需重新构建镜像
+    env_file:
+      - ./backend/.env
+    ports:
+      - "7396:7396"
+    # 持久化上传文件与数据库，容器删除后数据不丢失
+    volumes:
+      - ./backend/storage:/app/storage
+      - ./backend/logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:7396/api/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  # ── 前端：Nginx 提供静态文件 + 反向代理后端 ──────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: chatexcel-frontend
+    ports:
+      - "3030:80"
+    depends_on:
+      - backend
+    restart: unless-stopped

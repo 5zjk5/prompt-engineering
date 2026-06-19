@@ -1,0 +1,12 @@
+# 构建产物与依赖，避免被打进镜像拖慢构建
+node_modules/
+dist/
+.next/
+
+# 本地配置与缓存
+.vite/
+*.local
+
+# 临时文件
+*.log
+.DS_Store

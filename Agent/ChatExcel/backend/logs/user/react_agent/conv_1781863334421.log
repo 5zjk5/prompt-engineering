@@ -1,0 +1,7 @@
+2026-06-19 18:02:22.300 | INFO  | chat_react.py:138 | chat_react_agent() | ===== [REACT_AGENT] 收到对话请求 =====
+2026-06-19 18:02:22.300 | INFO  | chat_react.py:139 | chat_react_agent() | 参数: user_input=你好, conv_uid=conv_1781863334421, file_path=, skill_name=, file_paths=[]
+2026-06-19 18:02:22.301 | INFO  | chat_react.py:151 | chat_react_agent() | 【分支1】无文件+无引擎，走纯 LLM 对话
+2026-06-19 18:02:22.303 | INFO  | chat_react.py:165 | simple_chat_stream() | 纯 LLM 对话调用，user_input=你好
+2026-06-19 18:02:22.304 | INFO  | chat_react.py:167 | simple_chat_stream() | LLM 调用参数: stage=react_simple, model=DeepSeek-V4-Flash, temperature=0.7, max_tokens=4096, stream=True, messages=1
+2026-06-19 18:02:25.446 | INFO  | chat_react.py:113 | _save_react_round() | ReAct 对话已保存: order_no=1, steps=1, final_len=21
+2026-06-19 18:02:25.446 | INFO  | chat_react.py:192 | simple_chat_stream() | 纯 LLM 对话完成，共计 21 字符
