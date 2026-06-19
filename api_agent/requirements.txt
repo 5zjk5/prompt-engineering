@@ -1,6 +1,0 @@
-fastapi
-uvicorn
-openai
-pydantic
-pywebview
-pyinstaller
