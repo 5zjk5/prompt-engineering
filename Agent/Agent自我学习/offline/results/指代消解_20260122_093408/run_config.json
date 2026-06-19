@@ -1,0 +1,23 @@
+{
+  "task_name": "指代消解",
+  "mode": "eval_only",
+  "generator_model": "GLM-4-Flash",
+  "reflector_model": "GLM-4-Flash",
+  "curator_model": "GLM-4-Flash",
+  "config": {
+    "num_epochs": 2,
+    "max_num_rounds": 1,
+    "curator_frequency": 1,
+    "eval_steps": 20,
+    "save_steps": 15,
+    "playbook_token_budget": 80000,
+    "task_name": "指代消解",
+    "mode": "eval_only",
+    "no_ground_truth": false,
+    "save_dir": "offline\\results\\指代消解_20260122_093408",
+    "test_workers": 200,
+    "initial_playbook_path": "C:\\Users\\\\zhoujk2\\\\Desktop\\\\prompt-engineering\\\\Agent自进化\\\\offline\\\\results\\\\指代消解_train\\\\best_playbook.txt",
+    "use_bulletpoint_analyzer": true,
+    "bulletpoint_analyzer_threshold": 0.7
+  }
+}

@@ -1,0 +1,20 @@
+## STRATEGIES & INSIGHTS (strategies_and_insights)
+
+[sai-00001] helpful=22 harmful=13 :: [Update the heuristic to evaluate logical independence, contradictions, scope/specificity, nuanced financial implications, plausible inferences, nuanced relationships using a quantifiable scale, formulas for contradiction scores, and a weighted scoring system that prioritizes context, relevance, significance, specific context recognition, and avoids overgeneralization to ensure accurate relationship assessment, including explicit handling of contradictions and nuanced relationships.]
+[sai-00009] helpful=1 harmful=0 :: [Implement a heuristic for interpreting implications, including those involving decision-makers and nuanced financial implications from decisions.]
+[sai-00044] helpful=0 harmful=0 :: [Develop strategies for identifying nuanced relationships and assessing sentence clarity through logical structure, quantifiers, sentiment, negation, contrasting terms, sentiment shifts, and introduce a new calculation method for quantifying logical relationships between sentences.]
+## FORMULAS & CALCULATIONS (formulas_and_calculations)
+
+[calc-00034] helpful=0 harmful=0 :: [New calculation method for quantifying logical relationships between sentences, incorporating logical structure, quantifiers, sentiment, negation, contrasting terms, and sentiment shifts]
+[calc-00035] helpful=0 harmful=0 :: [Develop a formula 'amb-00001' that quantifies both ambiguity and clarity of a sentence based on content, structure, quantifiers, detail level, and comparative language, providing a numerical value for both assessments.]
+[calc-00037] helpful=0 harmful=0 :: Develop a heuristic 'ent-00001' for identifying entailment and a formula 'con-00002' for identifying contradictions, both analyzing logical structure, quantifiers, sentiment, negation, contrasting terms, and sentiment shifts, with binary outputs indicating the existence of entailment or contradiction.
+[calc-00046] helpful=0 harmful=0 :: [calc-00038] helpful=0 harmful=0 :: Develop a formula 'con-00003' that quantifies the contradiction score between two statements based on the logical inconsistency, with a higher score indicating a stronger contradiction.]
+## CODE SNIPPETS & TEMPLATES (code_snippets_and_templates)
+
+## COMMON MISTAKES TO AVOID (common_mistakes_to_avoid)
+
+## PROBLEM-SOLVING HEURISTICS (problem_solving_heuristics)
+
+## CONTEXT CLUES & INDICATORS (context_clues_and_indicators)
+
+## OTHERS (misc)

@@ -1,0 +1,17 @@
+## STRATEGIES & INSIGHTS (strategies_and_insights)
+
+[sai-00001] helpful=162 harmful=24 :: [Enhance pronoun resolution through metaphorical interpretations, syntactic and temporal analysis, referent consistency checks, antecedent distance calculation, descriptive phrase interpretation, pronoun referent shift formula, post-contextual reevaluation, pronoun redefinition, emphasizing sentence structure significance, verb tense, sentence position, syntactic relationships, incorporating narrative context, and a weighted scoring system for referent continuity with narrative perspective analysis.]
+[sai-00121] helpful=9 harmful=1 :: [Identify, interpret colloquial expressions like '俺' in Chinese narratives, and incorporate analysis steps to maintain referent consistency.]
+[sai-00161] helpful=9 harmful=4 :: [Incorporate a step to cross-reference the pronoun with previous sentences to ensure that the referent remains consistent and to identify any potential shifts in referent.]
+[sai-00181] helpful=0 harmful=0 :: [Implement a heuristic that tracks the emotional trajectory of the characters to infer the narrator's perspective and predict pronoun referent shifts.]
+## FORMULAS & CALCULATIONS (formulas_and_calculations)
+
+## CODE SNIPPETS & TEMPLATES (code_snippets_and_templates)
+
+## COMMON MISTAKES TO AVOID (common_mistakes_to_avoid)
+
+## PROBLEM-SOLVING HEURISTICS (problem_solving_heuristics)
+
+## CONTEXT CLUES & INDICATORS (context_clues_and_indicators)
+
+## OTHERS (misc)

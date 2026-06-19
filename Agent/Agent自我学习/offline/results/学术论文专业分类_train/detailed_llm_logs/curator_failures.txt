@@ -1,0 +1,140 @@
+
+============================================================
+CURATOR FAILURE LOG
+============================================================
+Timestamp: 2026-01-20 10:10:07
+Epoch: 0
+Step: 590
+Failure Type: json_parse_error
+Error Details: Failed to extract valid JSON from curator response
+
+Raw Curator Response (first 1000 chars):
+----------------------------------------
+TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT
+----------------------------------------
+
+Full Raw Curator Response:
+----------------------------------------
+TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT
+----------------------------------------
+
+
+============================================================
+CURATOR FAILURE LOG
+============================================================
+Timestamp: 2026-01-20 10:11:51
+Epoch: 0
+Step: 591
+Failure Type: json_parse_error
+Error Details: Failed to extract valid JSON from curator response
+
+Raw Curator Response (first 1000 chars):
+----------------------------------------
+TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT
+----------------------------------------
+
+Full Raw Curator Response:
+----------------------------------------
+TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT
+----------------------------------------
+
+
+============================================================
+CURATOR FAILURE LOG
+============================================================
+Timestamp: 2026-01-20 10:13:55
+Epoch: 0
+Step: 592
+Failure Type: json_parse_error
+Error Details: Failed to extract valid JSON from curator response
+
+Raw Curator Response (first 1000 chars):
+----------------------------------------
+TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT
+----------------------------------------
+
+Full Raw Curator Response:
+----------------------------------------
+TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT
+----------------------------------------
+
+
+============================================================
+CURATOR FAILURE LOG
+============================================================
+Timestamp: 2026-01-20 11:19:24
+Epoch: 0
+Step: 623
+Failure Type: json_parse_error
+Error Details: Failed to extract valid JSON from curator response
+
+Raw Curator Response (first 1000 chars):
+----------------------------------------
+TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT
+----------------------------------------
+
+Full Raw Curator Response:
+----------------------------------------
+TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT
+----------------------------------------
+
+
+============================================================
+CURATOR FAILURE LOG
+============================================================
+Timestamp: 2026-01-20 11:21:49
+Epoch: 0
+Step: 624
+Failure Type: json_parse_error
+Error Details: Failed to extract valid JSON from curator response
+
+Raw Curator Response (first 1000 chars):
+----------------------------------------
+TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT
+----------------------------------------
+
+Full Raw Curator Response:
+----------------------------------------
+TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT
+----------------------------------------
+
+
+============================================================
+CURATOR FAILURE LOG
+============================================================
+Timestamp: 2026-01-20 11:54:53
+Epoch: 0
+Step: 639
+Failure Type: json_parse_error
+Error Details: Failed to extract valid JSON from curator response
+
+Raw Curator Response (first 1000 chars):
+----------------------------------------
+TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT
+----------------------------------------
+
+Full Raw Curator Response:
+----------------------------------------
+TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT
+----------------------------------------
+
+
+============================================================
+CURATOR FAILURE LOG
+============================================================
+Timestamp: 2026-01-20 12:13:05
+Epoch: 0
+Step: 643
+Failure Type: json_parse_error
+Error Details: Failed to extract valid JSON from curator response
+
+Raw Curator Response (first 1000 chars):
+----------------------------------------
+TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT
+----------------------------------------
+
+Full Raw Curator Response:
+----------------------------------------
+TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT, TIMEOUT_FAILED_INCORRECT
+----------------------------------------
+
