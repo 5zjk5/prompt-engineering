@@ -1,2 +1,23 @@
 deep_search-dev/.env
 
+Agent/api_agent/build/API_Agent/Analysis-00.toc
+Agent/api_agent/build/API_Agent/API_Agent.pkg
+Agent/api_agent/build/API_Agent/base_library.zip
+Agent/api_agent/build/API_Agent/EXE-00.toc
+Agent/api_agent/build/API_Agent/generated-85fc1eff2923a0986118ed065c494135a5a9f8b39bc6a3feb8ba96f25c823a3d.ico
+Agent/api_agent/build/API_Agent/PKG-00.toc
+Agent/api_agent/build/API_Agent/PYZ-00.pyz
+Agent/api_agent/build/API_Agent/PYZ-00.toc
+Agent/api_agent/build/API_Agent/warn-API_Agent.txt
+Agent/api_agent/build/API_Agent/xref-API_Agent.html
+Agent/api_agent/build/API_Agent/localpycs/pyimod01_archive.pyc
+Agent/api_agent/build/API_Agent/localpycs/pyimod02_importers.pyc
+Agent/api_agent/build/API_Agent/localpycs/pyimod03_ctypes.pyc
+Agent/api_agent/build/API_Agent/localpycs/pyimod04_pywin32.pyc
+Agent/api_agent/build/API_Agent/localpycs/struct.pyc
+Agent/api_agent/dist/API_Agent.exe
+Agent/api_agent/dist/api_agent.log
+Agent/api_agent/dist/providers.json
+Agent/api_agent/API_Agent.spec
+.gitignore
+Agent/api_agent/providers.json
