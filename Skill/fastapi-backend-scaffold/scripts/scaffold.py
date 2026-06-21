@@ -26,14 +26,12 @@
   │   │   └── __init__.py
   │   └── prompts/
   │       └── __init__.py
-  ├── logs/                        # 日志目录（.gitkeep）
-  ├── skills/                      # 技能目录（.gitkeep）
-  └── storage/                     # 存储目录
-      ├── db/                      # SQLite 数据库（.gitkeep）
-      ├── uploads/                 # 文件上传（.gitkeep）
-      ├── tmp/                     # 临时文件（.gitkeep）
-      └── static/
-          └── images/              # 静态图片（.gitkeep）
+  ├── logs/                        # 日志目录（运行时自动创建子目录）
+  ├── skills/                      # 技能目录
+  └── storage/                     # 存储目录（按需存放项目文件，结构由实际需求决定）
+
+注意：不生成 .gitignore 和 .gitkeep 文件。
+storage/ 仅创建顶层目录，不预生成子目录结构，由运行时代码按需创建。
 
 用法：
     python scaffold.py <目标目录> [--project-name <名称>]
@@ -44,7 +42,6 @@
 """
 
 import argparse
-import os
 import shutil
 import sys
 from pathlib import Path
@@ -84,14 +81,6 @@ def copy_dir(src: Path, dst: Path) -> None:
             copy_dir(item, dst / item.name)
 
 
-def create_gitkeep(dir_path: Path) -> None:
-    """在目录中创建 .gitkeep 占位文件"""
-    dir_path.mkdir(parents=True, exist_ok=True)
-    gitkeep = dir_path / ".gitkeep"
-    if not gitkeep.exists():
-        gitkeep.write_text("", encoding="utf-8")
-
-
 def create_empty_init(dir_path: Path) -> None:
     """创建空的 __init__.py"""
     dir_path.mkdir(parents=True, exist_ok=True)
@@ -120,37 +109,37 @@ def generate_scaffold(target_dir: str, project_name: str = "FastAPI Backend") ->
     root.mkdir(parents=True, exist_ok=True)
 
     # ── 1. 复制 LLM 模块（直接照抄，不做任何修改） ──────────
-    print("  [1/8] 复制 LLM 模块 (app/llm/)...")
+    print("  [1/7] 复制 LLM 模块 (app/llm/)...")
     llm_dst = root / "app" / "llm"
     copy_dir(ASSETS_LLM, llm_dst)
 
     # ── 2. 复制 core 模块模板 ────────────────────────────────
-    print("  [2/8] 生成 core 模块 (app/core/)...")
+    print("  [2/7] 生成 core 模块 (app/core/)...")
     core_dst = root / "app" / "core"
     create_empty_init(core_dst)
     copy_file(ASSETS_TEMPLATES / "config.py", core_dst / "config.py")
     copy_file(ASSETS_TEMPLATES / "logger.py", core_dst / "logger.py")
 
     # ── 3. 复制 dal 模块模板 ─────────────────────────────────
-    print("  [3/8] 生成 dal 模块 (app/dal/)...")
+    print("  [3/7] 生成 dal 模块 (app/dal/)...")
     dal_dst = root / "app" / "dal"
     create_empty_init(dal_dst)
     copy_file(ASSETS_TEMPLATES / "database.py", dal_dst / "database.py")
 
     # ── 4. 生成 api 模块（含示例） ───────────────────────────
-    print("  [4/8] 生成 api 模块 (app/api/)...")
+    print("  [4/7] 生成 api 模块 (app/api/)...")
     api_dst = root / "app" / "api"
     create_empty_init(api_dst)
     copy_file(ASSETS_TEMPLATES / "api_example.py", api_dst / "example.py")
 
     # ── 5. 生成 services 和 prompts 空模块 ──────────────────
-    print("  [5/8] 生成 services 和 prompts 模块...")
+    print("  [5/7] 生成 services 和 prompts 模块...")
     create_empty_init(root / "app" / "services")
     create_empty_init(root / "app" / "prompts")
     create_empty_init(root / "app")
 
     # ── 6. 复制入口文件和配置 ────────────────────────────────
-    print("  [6/8] 生成入口文件和依赖...")
+    print("  [6/7] 生成入口文件和依赖...")
     # 读取模板 main.py，替换项目名称
     main_content = (ASSETS_TEMPLATES / "main.py").read_text(encoding="utf-8")
     main_content = main_content.replace('FastAPI Backend', project_name)
@@ -159,49 +148,13 @@ def generate_scaffold(target_dir: str, project_name: str = "FastAPI Backend") ->
     copy_file(ASSETS_TEMPLATES / ".env.example", root / ".env.example")
 
     # ── 7. 创建运行时目录（logs / skills / storage） ────────
-    print("  [7/8] 创建运行时目录 (logs/ skills/ storage/)...")
-    create_gitkeep(root / "logs" / "user")
-    create_gitkeep(root / "skills")
-    create_gitkeep(root / "storage" / "db")
-    create_gitkeep(root / "storage" / "uploads")
-    create_gitkeep(root / "storage" / "tmp")
-    create_gitkeep(root / "storage" / "static" / "images")
-    create_gitkeep(root / "storage" / "duckdb")
-
-    # ── 8. 生成 .gitignore ──────────────────────────────────
-    print("  [8/8] 生成 .gitignore...")
-    gitignore_content = """\
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.egg-info/
-dist/
-build/
-
-# 虚拟环境
-venv/
-.venv/
-
-# 环境变量
-.env
-
-# 日志（保留目录结构，忽略日志内容）
-logs/user/**/*.log
-
-# 数据库与存储（保留目录结构，忽略运行时数据）
-storage/db/*.db
-storage/db/*.db-journal
-storage/duckdb/*.duckdb*
-storage/uploads/
-storage/tmp/
-storage/static/images/
-
-# IDE
-.vscode/
-.idea/
-"""
-    write_file(root / ".gitignore", gitignore_content)
+    print("  [7/7] 创建运行时目录 (logs/ skills/ storage/)...")
+    # 仅创建顶层目录，不预生成子目录结构，也不生成 .gitignore / .gitkeep。
+    # storage/ 用于存放项目运行时所需的文件（数据库、上传文件、临时文件等），
+    # 具体子目录结构由实际业务需求决定，运行时代码会按需自动创建。
+    (root / "logs").mkdir(parents=True, exist_ok=True)
+    (root / "skills").mkdir(parents=True, exist_ok=True)
+    (root / "storage").mkdir(parents=True, exist_ok=True)
 
     print()
     print("✅ 后端脚手架生成完成！")
@@ -211,7 +164,6 @@ storage/static/images/
     print(f"  ├── main.py              # FastAPI 入口")
     print(f"  ├── requirements.txt     # Python 依赖")
     print(f"  ├── .env.example         # 环境变量示例")
-    print(f"  ├── .gitignore")
     print(f"  ├── app/")
     print(f"  │   ├── core/            # 配置、日志")
     print(f"  │   ├── llm/             # LLM 客户端（多模型、重试、流式）")
@@ -221,7 +173,7 @@ storage/static/images/
     print(f"  │   └── prompts/         # 提示词管理")
     print(f"  ├── logs/                # 日志目录")
     print(f"  ├── skills/              # 技能目录")
-    print(f"  └── storage/             # 存储目录（db/uploads/tmp/static）")
+    print(f"  └── storage/             # 存储目录（按需存放项目文件）")
     print()
     print("后续步骤：")
     print(f"  1. cd {root}")

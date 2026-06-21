@@ -35,7 +35,6 @@ backend/
 ├── main.py                      # FastAPI 入口（路由注册、中间件、启动事件）
 ├── requirements.txt             # Python 依赖
 ├── .env.example                 # 环境变量示例
-├── .gitignore
 ├── app/
 │   ├── __init__.py
 │   ├── core/                    # 核心基础设施层
@@ -56,15 +55,9 @@ backend/
 │   │   └── __init__.py
 │   └── prompts/                 # 提示词管理
 │       └── __init__.py
-├── logs/                        # 日志目录（.gitkeep）
-├── skills/                      # 技能目录（.gitkeep）
-└── storage/                     # 存储目录
-    ├── db/                      # SQLite 数据库（.gitkeep）
-    ├── uploads/                 # 文件上传（.gitkeep）
-    ├── tmp/                     # 临时文件（.gitkeep）
-    ├── duckdb/                  # DuckDB 数据（.gitkeep）
-    └── static/
-        └── images/              # 静态图片（.gitkeep）
+├── logs/                        # 日志目录（运行时自动创建子目录）
+├── skills/                      # 技能目录
+└── storage/                     # 存储目录（按需存放项目文件，结构由实际需求决定）
 ```
 
 ## 执行流程
@@ -93,8 +86,10 @@ python scripts/scaffold.py ./backend --project-name "My API"
 4. 生成 api 模块（含 SSE 流式示例）
 5. 创建 services、prompts 空模块
 6. 生成 main.py 入口、requirements.txt、.env.example
-7. 创建 logs、skills、storage 运行时目录（含 .gitkeep）
-8. 生成 .gitignore
+7. 创建 logs、skills、storage 顶层运行时目录
+
+> **注意**：不生成 `.gitignore` 和 `.gitkeep` 文件。`storage/` 仅创建顶层目录，
+> 不预生成子目录结构，由运行时代码按需自动创建。
 
 ### 第三步：指导用户完成配置
 
@@ -105,7 +100,11 @@ python scripts/scaffold.py ./backend --project-name "My API"
 3. **配置模型服务**：修改 `app/llm/llm_config.py` 中的 `LLM_PROVIDERS` 列表，填入实际的模型 base_url、api_key、model 名称
 4. 启动服务：`python main.py`
 
-## LLM 模块说明（直接照抄，不修改）
+## LLM 模块说明（必须照抄，不修改）
+
+> **强制要求**：只要使用了本技能，`app/llm/` 模块**必须**使用本技能提供的模板代码（包含多模型备用切换、失败重试、流式安全重试等逻辑）。
+> 即便目标项目已有 LLM 相关代码，也必须替换为本技能的模板，以确保具备自动切换和重试能力。
+> 除非用户明确说明不需要这些能力，否则一律按模板生成。
 
 `app/llm/` 目录是从生产项目直接照抄的参考模板代码，包含以下核心能力：
 
@@ -171,6 +170,12 @@ logger.info("用户输入: %s", user_input)
 ### api/example.py — SSE 流式 API 示例
 
 演示标准的 SSE 流式对话接口写法，包含异常处理和事件格式。
+
+### storage/ — 文件存储
+
+`storage/` 目录用于存放项目运行时所需的文件，例如数据库文件、用户上传的文件、临时文件、静态资源等。
+脚手架仅创建顶层 `storage/` 目录，**不预生成任何子目录结构**——具体的目录划分由实际业务需求决定，
+运行时代码（如 `config.py` 中的 `os.makedirs`）会按需自动创建所需子目录。
 
 ## 架构详情
 
