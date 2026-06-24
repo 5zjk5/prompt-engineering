@@ -2,6 +2,7 @@
 
 import asyncio
 import logging
+import time
 from typing import AsyncIterator, Dict, List, Optional, Tuple
 
 from openai import APIConnectionError, APIError, APITimeoutError, AsyncOpenAI, RateLimitError
@@ -68,14 +69,16 @@ async def chat_completion(
     temperature: Optional[float] = None,
     max_tokens: Optional[int] = None,
     stream: bool = False,
+    logger: Optional[logging.Logger] = None,
     **kwargs,
 ):
     """统一的聊天补全调用，支持失败重试和备用模型切换。"""
+    log = logger or globals()["logger"]
     providers = get_llm_providers()
     if not providers:
         raise RuntimeError("未配置可用的大模型服务")
     retry_count = get_llm_retry_count()
-    max_attempts = max(1, retry_count + 1)
+    max_attempts = max(1, retry_count)
     last_error: Exception | None = None
 
     for attempt in range(max_attempts):
@@ -89,7 +92,7 @@ async def chat_completion(
                 **provider.extra_body,
                 **dict(request_kwargs.get("extra_body") or {}),
             }
-        logger.info(
+        log.info(
             "LLM 调用参数: provider=%s, base_url=%s, model=%s, temperature=%s, max_tokens=%s, stream=%s, messages=%d, attempt=%d/%d, non_stream_timeout=%s, extra_params=%s",
             provider.name,
             provider.base_url,
@@ -104,18 +107,29 @@ async def chat_completion(
             sorted(request_kwargs.keys()),
         )
         try:
-            return await client.chat.completions.create(
-                model=provider.model,
-                messages=messages,
-                temperature=resolved_temperature,
-                max_tokens=resolved_max_tokens,
-                stream=stream,
-                **request_kwargs,
+            # 用 asyncio.wait_for 做硬超时，防止服务端持续返回数据导致 SDK read timeout 形同虚设
+            start_time = time.time()
+            result = await asyncio.wait_for(
+                client.chat.completions.create(
+                    model=provider.model,
+                    messages=messages,
+                    temperature=resolved_temperature,
+                    max_tokens=resolved_max_tokens,
+                    stream=stream,
+                    **request_kwargs,
+                ),
+                timeout=get_llm_non_stream_timeout(),
             )
+            elapsed = time.time() - start_time
+            log.info(
+                "LLM 调用完成: provider=%s, model=%s, attempt=%d/%d, 耗时=%.2fs",
+                provider.name, provider.model, attempt + 1, max_attempts, elapsed,
+            )
+            return result
         except Exception as exc:
             last_error = exc
             retryable = _is_retryable_error(exc)
-            logger.warning(
+            log.warning(
                 "LLM 调用失败: provider=%s, model=%s, attempt=%d/%d, retryable=%s, error_type=%s, error=%s",
                 provider.name,
                 provider.model,
@@ -136,9 +150,11 @@ async def chat_completion_stream(
     model: Optional[str] = None,
     temperature: Optional[float] = None,
     max_tokens: Optional[int] = None,
+    logger: Optional[logging.Logger] = None,
     **kwargs,
 ) -> AsyncIterator[str]:
     """流式聊天补全，首个内容 chunk 超时后自动重试并切换备用模型。"""
+    log = logger or globals()["logger"]
     providers = get_llm_providers()
     if not providers:
         raise RuntimeError("未配置可用的大模型服务")
@@ -159,7 +175,8 @@ async def chat_completion_stream(
             }
 
         first_content_yielded = False
-        logger.info(
+        stream_start_time = time.time()
+        log.info(
             "LLM 流式调用参数: provider=%s, base_url=%s, model=%s, temperature=%s, max_tokens=%s, messages=%d, attempt=%d/%d, first_chunk_timeout=%s, extra_params=%s",
             provider.name,
             provider.base_url,
@@ -195,18 +212,26 @@ async def chat_completion_stream(
                 timeout=first_chunk_timeout,
             )
             first_content_yielded = True
+            log.info(
+                "LLM 流式首 chunk 到达: provider=%s, model=%s, attempt=%d/%d, 耗时=%.2fs",
+                provider.name, provider.model, attempt + 1, max_attempts, time.time() - stream_start_time,
+            )
             yield first_content
 
             async for chunk in iterator:
                 if chunk.choices and chunk.choices[0].delta.content:
                     yield chunk.choices[0].delta.content
+            log.info(
+                "LLM 流式调用完成: provider=%s, model=%s, attempt=%d/%d, 总耗时=%.2fs",
+                provider.name, provider.model, attempt + 1, max_attempts, time.time() - stream_start_time,
+            )
             return
         except StopAsyncIteration:
             return
         except Exception as exc:
             last_error = exc
             retryable = _is_retryable_error(exc)
-            logger.warning(
+            log.warning(
                 "LLM 流式调用失败: provider=%s, model=%s, attempt=%d/%d, retryable=%s, error_type=%s, error=%s",
                 provider.name,
                 provider.model,
@@ -227,21 +252,24 @@ async def chat_completion_full(
     model: Optional[str] = None,
     temperature: Optional[float] = None,
     max_tokens: Optional[int] = None,
+    logger: Optional[logging.Logger] = None,
     **kwargs,
 ) -> str:
     """非流式聊天补全，返回完整文本。"""
+    log = logger or globals()["logger"]
     response = await chat_completion(
         messages=messages,
         model=model,
         temperature=temperature,
         max_tokens=max_tokens,
         stream=False,
+        logger=logger,
         **kwargs,
     )
     content = response.choices[0].message.content if response.choices else ""
     default_model = get_llm_providers()[0].model if get_llm_providers() else ""
-    logger.debug("chat_completion_full: 输入%d条消息, 输出长度=%d, 模型=%s",
-                 len(messages), len(content or ""), model or default_model)
+    log.debug("chat_completion_full: 输入%d条消息, 输出长度=%d, 模型=%s",
+              len(messages), len(content or ""), model or default_model)
     return content
 
 

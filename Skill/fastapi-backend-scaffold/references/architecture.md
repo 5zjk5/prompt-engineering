@@ -48,18 +48,19 @@ backend/
 
 封装大模型调用，对外暴露统一接口。**只要使用了本技能，此模块必须使用模板代码**（包含多模型备用切换、失败重试、流式安全重试），即便项目已有 LLM 代码也须替换，除非用户明确说明不需要。
 
-- **client.py**: 提供 3 个核心函数：
-  - `chat_completion()` — 非流式调用，返回原始 response
+- **client.py**: 提供 4 个核心函数，所有 `chat_completion*` 函数均支持可选 `logger` 参数：
+  - `chat_completion()` — 非流式调用，返回原始 response（使用 `asyncio.wait_for` 做硬超时）
   - `chat_completion_stream()` — 流式调用，AsyncIterator[str]
   - `chat_completion_full()` — 非流式调用，返回完整文本
   - `count_tokens()` — token 估算
-- **llm_config.py**: 多模型配置管理。在 `LLM_PROVIDERS` 列表中集中配置所有模型服务，重试时按顺序自动切换。
+- **llm_config.py**: 多模型配置管理。在 `LLM_PROVIDERS` 列表中集中配置所有模型服务，重试时按顺序自动切换。支持通过 `extra_body` 传递额外参数（如 `top_k`、`chat_template_kwargs` 等）。
 
 核心特性：
 - 多模型备用切换（重试时轮换 provider）
-- 超时控制（非流式 60s，流式首 chunk 10s）
+- 超时控制（非流式使用 `asyncio.wait_for` 硬超时，流式首 chunk 10s 超时）
 - 异常分类（可重试 vs 不可重试）
 - 流式首 chunk 超时重试（已 yield 内容后不重试）
+- 调用耗时日志（非流式记录调用耗时，流式记录首 chunk 到达时间和总耗时）
 
 ### 3. dal/ — 数据访问层
 

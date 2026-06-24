@@ -40,6 +40,19 @@ LLM_PROVIDERS: List[Dict[str, Any]] = [
     #     "max_tokens": 4096,
     #     "extra_body": {},
     # },
+    # 支持 extra_body 传递额外参数的示例（如 top_k、chat_template_kwargs 等）
+    # {
+    #     "name": "qwen3.6-27b",
+    #     "base_url": "https://your-api-endpoint/v1",
+    #     "api_key": "sk-your-api-key-here",
+    #     "model": "qwen3.6-27b-fp8",
+    #     "temperature": 0.3,
+    #     "max_tokens": 4096,
+    #     "extra_body": {
+    #         "top_k": 20,
+    #         "chat_template_kwargs": {"enable_thinking": False},
+    #     },
+    # },
 ]
 
 

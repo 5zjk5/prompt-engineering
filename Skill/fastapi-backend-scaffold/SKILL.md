@@ -110,7 +110,7 @@ python scripts/scaffold.py ./backend --project-name "My API"
 
 ### client.py — 统一调用接口
 
-提供 4 个核心函数：
+提供 4 个核心函数，所有 `chat_completion*` 函数均支持可选的 `logger` 参数，可传入会话级 logger 使调用日志写入对应会话文件：
 
 | 函数 | 用途 | 返回值 |
 |------|------|--------|
@@ -121,28 +121,34 @@ python scripts/scaffold.py ./backend --project-name "My API"
 
 ### llm_config.py — 多模型配置
 
-在 `LLM_PROVIDERS` 列表中集中配置所有模型服务。重试时按顺序自动轮换 provider。
+在 `LLM_PROVIDERS` 列表中集中配置所有模型服务。重试时按顺序自动轮换 provider。支持通过 `extra_body` 传递额外参数（如 `top_k`、`chat_template_kwargs` 等）。
 
 关键特性：
 - **多模型备用切换**：配置多个 provider，重试时轮换
-- **超时控制**：非流式 60s，流式首 chunk 10s（可由环境变量调整）
+- **超时控制**：非流式调用使用 `asyncio.wait_for` 做硬超时（防止 SDK read timeout 失效），流式首 chunk 10s 超时控制（均可由环境变量调整）
 - **异常分类**：超时/连接错误/限流可重试，4xx 不可重试
 - **流式安全重试**：首个内容 chunk 超时才重试，已开始输出后不重试
+- **调用耗时日志**：非流式记录调用耗时，流式记录首 chunk 到达时间和总耗时
 
 ### 使用示例
 
 ```python
 from app.llm.client import chat_completion_stream, chat_completion_full
+from app.core.logger import get_session_logger
 
-# 流式调用
+logger = get_session_logger(conv_uid, "chat")
+
+# 流式调用（传入会话 logger，调用日志写入会话日志文件）
 async for chunk in chat_completion_stream(
     messages=[{"role": "user", "content": "你好"}],
+    logger=logger,
 ):
     print(chunk, end="", flush=True)
 
 # 非流式调用
 result = await chat_completion_full(
     messages=[{"role": "user", "content": "总结这段话"}],
+    logger=logger,
 )
 ```
 
