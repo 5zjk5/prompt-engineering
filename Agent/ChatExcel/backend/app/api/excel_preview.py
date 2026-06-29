@@ -6,6 +6,8 @@
 
 import os
 import json
+import logging
+import math
 from datetime import date, datetime
 
 from fastapi import APIRouter, HTTPException, Query
@@ -14,6 +16,7 @@ from pydantic import BaseModel
 from app.core import config
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 def _display_file_name(file_path: str) -> str:
@@ -39,6 +42,15 @@ def _json_serial(obj):
     raise TypeError(f"Type {type(obj)} not serializable")
 
 
+def _sanitize_rows(rows: list) -> list:
+    """将 NaN/Inf 替换为 None，避免 JSON 序列化报错"""
+    for row in rows:
+        for i, val in enumerate(row):
+            if isinstance(val, float) and (math.isnan(val) or math.isinf(val)):
+                row[i] = None
+    return rows
+
+
 @router.get("/excel-preview")
 async def excel_preview(file_path: str = Query(..., description="Excel 文件绝对路径")):
     """读取 Excel 文件，返回所有 sheet 的原始数据"""
@@ -57,9 +69,23 @@ async def excel_preview(file_path: str = Query(..., description="Excel 文件绝
 
     try:
         if ext == ".csv":
-            # CSV 按 pandas 读取
+            # CSV 按 pandas 读取，检测编码
             import pandas as pd
-            df = pd.read_csv(abs_path)
+            import chardet
+            with open(abs_path, "rb") as f:
+                raw = f.read()
+            encoding = chardet.detect(raw).get("encoding") or "utf-8"
+            try:
+                raw.decode(encoding)
+            except (UnicodeDecodeError, LookupError):
+                for enc in ["gbk", "gb2312", "gb18030", "utf-8-sig", "latin-1"]:
+                    try:
+                        raw.decode(enc)
+                        encoding = enc
+                        break
+                    except (UnicodeDecodeError, LookupError):
+                        continue
+            df = pd.read_csv(abs_path, encoding=encoding, on_bad_lines="skip")
             total_rows = len(df)
             total_cols = len(df.columns)
 
@@ -85,7 +111,7 @@ async def excel_preview(file_path: str = Query(..., description="Excel 文件绝
                     "total_cols": total_cols,
                     "too_large": False,
                     "columns": columns,
-                    "rows": json.loads(json.dumps(rows, default=_json_serial)),
+                    "rows": json.loads(json.dumps(_sanitize_rows(rows), default=_json_serial)),
                 }],
             }
         else:
@@ -119,7 +145,7 @@ async def excel_preview(file_path: str = Query(..., description="Excel 文件绝
                     "total_cols": total_cols,
                     "too_large": False,
                     "columns": columns,
-                    "rows": json.loads(json.dumps(rows, default=_json_serial)),
+                    "rows": json.loads(json.dumps(_sanitize_rows(rows), default=_json_serial)),
                 })
 
             return {
@@ -128,4 +154,5 @@ async def excel_preview(file_path: str = Query(..., description="Excel 文件绝
             }
 
     except Exception as e:
+        logger.error("Excel 预览失败: file_path=%s, error=%s", abs_path, e, exc_info=True)
         raise HTTPException(status_code=500, detail=f"读取文件失败: {str(e)}")

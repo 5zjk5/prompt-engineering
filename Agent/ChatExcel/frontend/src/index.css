@@ -518,6 +518,13 @@ html, body, #root {
   font-weight: 600;
 }
 
+/* ── ModelSelector ───────────────────────────────────────── */
+.model-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 /* ── SQL 代码块 ────────────────────────────────────────── */
 .sql-block {
   background: #1e1e2e;

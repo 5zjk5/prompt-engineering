@@ -21,19 +21,19 @@ class LLMProviderConfig:
 # 如需配置多个模型，继续在列表中追加字典；重试时会按顺序自动切换。
 LLM_PROVIDERS: List[Dict[str, Any]] = [
     {
-        "name": "DeepSeek-V4-Flash",
+        "name": "Qwen3.5-122B-A10B",
         "base_url": "",
-        "api_key": "",
-        "model": "DeepSeek-V4-Flash",
+        "api_key": "empty",
+        "model": "Qwen3.5-122B-A10B",
         "temperature": 0.3,
         "max_tokens": 4096,
         "extra_body": {},
     },
     {
-        "name": "Qwen3.5-122B-A10B",
+        "name": "DeepSeek-V4-Flash",
         "base_url": "",
-        "api_key": "",
-        "model": "Qwen3.5-122B-A10B",
+        "api_key": "empty",
+        "model": "DeepSeek-V4-Flash",
         "temperature": 0.3,
         "max_tokens": 4096,
         "extra_body": {},

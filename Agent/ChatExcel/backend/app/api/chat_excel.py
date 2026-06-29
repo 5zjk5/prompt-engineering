@@ -17,6 +17,7 @@ from app.services.chat_excel.engine import ChatExcelEngine
 from app.llm.client import chat_completion_stream
 from app.core.logger import get_session_logger
 from app.llm.llm_config import get_default_llm_provider
+from app.dal.conversation import add_message, get_messages
 
 router = APIRouter()
 
@@ -63,15 +64,38 @@ async def chat_excel(req: ChatExcelRequest):
                     True,
                     1,
                 )
+                # 通过回调捕获后端实际使用的模型，切换时通知前端
+                current_provider = {"name": None}
+                def _on_provider(name):
+                    current_provider["name"] = name
                 async for chunk in chat_completion_stream(
                     messages=[{"role": "user", "content": req.user_input}],
                     temperature=0.7,
+                    logger=logger,
+                    preferred_model=req.model_name or None,
+                    on_provider=_on_provider,
                 ):
+                    if current_provider["name"]:
+                        yield f"data: {json.dumps({'type': 'model', 'model': current_provider['name']}, ensure_ascii=False)}\n\n"
+                        current_provider["name"] = None
                     full_text += chunk
                     yield f"data: {json.dumps({'type': 'text', 'content': chunk}, ensure_ascii=False)}\n\n"
                 if not full_text:
                     logger.warning("纯 LLM 对话返回空内容")
-                    yield f"data: {json.dumps({'type': 'text', 'content': '(无回复)'}, ensure_ascii=False)}\n\n"
+                    full_text = "(无回复)"
+                    yield f"data: {json.dumps({'type': 'text', 'content': full_text}, ensure_ascii=False)}\n\n"
+                # 保存纯 LLM 对话到数据库，切换会话后可恢复历史
+                try:
+                    order_no = len(await get_messages(conv_uid))
+                    await add_message(conv_uid, "human", req.user_input, order_no=order_no)
+                    order_no += 1
+                    await add_message(
+                        conv_uid, "ai", full_text,
+                        order_no=order_no,
+                        metadata=json.dumps({"content": full_text}, ensure_ascii=False),
+                    )
+                except Exception as save_err:
+                    logger.warning("保存纯 LLM 对话失败: %s", save_err)
                 yield f"data: {json.dumps({'type': 'done'})}\n\n"
                 logger.info("纯 LLM 对话完成，共计 %d 字符", len(full_text))
             except Exception as exc:
@@ -98,7 +122,7 @@ async def chat_excel(req: ChatExcelRequest):
     async def event_stream():
         try:
             logger.info("开始 ChatExcel 流式分析")
-            async for event in engine.chat_stream(req.user_input):
+            async for event in engine.chat_stream(req.user_input, model_name=req.model_name):
                 yield f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
             logger.info("ChatExcel 流式分析结束")
         except Exception as exc:

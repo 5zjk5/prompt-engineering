@@ -95,7 +95,9 @@ directory. Parameters: {{"skill_name": "skill name",
    Parameters: {{"skill_name": "skill name", "script_name": "script name",
    "args": {{parameters}}}}
 6. **execute_analysis**: Execute quick analysis on uploaded Excel/CSV file.
-   Returns data overview (shape/columns/dtypes/head5). Call this first to understand data.
+   Returns data overview (shape/columns/dtypes/head5) of the first sheet.
+   Call this first to understand data. If the target data is not in the first
+   sheet, use code_interpreter to read other sheets.
    Parameters: {{"input_file": "file path"}}
 7. **code_interpreter**: Execute arbitrary Python code.
    Parameters: {{"code": "python code string"}}
@@ -104,7 +106,9 @@ directory. Parameters: {{"skill_name": "skill name",
      and processing. Never assume df or any other variable already exists.
    - Always print() results you want to see in the output.
    - Available: pandas, numpy, matplotlib, json, os. FILE_PATH variable is pre-set.
-   - For Excel files, NEVER use pd.read_excel(FILE_PATH) without sheet_name. You MUST read all sheets with pd.read_excel(FILE_PATH, sheet_name=None), drop empty sheets, and analyze every non-empty sheet. The code_interpreter preloads DATAFRAMES as a dict: {{sheet_name: dataframe}} containing all non-empty sheets; prefer using DATAFRAMES directly.
+   - For multi-sheet Excel files, use pd.read_excel(FILE_PATH, sheet_name=None) to
+     read all sheets, or pd.read_excel(FILE_PATH, sheet_name="Sheet2") to read a
+     specific sheet. Check sheet names first with pd.ExcelFile(FILE_PATH).sheet_names.
 8. **html_interpreter**: Render HTML as an interactive web report (the ONLY way
 to display reports on the right panel). Default usage:
 {{"html": "<html>complete HTML code</html>", "title": "title"}}.

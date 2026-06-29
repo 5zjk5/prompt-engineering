@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { PlusOutlined, SendOutlined, FileExcelOutlined, CloseOutlined } from '@ant-design/icons';
 import { message } from 'antd';
 import { uploadFile } from '../api/client';
@@ -13,9 +13,12 @@ interface Props {
   chatMode?: string;
   onFileUploaded?: (fileInfo: FileInfo) => void;
   convUid?: string;
+  initialFilePaths?: string[];  // 从会话恢复的文件路径列表
+  initialFileNames?: string[];  // 从会话恢复的文件名列表
 }
 
 function formatFileSize(bytes: number): string {
+  if (!bytes || bytes <= 0) return '';
   if (bytes < 1024) return bytes + ' B';
   if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
   return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
@@ -58,6 +61,8 @@ export default function ChatInput({
   chatMode = 'chat_excel',
   onFileUploaded,
   convUid = '',
+  initialFilePaths = [],
+  initialFileNames = [],
 }: Props) {
   const [input, setInput] = useState('');
   const [fileInfo, setFileInfo] = useState<FileInfo | null>(null);
@@ -66,6 +71,22 @@ export default function ChatInput({
   const [uploadProgress, setUploadProgress] = useState(0);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // 从会话数据恢复已上传文件列表（仅在组件挂载时执行一次）
+  // ChatPanel 使用 key={convUid}，切换会话会重新挂载，故空依赖即可
+  useEffect(() => {
+    if (initialFilePaths.length > 0) {
+      const restored = initialFilePaths.map((path, idx) => ({
+        file_id: '',
+        file_path: path,
+        file_name: initialFileNames[idx] || '',
+        size: 0,
+      }));
+      setFileList(restored);
+      setFileInfo({ file_id: '', file_path: initialFilePaths[0], file_name: initialFileNames[0] || '' });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (disabled) return;
@@ -89,7 +110,7 @@ export default function ChatInput({
       setFileList(prev => {
         const exists = prev.some(item => item.file_path === result.file_path);
         if (exists) return prev;
-        return [...prev, { ...result, size: file.size }];
+        return [...prev, { ...result, size: (result as any).file_size || file.size }];
       });
       onFileUploaded?.(result);
 

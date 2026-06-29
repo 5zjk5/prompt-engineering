@@ -21,6 +21,7 @@ from app.llm.client import chat_completion_stream
 from app.dal.conversation import add_message, create_conversation, get_conversation, get_messages
 from app.core.logger import get_session_logger
 from app.llm.llm_config import get_default_llm_provider
+from app.core import config
 
 router = APIRouter()
 
@@ -113,6 +114,34 @@ async def _save_react_round(conv_uid: str, user_input: str, content: str, steps:
     logger.info("ReAct 对话已保存: order_no=%d, steps=%d, final_len=%d", order_no, len(steps), len(content or ""))
 
 
+async def _load_react_history(conv_uid: str, logger) -> list[dict]:
+    """加载最近 10 轮 ReAct 历史消息，拼接为 LLM messages 格式。"""
+    try:
+        db_messages = await get_messages(conv_uid)
+        history = []
+        for msg in db_messages:
+            if msg.get("role") == "human":
+                history.append({"role": "user", "content": msg["content"]})
+            elif msg.get("role") == "ai":
+                content = msg.get("content", "")
+                # ReAct 的回复内容存在 metadata.finalContent 字段
+                if msg.get("metadata"):
+                    try:
+                        meta = json.loads(msg["metadata"])
+                        content = meta.get("finalContent") or meta.get("content") or content
+                    except (json.JSONDecodeError, TypeError):
+                        pass
+                if content:
+                    history.append({"role": "assistant", "content": content})
+        # 最近 N 轮（每轮 human + ai = 2 条），N 由配置项 REACT_HISTORY_ROUNDS 控制
+        limited_history = history[-config.REACT_HISTORY_ROUNDS * 2:]
+        logger.info("加载历史消息: 数据库 %d 条, 处理后 %d 条, 本次使用 %d 条", len(db_messages), len(history), len(limited_history))
+        return limited_history
+    except Exception as e:
+        logger.warning("加载历史消息失败: %s", e)
+        return []
+
+
 class ChatReactRequest(BaseModel):
     user_input: str
     conv_uid: str = ""
@@ -146,6 +175,21 @@ async def chat_react_agent(req: ChatReactRequest):
     file_names = req.file_names if req.file_names else ([req.file_name] if req.file_name else [])
     has_file = bool(file_paths)
 
+    # 无文件 + 无已有引擎时，尝试从数据库恢复文件信息（容器重启后引擎缓存丢失的场景）
+    if not has_file and not has_engine and conv_uid:
+        try:
+            conv = await get_conversation(conv_uid)
+            if conv:
+                saved_paths = conv.get("file_paths") or []
+                saved_names = conv.get("file_names") or []
+                if saved_paths:
+                    file_paths = saved_paths
+                    file_names = saved_names if saved_names else ["" for _ in saved_paths]
+                    has_file = True
+                    logger.info("从数据库恢复文件信息: file_paths=%s", file_paths)
+        except Exception as e:
+            logger.warning("从数据库恢复文件信息失败: %s", e)
+
     # 无文件 + 无已有引擎 → 纯 LLM 对话
     if not has_file and not has_engine:
         logger.info("【分支1】无文件+无引擎，走纯 LLM 对话")
@@ -162,24 +206,47 @@ async def chat_react_agent(req: ChatReactRequest):
                 yield f"data: {json.dumps(meta_event, ensure_ascii=False)}\n\n"
 
                 full_text = ""
-                logger.info("纯 LLM 对话调用，user_input=%s", req.user_input[:100])
+                # 加载历史对话并拼接当前输入
+                chat_history = await _load_react_history(conv_uid, logger)
+                messages = chat_history + [{"role": "user", "content": req.user_input}]
                 default_llm = get_default_llm_provider()
+                logger.info("纯 LLM 对话调用，user_input=%s", req.user_input[:100])
                 logger.info(
                     "LLM 调用参数: stage=react_simple, model=%s, temperature=%s, max_tokens=%s, stream=%s, messages=%d",
                     default_llm.model,
                     0.7,
                     default_llm.max_tokens,
                     True,
-                    1,
+                    len(messages),
                 )
+                logger.info(
+                    "===== [REACT_INPUT_FULL] 本次对话输入完整消息 =====\n%s\n===== [REACT_INPUT_FULL_END] =====",
+                    json.dumps(messages, ensure_ascii=False, indent=2),
+                )
+                # 通过回调捕获后端实际使用的模型，切换时通知前端
+                current_provider = {"name": None}
+                def _on_provider(name):
+                    current_provider["name"] = name
                 async for chunk in chat_completion_stream(
-                    messages=[{"role": "user", "content": req.user_input}],
+                    messages=messages,
                     temperature=0.7,
+                    logger=logger,
+                    preferred_model=req.model_name or None,
+                    on_provider=_on_provider,
                 ):
+                    if current_provider["name"]:
+                        model_event = {'type': 'model', 'model': current_provider["name"]}
+                        yield f"data: {json.dumps(model_event, ensure_ascii=False)}\n\n"
+                        current_provider["name"] = None
                     full_text += chunk
                     chunk_event = {'type': 'step.chunk', 'id': step_id, 'output_type': 'text', 'content': chunk}
                     _apply_react_event(steps, chunk_event)
                     yield f"data: {json.dumps(chunk_event, ensure_ascii=False)}\n\n"
+
+                logger.info(
+                    "===== [REACT_OUTPUT_FULL] 本次对话输出完整内容 =====\n%s\n===== [REACT_OUTPUT_FULL_END] =====",
+                    full_text,
+                )
 
                 done_event = {'type': 'step.done', 'id': step_id, 'status': 'done'}
                 _apply_react_event(steps, done_event)
@@ -240,7 +307,7 @@ async def chat_react_agent(req: ChatReactRequest):
             steps = []
             start_time = time.perf_counter()
             logger.info("开始 ReAct Agent 引擎流式分析：conv_uid=%s", conv_uid)
-            async for event in engine.run_stream(req.user_input):
+            async for event in engine.run_stream(req.user_input, model_name=req.model_name):
                 _apply_react_event(steps, event)
                 if event.get("type") == "step.start":
                     round_count += 1

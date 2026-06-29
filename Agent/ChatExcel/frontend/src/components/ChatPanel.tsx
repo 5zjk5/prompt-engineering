@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import ModeSwitcher from './ModeSwitcher';
+import ModelSelector from './ModelSelector';
 import ContextBar from './ContextBar';
 import MessageList from './MessageList';
 import ChatInput from './ChatInput';
@@ -54,9 +55,13 @@ interface Props {
   onModeChange: (mode: ChatMode) => void | Promise<void>;
   onTitleUpdate: (hasMessage?: boolean) => void;  // 通知 App 刷新侧边栏标题
   onFilePathUpdate?: (fileInfo: FileInfo) => void;  // 通知 App 文件变化（用于预览栏）
+  initialFilePaths?: string[];  // 从会话恢复的文件路径列表
+  initialFileNames?: string[];  // 从会话恢复的文件名列表
+  selectedModel: string;  // 用户选择的模型名称
+  onModelChange: (model: string) => void;  // 模型切换回调（含后端自动切换通知）
 }
 
-export default function ChatPanel({ convUid, mode, onModeChange, onTitleUpdate, onFilePathUpdate }: Props) {
+export default function ChatPanel({ convUid, mode, onModeChange, onTitleUpdate, onFilePathUpdate, initialFilePaths = [], initialFileNames = [], selectedModel, onModelChange }: Props) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isWorking, setIsWorking] = useState(false);
   const [contextStatus, setContextStatus] = useState<any>(null);
@@ -207,6 +212,7 @@ export default function ChatPanel({ convUid, mode, onModeChange, onTitleUpdate, 
           file_name: fileName,
           file_paths: filePaths,
           file_names: fileNames,
+          model_name: selectedModel,
         }),
         signal: abortRef.current.signal,
       });
@@ -226,6 +232,9 @@ export default function ChatPanel({ convUid, mode, onModeChange, onTitleUpdate, 
             const msg = { ...updated[idx] } as ChatMessage;
 
             switch (event.type) {
+              case 'model':
+                if (event.model) onModelChange(event.model);
+                break;
               case 'learning':
                 msg.content = event.content || '正在分析数据结构...';
                 break;
@@ -292,6 +301,9 @@ export default function ChatPanel({ convUid, mode, onModeChange, onTitleUpdate, 
             }));
 
             switch (event.type) {
+              case 'model':
+                if (event.model) onModelChange(event.model);
+                break;
               case 'step.start':
                 steps.push({
                   id: event.id || `step_${steps.length}`,
@@ -425,6 +437,7 @@ export default function ChatPanel({ convUid, mode, onModeChange, onTitleUpdate, 
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       {/* 顶部栏 */}
       <div className="chat-topbar">
+        <ModelSelector value={selectedModel} onChange={onModelChange} />
         <ModeSwitcher mode={mode} onChange={onModeChange} locked={hasHistory} />
         {mode === 'react_agent' && <ContextBar status={contextStatus} />}
       </div>
@@ -438,7 +451,7 @@ export default function ChatPanel({ convUid, mode, onModeChange, onTitleUpdate, 
 
       {/* 输入区 */}
       <div className="input-area">
-        <ChatInput onSend={handleSend} disabled={isWorking} disableUpload={disableUpload} chatMode={mode} onFileUploaded={handleFileUploaded} convUid={convUid} />
+        <ChatInput onSend={handleSend} disabled={isWorking} disableUpload={disableUpload} chatMode={mode} onFileUploaded={handleFileUploaded} convUid={convUid} initialFilePaths={initialFilePaths} initialFileNames={initialFileNames} />
       </div>
     </div>
   );

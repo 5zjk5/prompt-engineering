@@ -106,40 +106,16 @@ import json
 import pandas as pd
 
 file_path = r"{file_path}"
-
-def clean_dataframe(df):
-    # 清理空行空列，用于判断 sheet 是否有效。
-    return df.dropna(how="all").dropna(axis=1, how="all")
-
 if file_path.lower().endswith((".xls", ".xlsx")):
-    raw_sheets = pd.read_excel(file_path, sheet_name=None)
-    sheets = {{}}
-    for sheet_name, sheet_df in raw_sheets.items():
-        cleaned_df = clean_dataframe(sheet_df)
-        if not cleaned_df.empty:
-            sheets[sheet_name] = cleaned_df
-    summary = {{
-        "file_type": "excel",
-        "sheet_count": len(sheets),
-        "sheets": {{
-            sheet_name: {{
-                "shape": list(sheet_df.shape),
-                "columns": list(sheet_df.columns),
-                "dtypes": {{col: str(dtype) for col, dtype in sheet_df.dtypes.items()}},
-                "head": sheet_df.head(5).to_dict(orient="records"),
-            }}
-            for sheet_name, sheet_df in sheets.items()
-        }},
-    }}
+    df = pd.read_excel(file_path)
 else:
-    df = clean_dataframe(pd.read_csv(file_path))
-    summary = {{
-        "file_type": "csv",
-        "shape": list(df.shape),
-        "columns": list(df.columns),
-        "dtypes": {{col: str(dtype) for col, dtype in df.dtypes.items()}},
-        "head": df.head(5).to_dict(orient="records"),
-    }}
+    df = pd.read_csv(file_path)
+summary = {{
+    "shape": list(df.shape),
+    "columns": list(df.columns),
+    "dtypes": {{col: str(dtype) for col, dtype in df.dtypes.items()}},
+    "head": df.head(5).to_dict(orient="records"),
+}}
 print(json.dumps(summary, ensure_ascii=False, default=str))
 """
     # 使用 code_interpreter 的子进程方式执行
@@ -154,32 +130,6 @@ print(json.dumps(summary, ensure_ascii=False, default=str))
         try:
             summary = json.loads(output_text.strip())
             chunks.append({"output_type": "json", "content": summary})
-            if summary.get("file_type") == "excel":
-                sheets = summary.get("sheets") or {}
-                sheet_lines = [
-                    f"{sheet_name}: {sheet_info.get('shape')} 行列, 字段={sheet_info.get('columns')}"
-                    for sheet_name, sheet_info in sheets.items()
-                ]
-                chunks.append({
-                    "output_type": "text",
-                    "content": "已读取 Excel 所有非空 sheet：\n" + "\n".join(sheet_lines),
-                })
-                for sheet_name, sheet_info in sheets.items():
-                    head_rows = sheet_info.get("head")
-                    columns = sheet_info.get("columns")
-                    if isinstance(head_rows, list) and isinstance(columns, list):
-                        chunks.append({
-                            "output_type": "table",
-                            "content": {
-                                "title": sheet_name,
-                                "columns": [
-                                    {"title": col, "dataIndex": col, "key": col}
-                                    for col in columns
-                                ],
-                                "rows": head_rows,
-                            },
-                        })
-                return json.dumps({"chunks": chunks}, ensure_ascii=False)
             head_rows = summary.get("head")
             columns = summary.get("columns")
             if isinstance(head_rows, list) and isinstance(columns, list):
@@ -283,22 +233,6 @@ async def tool_code_interpreter(code: str, file_path: str = "", conv_id: str = "
     ]
     if file_path:
         preamble_lines.append(f'FILE_PATH = r"{file_path}"')
-        preamble_lines.extend([
-            "def load_all_sheets(file_path=FILE_PATH):",
-            "    \"\"\"读取 Excel 的所有非空 sheet；CSV 返回 {'CSV': df}。\"\"\"",
-            "    if file_path.lower().endswith((\".xls\", \".xlsx\")):",
-            "        raw_sheets = pd.read_excel(file_path, sheet_name=None)",
-            "        result = {}",
-            "        for sheet_name, sheet_df in raw_sheets.items():",
-            "            cleaned_df = sheet_df.dropna(how=\"all\").dropna(axis=1, how=\"all\")",
-            "            if not cleaned_df.empty:",
-            "                result[sheet_name] = cleaned_df",
-            "        return result",
-            "    df = pd.read_csv(file_path).dropna(how=\"all\").dropna(axis=1, how=\"all\")",
-            "    return {\"CSV\": df} if not df.empty else {}",
-            "DATAFRAMES = load_all_sheets(FILE_PATH)",
-            "df = next(iter(DATAFRAMES.values())) if DATAFRAMES else pd.DataFrame()",
-        ])
     preamble = "\n".join(preamble_lines) + "\n"
     full_code = preamble + code
 
@@ -718,6 +652,14 @@ async def execute_tool(
     todo_list_ref = todo_list_ref if todo_list_ref is not None else []
 
     if action == "execute_analysis":
+        # 模型误把 code 参数传给 execute_analysis 时，提示使用 code_interpreter
+        if "code" in action_input and "input_file" not in action_input:
+            return json.dumps({
+                "chunks": [{
+                    "type": "text",
+                    "content": "execute_analysis 仅用于获取文件概览（参数: input_file）。你传入的 code 参数已被忽略。如需执行 Python 代码，请使用 code_interpreter 工具。",
+                }]
+            }, ensure_ascii=False)
         input_file = action_input.get("input_file", file_path)
         return await tool_execute_analysis(input_file, conv_id)
     elif action == "code_interpreter":

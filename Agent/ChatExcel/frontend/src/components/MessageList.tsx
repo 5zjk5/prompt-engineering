@@ -50,6 +50,26 @@ const cleanFinalContent = (raw: string): string => {
   return raw;
 };
 
+/** chart-view 自定义标签正则，匹配 <chart-view content='...'/>。用非贪婪 .*? 兼容 content 内部含单引号的情况（如 SQL 中的 '值'） */
+const CHART_VIEW_RE = /<chart-view\s+content='.*?'\s*\/>/gs;
+
+/** 去掉文本中的 <chart-view> 标签，只保留可见文本。
+ *  表格/图表由 ResultTabs 等结构化字段渲染，不使用 chart-view 中的数据（防止 LLM 编造数据）。 */
+const stripChartView = (text: string): string => {
+  return text.replace(CHART_VIEW_RE, '').trim();
+};
+
+/** 渲染消息内容：去掉 <chart-view> 标签后按 Markdown 渲染 */
+const renderContentWithChartView = (text: string) => {
+  const cleaned = stripChartView(text);
+  if (!cleaned) return null;
+  return (
+    <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+      {cleaned}
+    </ReactMarkdown>
+  );
+};
+
 const markdownComponents = {
   h1: ({ children }: any) => <h3 style={{ fontSize: 18, margin: '8px 0 4px', fontWeight: 600 }}>{children}</h3>,
   h2: ({ children }: any) => <h4 style={{ fontSize: 16, margin: '8px 0 4px', fontWeight: 600 }}>{children}</h4>,
@@ -115,9 +135,7 @@ export default function MessageList({ messages, isWorking }: Props) {
                     <>
                       {msg.content && (
                         <div className="markdown-body">
-                          <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-                            {msg.content}
-                          </ReactMarkdown>
+                          {renderContentWithChartView(msg.content)}
                         </div>
                       )}
                       {msg.sql && msg.chartData && msg.chartType && msg.chartData.columns && msg.chartData.rows ? (
@@ -154,9 +172,7 @@ export default function MessageList({ messages, isWorking }: Props) {
                       {msg.finalContent && (
                         <div className="final-answer">
                           <strong>结论: </strong>
-                          <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-                            {cleanFinalContent(msg.finalContent)}
-                          </ReactMarkdown>
+                          {renderContentWithChartView(cleanFinalContent(msg.finalContent))}
                         </div>
                       )}
                     </>

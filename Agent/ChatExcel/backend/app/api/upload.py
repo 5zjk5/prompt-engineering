@@ -169,6 +169,7 @@ async def upload_file(
         "file_id": file_id,
         "file_path": abs_file_path,
         "file_name": file.filename,
+        "file_size": len(content),
         "chat_mode": chat_mode,
         "user_no": user_no,
         "conv_uid": conv_uid,

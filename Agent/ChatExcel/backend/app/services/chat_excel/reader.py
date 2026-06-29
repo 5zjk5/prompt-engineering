@@ -16,6 +16,30 @@ from app.core import config
 
 logger = logging.getLogger(__name__)
 
+# 常见中文编码，chardet 检测失败或读取报错时依次尝试
+_FALLBACK_ENCODINGS = ["gbk", "gb2312", "gb18030", "utf-8-sig", "latin-1"]
+
+
+def _detect_encoding(raw: bytes) -> str:
+    """检测文件编码，chardet 失败时回退到常见中文编码"""
+    result = chardet.detect(raw)
+    encoding = result.get("encoding")
+    if encoding:
+        # 用检测到的编码试读，失败则继续尝试其他编码
+        try:
+            raw.decode(encoding)
+            return encoding
+        except (UnicodeDecodeError, LookupError):
+            pass
+    # chardet 检测失败或解码报错，依次尝试常见编码
+    for enc in _FALLBACK_ENCODINGS:
+        try:
+            raw.decode(enc)
+            return enc
+        except (UnicodeDecodeError, LookupError):
+            continue
+    return "utf-8"
+
 
 def excel_colunm_format(old_name: str) -> str:
     """空格替换为下划线"""
@@ -137,8 +161,7 @@ def read_from_df(db, file_path: str, file_name: str, table_name: str):
     with open(file_path, "rb") as f:
         raw = f.read()
 
-    result = chardet.detect(raw)
-    encoding = result["encoding"]
+    encoding = _detect_encoding(raw)
 
     if file_name.endswith(".xlsx") or file_name.endswith(".xls"):
         df_tmp = pd.read_excel(io.BytesIO(raw), index_col=False)
@@ -147,9 +170,9 @@ def read_from_df(db, file_path: str, file_name: str, table_name: str):
             converters={i: csv_colunm_format for i in range(df_tmp.shape[1])},
         )
     elif file_name.endswith(".csv"):
-        df_tmp = pd.read_csv(io.BytesIO(raw), index_col=False, encoding=encoding)
+        df_tmp = pd.read_csv(io.BytesIO(raw), index_col=False, encoding=encoding, on_bad_lines="skip")
         df = pd.read_csv(
-            io.BytesIO(raw), index_col=False, encoding=encoding,
+            io.BytesIO(raw), index_col=False, encoding=encoding, on_bad_lines="skip",
             converters={i: csv_colunm_format for i in range(df_tmp.shape[1])},
         )
     else:
@@ -163,16 +186,17 @@ def read_from_df(db, file_path: str, file_name: str, table_name: str):
 
 def read_direct(db, file_path: str, file_name: str, table_name: str):
     """DuckDB 直接读取文件（优先方式）"""
-    try:
-        db.sql(f"CREATE TABLE {table_name} AS SELECT * FROM '{file_path}'")
-        return
-    except Exception as e:
-        logger.warning(f"DuckDB direct read failed: {e}")
+    ext = os.path.splitext(file_path)[1].lower()
 
-    ext = os.path.splitext(file_path)[1]
+    # CSV 需要先检测编码，DuckDB 默认按 UTF-8 读取会导致非 UTF-8 文件乱码或报错
     if ext == ".csv":
+        with open(file_path, "rb") as f:
+            raw = f.read()
+        encoding = _detect_encoding(raw)
         load_func = "read_csv"
         load_params = {}
+        if encoding.lower() not in ("utf-8", "utf8"):
+            load_params["encoding"] = f"'{encoding}'"
     elif ext == ".xlsx":
         load_func = "read_xlsx"
         load_params = {"empty_as_varchar": "true", "ignore_errors": "true"}
@@ -313,8 +337,8 @@ class ExcelReader:
         if ext == ".csv":
             with open(file_path, "rb") as f:
                 raw = f.read()
-            encoding = chardet.detect(raw)["encoding"] or "utf-8"
-            df = pd.read_csv(io.BytesIO(raw), index_col=False, encoding=encoding)
+            encoding = _detect_encoding(raw)
+            df = pd.read_csv(io.BytesIO(raw), index_col=False, encoding=encoding, on_bad_lines="skip")
             df = _clean_dataframe(df)
             if not df.empty:
                 suffix = self._unique_table_name(f"{file_key}_csv").replace("temp_", "")
@@ -473,6 +497,7 @@ INSERT INTO {new_table_name} SELECT {', '.join(select_sql_list)} FROM {old_table
         return samples
 
     def get_create_table_sql(self, table_name: str = None) -> str:
+        """生成包含表注释和列注释的 CREATE TABLE DDL。"""
         table_name = table_name or self.curr_table
         sql = f"""SELECT comment, table_name, database_name FROM duckdb_tables()
                   WHERE table_name = '{table_name}'"""
@@ -484,13 +509,18 @@ INSERT INTO {new_table_name} SELECT {', '.join(select_sql_list)} FROM {old_table
         column_strs = []
         for cl_data in cl_datas:
             column_name, column_type, nullable = cl_data[0], cl_data[1], cl_data[2]
+            column_comment = cl_data[3] if len(cl_data) > 3 else None
             curr_sql = f"    {column_name} {column_type}"
             if nullable and str(nullable).lower() == "no":
                 curr_sql += " NOT NULL"
+            if column_comment:
+                escaped = str(column_comment).replace("'", "''")
+                curr_sql += f" COMMENT '{escaped}'"
             column_strs.append(curr_sql)
         ddl_sql += ",\n".join(column_strs)
         if table_comment:
-            ddl_sql += f"\n) COMMENT '{table_comment}';"
+            escaped_table_comment = str(table_comment).replace("'", "''")
+            ddl_sql += f"\n) COMMENT '{escaped_table_comment}';"
         else:
             ddl_sql += "\n);"
         return ddl_sql
@@ -506,11 +536,94 @@ INSERT INTO {new_table_name} SELECT {', '.join(select_sql_list)} FROM {old_table
             )
         return "\n\n".join(parts)
 
+    def get_create_table_sql_for_tables(self, table_names: List[str]) -> str:
+        """仅生成指定表的 DDL（含列注释），用于分析阶段按需注入。"""
+        name_set = set(table_names)
+        parts = []
+        for info in self.table_infos:
+            if not info.get("transformed"):
+                continue
+            if info["table_name"] not in name_set:
+                continue
+            parts.append(
+                f"-- 文件: {info.get('file_name')} / Sheet: {info.get('sheet_name')}\n"
+                f"{self.get_create_table_sql(info['table_name'])}"
+            )
+        return "\n\n".join(parts)
+
+    def get_sample_data_for_tables(self, table_names: List[str], limit: int = 2) -> str:
+        """仅获取指定表的采样数据，用于分析阶段按需注入。返回 JSON 字符串。"""
+        import json
+        from datetime import date, datetime
+
+        def _default_serial(obj):
+            """JSON 序列化兜底，处理 date/datetime/numpy 类型。"""
+            if isinstance(obj, (datetime, date)):
+                return obj.isoformat()
+            if isinstance(obj, (np.integer,)):
+                return int(obj)
+            if isinstance(obj, (np.floating,)):
+                return float(obj)
+            if isinstance(obj, (np.bool_,)):
+                return bool(obj)
+            return str(obj)
+
+        name_set = set(table_names)
+        samples = []
+        for info in self.table_infos:
+            if not info.get("transformed"):
+                continue
+            if info["table_name"] not in name_set:
+                continue
+            columns, datas = self.get_sample_data(table_name=info["table_name"], limit=limit)
+            samples.append({
+                "file_name": info.get("file_name"),
+                "sheet_name": info.get("sheet_name"),
+                "table_name": info["table_name"],
+                "columns": columns,
+                "rows": datas,
+            })
+        return json.dumps(samples, ensure_ascii=False, default=_default_serial)
+
+    def get_table_index(self) -> List[dict]:
+        """生成轻量表索引，每张表包含表名、sheet名、表注释、列名与列注释列表。
+        用于分析阶段的表筛选 LLM 调用，避免全量 DDL + 采样数据超出上下文。
+        """
+        index = []
+        for info in self.table_infos:
+            if not info.get("transformed"):
+                continue
+            table_name = info["table_name"]
+            # 表注释
+            sql = f"""SELECT comment FROM duckdb_tables() WHERE table_name = '{table_name}'"""
+            _, t_datas = self._run_sql(sql)
+            table_comment = t_datas[0][0] if t_datas else ""
+            # 列名 + 列注释
+            _, cl_datas = self.get_columns(table_name)
+            columns = []
+            for cl_data in cl_datas:
+                col_name = cl_data[0]
+                col_comment = cl_data[3] if len(cl_data) > 3 else None
+                if col_comment:
+                    columns.append(f"{col_name}({col_comment})")
+                else:
+                    columns.append(col_name)
+            index.append({
+                "table_name": table_name,
+                "sheet_name": info.get("sheet_name", ""),
+                "file_name": info.get("file_name", ""),
+                "table_comment": table_comment or "",
+                "columns": columns,
+            })
+        return index
+
     def get_columns(self, table_name: str = None):
+        """获取表的列信息，包含列名、类型、是否可空、列注释。"""
         table_name = table_name or self.curr_table
         sql = f"""
         SELECT dc.column_name, dc.data_type AS column_type,
-               CASE WHEN dc.is_nullable THEN 'YES' ELSE 'NO' END AS "null"
+               CASE WHEN dc.is_nullable THEN 'YES' ELSE 'NO' END AS "null",
+               dc.comment
         FROM duckdb_columns() dc
         WHERE dc.table_name = '{table_name}' AND dc.schema_name = 'main';
         """

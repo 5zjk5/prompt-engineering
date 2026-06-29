@@ -17,7 +17,11 @@ from typing import AsyncIterator, Dict, List, Optional
 from app.services.chat_excel.reader import ExcelReader
 from app.llm.client import chat_completion_stream, chat_completion_full
 from app.dal.conversation import add_message, get_messages
-from app.prompts.chat_excel_analyze import build_analyze_messages
+from app.prompts.chat_excel_analyze import (
+    build_analyze_messages,
+    build_table_selection_messages,
+    parse_table_selection,
+)
 from app.prompts.chat_excel_learning import (
     build_learning_messages,
     parse_learning_response,
@@ -25,10 +29,9 @@ from app.prompts.chat_excel_learning import (
 )
 from app.core.logger import get_session_logger
 from app.llm.llm_config import get_default_llm_provider
+from app.core import config
 
 logger = logging.getLogger(__name__)
-
-CHAT_EXCEL_HISTORY_ROUNDS = 10
 
 
 def _json_serial(obj):
@@ -123,9 +126,15 @@ class ChatExcelEngine:
             self.logger.info("文件已存在，无新增表")
         return added
 
-    async def _learn_table(self, table_info: dict) -> dict:
-        self.logger.info("开始学习表: temp_table=%s, file_name=%s, sheet_name=%s",
-                         table_info["temp_table"], table_info.get("file_name"), table_info.get("sheet_name"))
+    async def _learn_table(self, table_info: dict, progress: dict = None) -> dict:
+        """学习单张表。progress 为共享计数器，用于打印学习进度。"""
+        if progress is not None:
+            progress["done"] += 1
+            self.logger.info("当前学习 %d/%d: sheet_name=%s",
+                             progress["done"], progress["total"], table_info.get("sheet_name"))
+        else:
+            self.logger.info("开始学习表: temp_table=%s, file_name=%s, sheet_name=%s",
+                             table_info["temp_table"], table_info.get("file_name"), table_info.get("sheet_name"))
         table_schema = self.reader.get_create_table_sql(table_name=table_info["temp_table"])
         columns, datas = self.reader.get_sample_data(table_name=table_info["temp_table"])
         data_example = json.dumps(
@@ -147,15 +156,24 @@ class ChatExcelEngine:
         )
 
         default_llm = get_default_llm_provider()
+        # 学习阶段需要输出完整的列分析 JSON，列数多的宽表输出量很大，
+        # 使用更大的 max_tokens 避免输出截断导致 JSON 解析失败回退
+        _LEARN_MAX_TOKENS = 16384
         self.logger.info(
             "LLM 调用参数: stage=learn, model=%s, temperature=%s, max_tokens=%s, stream=%s, messages=%d",
             default_llm.model,
             0.8,
-            default_llm.max_tokens,
+            _LEARN_MAX_TOKENS,
             False,
             len(messages),
         )
-        llm_result = await chat_completion_full(messages, temperature=0.8)
+        llm_result = await chat_completion_full(
+            messages,
+            temperature=0.8,
+            max_tokens=_LEARN_MAX_TOKENS,
+            logger=self.logger,
+            preferred_model=getattr(self, '_model_name', '') or None,
+        )
         self.logger.info("LLM 学习完成，返回长度=%d", len(llm_result))
         self.logger.info(
             "===== [LEARN_LLM_OUTPUT_FULL] 学习阶段完整模型输出 =====\n%s\n===== [LEARN_LLM_OUTPUT_FULL_END] =====",
@@ -191,8 +209,17 @@ class ChatExcelEngine:
             return {}
         self.logger.info("待学习表数量: %d", len(pending_tables))
 
+        # 限制并发数，避免表过多时同时发起大量 LLM 调用导致限流或超时
+        _LEARN_CONCURRENCY = 5
+        semaphore = asyncio.Semaphore(_LEARN_CONCURRENCY)
+        progress = {"done": 0, "total": len(pending_tables)}
+
+        async def _learn_with_limit(table_info):
+            async with semaphore:
+                return await self._learn_table(table_info, progress=progress)
+
         results = await asyncio.gather(
-            *(self._learn_table(table_info) for table_info in pending_tables),
+            *(_learn_with_limit(table_info) for table_info in pending_tables),
             return_exceptions=True,
         )
 
@@ -221,7 +248,7 @@ class ChatExcelEngine:
         return {"tables": learned_tables, "view_message": view_message}
 
     async def _load_chat_history(self) -> List[dict]:
-        """加载最近 10 轮历史消息。"""
+        """加载最近 10 轮历史消息，跳过学习阶段的 view_message（避免重复注入已学习表的信息）。"""
         try:
             db_messages = await get_messages(self.conv_uid)
             history = []
@@ -237,8 +264,14 @@ class ChatExcelEngine:
                                 content = meta["content"]
                         except (json.JSONDecodeError, TypeError):
                             pass
+                    # 跳过学习阶段的 view_message（以 "### **表：" 开头），
+                    # 这些信息已通过 DDL 的列 COMMENT 注入 system prompt，不需要重复作为历史
+                    if content.lstrip().startswith("### **表："):
+                        continue
+                    # 去掉 <chart-view> 标签，防止 LLM 模仿该格式而跳过 <api-call> SQL 执行
+                    content = re.sub(r"<chart-view\s+content='.*?'\s*/>", "", content, flags=re.DOTALL)
                     history.append({"role": "assistant", "content": content})
-            limited_history = history[-CHAT_EXCEL_HISTORY_ROUNDS * 2 :]
+            limited_history = history[-config.CHAT_EXCEL_HISTORY_ROUNDS * 2 :]
             self.logger.info("加载历史消息: 数据库 %d 条, 处理后 %d 条, 本次使用 %d 条", len(db_messages), len(history), len(limited_history))
             self.logger.info(
                 "===== [CHAT_HISTORY_FULL] 本次分析使用的完整历史消息 =====\n%s\n===== [CHAT_HISTORY_FULL_END] =====",
@@ -284,8 +317,9 @@ class ChatExcelEngine:
             metadata=json.dumps(metadata or {}, ensure_ascii=False),
         )
 
-    async def chat_stream(self, user_input: str) -> AsyncIterator[dict]:
-        """流式对话。"""
+    async def chat_stream(self, user_input: str, model_name: str = "") -> AsyncIterator[dict]:
+        """流式对话。model_name 指定用户首选模型，优先使用。"""
+        self._model_name = model_name
         full_text = ""
         view_message = ""
         saved_learning_content = ""
@@ -324,12 +358,6 @@ class ChatExcelEngine:
             self.logger.info("用户输入: %s", user_input[:200])
 
             chat_history = await self._load_chat_history()
-            table_schema = self.reader.get_all_create_table_sql()
-            data_example = json.dumps(
-                self.reader.get_all_sample_data(),
-                ensure_ascii=False,
-                default=_json_serial,
-            )
             table_names = self.reader.table_names
             self.logger.info("可用表: %s", table_names)
             if not table_names:
@@ -337,6 +365,34 @@ class ChatExcelEngine:
                 yield {"type": "error", "content": "当前会话没有可分析的数据表，请先上传并完成 Excel 学习。"}
                 yield {"type": "done"}
                 return
+
+            # ---- 表筛选：用轻量 LLM 调用判断用户问题涉及哪些表，只把相关表的 DDL + 采样注入 prompt ----
+            selected_tables = table_names  # 默认全部表
+            try:
+                table_index = self.reader.get_table_index()
+                if len(table_index) > 1:
+                    selection_messages = build_table_selection_messages(user_input, table_index)
+                    self.logger.info("===== [TABLE_SELECTION_PROMPT] 表筛选提示词 =====\n%s\n===== [TABLE_SELECTION_PROMPT_END] =====",
+                                     json.dumps(selection_messages, ensure_ascii=False, indent=2, default=_json_serial))
+                    selection_response = await chat_completion_full(
+                        selection_messages,
+                        temperature=0.0,
+                        logger=self.logger,
+                        preferred_model=model_name or None,
+                    )
+                    self.logger.info("表筛选 LLM 返回: %s", selection_response)
+                    selected_tables = parse_table_selection(selection_response, table_names)
+                    self.logger.info("表筛选结果: %s (共 %d/%d 张表)", selected_tables, len(selected_tables), len(table_names))
+                else:
+                    self.logger.info("仅 1 张表，跳过表筛选")
+            except Exception as e:
+                self.logger.warning("表筛选失败，使用全部表: %s", e)
+                selected_tables = table_names
+
+            # 只拼接选中表的 DDL（含列注释）和采样数据（2行）
+            table_schema = self.reader.get_create_table_sql_for_tables(selected_tables)
+            data_example = self.reader.get_sample_data_for_tables(selected_tables, limit=2)
+            self.logger.info("选中表 DDL 长度=%d, 采样数据长度=%d", len(table_schema), len(data_example))
 
             messages = build_analyze_messages(
                 user_input=user_input,
@@ -364,7 +420,14 @@ class ChatExcelEngine:
                 len(messages),
             )
             self.logger.info("开始 LLM 流式调用")
-            async for chunk in chat_completion_stream(messages):
+            # 通过回调捕获后端实际使用的模型，切换时通知前端
+            current_provider = {"name": None}
+            def _on_provider(name):
+                current_provider["name"] = name
+            async for chunk in chat_completion_stream(messages, logger=self.logger, preferred_model=model_name or None, on_provider=_on_provider):
+                if current_provider["name"]:
+                    yield {"type": "model", "model": current_provider["name"]}
+                    current_provider["name"] = None
                 full_text += chunk
 
                 visible_text = _text_before_api_call(full_text)

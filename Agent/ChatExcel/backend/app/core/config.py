@@ -42,7 +42,14 @@ CONTEXT_ERROR_THRESHOLD: float = float(os.getenv("CONTEXT_ERROR_THRESHOLD", "0.9
 # ── ReAct Agent ────────────────────────────────────────────
 REACT_MAX_RETRY_COUNT: int = int(os.getenv("REACT_MAX_RETRY_COUNT", "30"))
 SHORT_TERM_MEMORY_BUFFER_SIZE: int = int(os.getenv("SHORT_TERM_MEMORY_BUFFER_SIZE", "5"))
+# ReAct 短期记忆保留最近几轮 ReAct 步骤（Thought+Observation），超过后早期步骤被挤出
 SKILLS_DIR: str = os.getenv("SKILLS_DIR", os.path.join(os.path.dirname(__file__), '..', '..', 'skills'))
+# ReAct 跨问题历史：从 DB 加载最近几轮对话（用户问+AI结论）拼接进 system prompt
+REACT_HISTORY_ROUNDS: int = int(os.getenv("REACT_HISTORY_ROUNDS", "10"))
+
+# ── ChatExcel 历史对话 ─────────────────────────────────────
+# ChatExcel 模式从 DB 加载最近几轮对话作为 LLM 上下文
+CHAT_EXCEL_HISTORY_ROUNDS: int = int(os.getenv("CHAT_EXCEL_HISTORY_ROUNDS", "10"))
 
 # ── DuckDB ────────────────────────────────────────────────
 DUCKDB_DIR: str = os.getenv("DUCKDB_DIR", os.path.join(os.path.dirname(__file__), '..', '..', 'storage', 'duckdb'))

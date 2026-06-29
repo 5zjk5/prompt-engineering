@@ -315,7 +315,7 @@ class ReactEngine:
             skill_name=self.skill_name,
             conversation_history=conversation_history,
         )
-        self.logger.info("系统提示词已构建\n%s", prompt)
+        self.logger.info("系统提示词已构建！\n%s", prompt)
         return prompt
 
     async def _load_thinking_messages(self, user_input: str) -> List[dict]:
@@ -328,7 +328,7 @@ class ReactEngine:
         # 传入最近 5 轮对话记忆
         memory_msgs = self.memory.read_as_messages()
         messages.extend(memory_msgs)
-        self.logger.info("记忆片段: %d 条消息", len(memory_msgs))
+        self.logger.info("最近的 react 记忆片段: %d 条消息", len(memory_msgs))
 
         messages.append({"role": "user", "content": user_input})
 
@@ -341,7 +341,7 @@ class ReactEngine:
 
         return messages
 
-    async def run_stream(self, user_input: str) -> AsyncIterator[dict]:
+    async def run_stream(self, user_input: str, model_name: str = "") -> AsyncIterator[dict]:
         """ReAct 循环 — yield SSE 事件（主入口）
 
         SSE 事件格式（1:1 复刻原版，兼容现有前端）:
@@ -368,6 +368,12 @@ class ReactEngine:
             "\n===== [REACT_USER_INPUT_FULL] 用户原始输入 =====\n%s\n===== [REACT_USER_INPUT_FULL_END] =====\n",
             user_input,
         )
+
+        # 循环检测：记录最近连续重复的 action+action_input，防止死循环
+        _last_action_sig = None
+        _repeat_count = 0
+        _last_action_only = None
+        _action_repeat_count = 0
 
         while retry_count < self.max_retry:
             retry_count += 1
@@ -421,7 +427,14 @@ class ReactEngine:
                     # 流式累积完整输出,同时实时推送 thought chunk
                     llm_output = ""
                     last_pushed_thought = ""
-                    async for chunk_text in chat_completion_stream(current_messages):
+                    # 通过回调捕获后端实际使用的模型，切换时通知前端
+                    current_provider = {"name": None}
+                    def _on_provider(name):
+                        current_provider["name"] = name
+                    async for chunk_text in chat_completion_stream(current_messages, logger=self.logger, preferred_model=model_name or None, on_provider=_on_provider):
+                        if current_provider["name"]:
+                            yield {"type": "model", "model": current_provider["name"]}
+                            current_provider["name"] = None
                         llm_output += chunk_text
                         # 提取到 "Action:" 之前的部分作为 thought 实时推送
                         thought_so_far = re.split(
@@ -538,6 +551,11 @@ class ReactEngine:
                 if not final_content:
                     final_content = parsed["thought"]
 
+                self.logger.info(
+                    "===== [REACT_FINAL_ANSWER] 最终回答 =====\n%s\n===== [REACT_FINAL_ANSWER_END] =====",
+                    final_content,
+                )
+
                 self.memory.write(MemoryFragment(
                     question=current_input,
                     thought=parsed["thought"],
@@ -583,7 +601,69 @@ class ReactEngine:
                 current_input = retry_hint
                 continue
 
-            # ── 5. 执行工具 ──────────────────────────────────────────
+            # ── 5. 循环检测 ──────────────────────────────────────────
+            _action_sig = parsed["action"] + "::" + json.dumps(parsed["action_input"], ensure_ascii=False, sort_keys=True, default=str)
+            _action_only = parsed["action"]
+            if _action_sig == _last_action_sig:
+                _repeat_count += 1
+            else:
+                _last_action_sig = _action_sig
+                _repeat_count = 0
+
+            # 连续相同 action 计数（即使 input 不同，action 相同也算）
+            if _action_only == _last_action_only:
+                _action_repeat_count += 1
+            else:
+                _last_action_only = _action_only
+                _action_repeat_count = 0
+
+            if _repeat_count >= 2:
+                # 连续 3 轮（含当前轮）执行完全相同的 action+action_input
+                loop_hint = (
+                    "你已连续执行相同的操作 3 次，但似乎没有取得进展。"
+                    "请尝试换一种方法：使用不同的工具、调整参数，"
+                    "或如果已有足够信息，直接调用 terminate 返回结果。"
+                )
+                self.logger.warning("【循环检测】第%d轮: 连续 %d 次重复 action=%s，注入提示打破循环",
+                                    retry_count, _repeat_count + 1, parsed["action"])
+                yield {
+                    "type": "step.chunk",
+                    "id": step_id,
+                    "output_type": "text",
+                    "content": loop_hint,
+                }
+                yield {"type": "step.done", "id": step_id, "status": "failed"}
+                current_input = loop_hint
+                # 重置计数器，让 LLM 有机会执行新的方案
+                _repeat_count = 0
+                _last_action_sig = None
+                continue
+
+            if _action_repeat_count >= 4:
+                # 连续 5 轮执行相同 action（input 可能不同），说明在同一工具上卡住
+                loop_hint = (
+                    "你已连续多次使用同一工具但未取得进展。"
+                    "如果是在 Excel 中查找数据未果，可能数据在其他 sheet 中。"
+                    "请用 pd.ExcelFile(FILE_PATH).sheet_names 查看所有 sheet 名称，"
+                    "然后用 pd.read_excel(FILE_PATH, sheet_name='目标sheet名') 读取其他 sheet。"
+                    "或者如果已有足够信息，直接调用 terminate 返回结果。"
+                )
+                self.logger.warning("【循环检测】第%d轮: 连续 %d 次相同 action=%s（input 不同），注入提示打破循环",
+                                    retry_count, _action_repeat_count + 1, parsed["action"])
+                yield {
+                    "type": "step.chunk",
+                    "id": step_id,
+                    "output_type": "text",
+                    "content": loop_hint,
+                }
+                yield {"type": "step.done", "id": step_id, "status": "failed"}
+                current_input = loop_hint
+                # 重置计数器，让 LLM 有机会执行新方案（比如读取其他 sheet）
+                _action_repeat_count = 0
+                _last_action_only = None
+                continue
+
+            # ── 6. 执行工具 ──────────────────────────────────────────
             self.logger.info("【工具执行】第%d轮: action=%s", retry_count, parsed["action"])
             self.logger.info(
                 "\n===== [REACT_ROUND_%d_TOOL_INPUT_FULL] 工具完整输入 =====\n%s\n===== [REACT_ROUND_%d_TOOL_INPUT_FULL_END] =====\n",

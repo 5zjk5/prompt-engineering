@@ -14,10 +14,10 @@ CHAT_EXCEL_ANALYZE_TEMPLATE = """
 {data_example}
 ``````
 
-DuckDB 表结构信息如下（包含所有可用表）：
+DuckDB 表结构信息如下（包含本次分析相关表的 DDL 及列注释）：
 {table_schema}
 
-可用表名如下：{table_names}
+所有可用表名如下：{table_names}
 
 DuckDB 中，需要特别注意的 DuckDB 语法规则：
 ``````markdown
@@ -64,8 +64,9 @@ DuckDB SQL数据分析回答用户的问题。
     - 如果用户问题与已上传数据表相关，回答必须以 [分析思路] 开头，并按 1、2、3、4 编号输出分析步骤
     - 如果用户问题与已上传数据表相关，最终回答必须包含 <api-call>、<name>、<args>、<sql>、</sql>、</args>、</api-call> 这些完整标签
     - <sql> 中必须是可以直接在 DuckDB 执行的 SELECT 查询语句
-    - 数据相关问题不要直接输出查询结果结论，例如“共有5人”“总金额为100”等；这些结论必须由系统执行 SQL 后生成
+    - 数据相关问题不要直接输出查询结果结论，例如"共有5人""总金额为100"等；这些结论必须由系统执行 SQL 后生成
     - 不要把 SQL 放在 markdown 代码块中，不要输出多个 <api-call>，不要在 </api-call> 后继续补充内容
+    - 严禁输出 <chart-view> 标签或自行编造查询结果数据，所有数据必须由系统执行 <api-call> 中的 SQL 后获得
     - 如果用户问题与已上传数据表无关，只输出无法基于当前数据表回答的说明，不要编造 SQL
 
 你可以参考下面的样例:
@@ -160,3 +161,69 @@ def build_analyze_messages(
     messages.append({"role": "user", "content": user_input})
 
     return messages
+
+
+# 表筛选提示词 — 用于分析阶段前判断用户问题涉及哪些表
+TABLE_SELECTION_SYSTEM = """你是一个数据表筛选助手。根据用户的问题，从可用数据表列表中选择与问题最相关的表。
+只返回表名，用逗号分隔，不要有多余解释。如果所有表都可能相关，全部返回。"""
+
+TABLE_SELECTION_TEMPLATE = """
+可用数据表列表如下（每张表包含表名、来源Sheet、表注释、列名及列描述）:
+
+{table_index}
+
+用户问题：{user_input}
+
+请从上述表中选出回答该问题所需的相关表。判断依据：
+1. 表注释和列描述是否与问题关键词匹配
+2. 问题涉及的指标、维度、实体是否在该表中
+3. 如果问题涉及多表关联，选出所有需要参与关联的表
+
+只返回相关表的 table_name，用逗号分隔。例如：data_analysis_xxx_sheet1, data_analysis_xxx_sheet2
+"""
+
+
+def build_table_selection_messages(user_input: str, table_index: list) -> list:
+    """构建表筛选的 messages，用于 LLM 判断用户问题涉及哪些表。
+
+    Args:
+        user_input: 用户当前问题
+        table_index: get_table_index() 返回的轻量表索引列表
+
+    Returns:
+        OpenAI messages 列表
+    """
+    import json
+
+    system_content = TABLE_SELECTION_SYSTEM + TABLE_SELECTION_TEMPLATE.format(
+        table_index=json.dumps(table_index, ensure_ascii=False, indent=2),
+        user_input=user_input,
+    )
+    return [
+        {"role": "system", "content": system_content},
+        {"role": "user", "content": user_input},
+    ]
+
+
+def parse_table_selection(response: str, all_table_names: list) -> list:
+    """解析 LLM 表筛选返回结果，提取有效表名。
+
+    Args:
+        response: LLM 返回的文本，包含逗号分隔的表名
+        all_table_names: 所有可用表名列表，用于校验
+
+    Returns:
+        选中的有效表名列表
+    """
+    if not response or not response.strip():
+        return all_table_names
+
+    # 提取逗号分隔的表名，清理空白和换行
+    parts = [p.strip().strip("'\"") for p in response.replace("\n", ",").split(",")]
+    selected = [p for p in parts if p in all_table_names]
+
+    # 如果没有匹配到任何有效表名，返回全部表（兜底）
+    if not selected:
+        return all_table_names
+
+    return selected

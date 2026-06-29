@@ -50,6 +50,7 @@ from app.api.chat_excel import router as chat_excel_router
 from app.api.chat_react import router as chat_react_router
 from app.api.conversation import router as conversation_router
 from app.api.excel_preview import router as excel_preview_router
+from app.api.llm import router as llm_router
 from app.core.sandbox.service import router as sandbox_router
 
 app.include_router(upload_router, prefix="/api", tags=["Upload"])
@@ -57,6 +58,7 @@ app.include_router(chat_excel_router, prefix="/api/chat", tags=["ChatExcel"])
 app.include_router(chat_react_router, prefix="/api/chat", tags=["ReActAgent"])
 app.include_router(conversation_router, prefix="/api", tags=["Conversation"])
 app.include_router(excel_preview_router, prefix="/api", tags=["ExcelPreview"])
+app.include_router(llm_router, prefix="/api", tags=["LLM"])
 app.include_router(sandbox_router, prefix="/api/sandbox", tags=["Sandbox"])
 
 # ── 静态图片服务 ─────────────────────────────────────────

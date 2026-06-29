@@ -32,8 +32,10 @@ function App() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeConvUid, setActiveConvUid] = useState<string>('');
   const [mode, setMode] = useState<ChatMode>('chat_excel');
+  const [selectedModel, setSelectedModel] = useState<string>('');
   const [activeFilePath, setActiveFilePath] = useState<string>('');
   const [activeFilePaths, setActiveFilePaths] = useState<string[]>([]);
+  const [activeFileNames, setActiveFileNames] = useState<string[]>([]);
   const [previewCollapsed, setPreviewCollapsed] = useState(true);
   const [editingConvUid, setEditingConvUid] = useState('');
   const [editingTitle, setEditingTitle] = useState('');
@@ -41,11 +43,13 @@ function App() {
 
   const activateConversation = (conv: Conversation) => {
     const filePaths = getConversationFilePaths(conv);
+    const fileNames = (Array.isArray(conv.file_names) ? conv.file_names : (conv.file_name ? [conv.file_name] : [])).filter(Boolean);
     const fp = filePaths[0] || '';
     setActiveConvUid(conv.conv_uid);
     setMode(conv.chat_mode as ChatMode);
     setActiveFilePath(fp);
     setActiveFilePaths(filePaths);
+    setActiveFileNames(fileNames);
     setPreviewCollapsed(!(conv.chat_mode === 'chat_excel' && fp));
   };
 
@@ -329,6 +333,10 @@ function App() {
                 onModeChange={handleModeChange}
                 onTitleUpdate={handleTitleUpdate}
                 onFilePathUpdate={handleFilePathUpdate}
+                initialFilePaths={activeFilePaths}
+                initialFileNames={activeFileNames}
+                selectedModel={selectedModel}
+                onModelChange={setSelectedModel}
               />
             </div>
 

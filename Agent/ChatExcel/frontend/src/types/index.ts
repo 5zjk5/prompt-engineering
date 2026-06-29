@@ -35,16 +35,17 @@ export interface Message {
 // ── Module 1 SSE Events ──────────────────────────────────
 
 export interface ExcelSSEEvent {
-  type: 'learning' | 'learning_result' | 'learning_done' | 'thought' | 'sql' | 'chart' | 'text' | 'error' | 'done';
+  type: 'learning' | 'learning_result' | 'learning_done' | 'thought' | 'sql' | 'chart' | 'text' | 'model' | 'error' | 'done';
   content?: string;
   chart_type?: string;
   data?: { columns: string[]; rows: any[][] };
+  model?: string;
 }
 
 // ── Module 3 SSE Events ──────────────────────────────────
 
 export interface ReactSSEEvent {
-  type: 'step.start' | 'step.meta' | 'step.chunk' | 'step.done' | 'context.status' | 'final' | 'done' | 'plan.update' | 'error';
+  type: 'step.start' | 'step.meta' | 'step.chunk' | 'step.done' | 'context.status' | 'final' | 'model' | 'done' | 'plan.update' | 'error';
   // step.start
   step?: number;
   id?: string;
@@ -69,6 +70,8 @@ export interface ReactSSEEvent {
   compact_layer?: string | null;
   // plan.update
   todos?: Array<{ content: string; status: string; priority: string }>;
+  // model
+  model?: string;
 }
 
 // ── Step Card (for Module 3 rendering) ───────────────────
