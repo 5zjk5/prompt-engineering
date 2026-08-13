@@ -1,0 +1,8 @@
+{
+  "access_key": "YOUR_ACCESS_KEY",
+  "secret_key": "YOUR_SECRET_KEY",
+  "host": "cdn.byteplusapi.com",
+  "region": "ap-singapore-1",
+  "service": "CDN",
+  "version": "2021-03-01"
+}
