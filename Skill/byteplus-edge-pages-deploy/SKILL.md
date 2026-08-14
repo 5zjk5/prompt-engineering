@@ -18,6 +18,8 @@ description: "Deploy static websites to BytePlus Edge Pages with CDN. Invoke whe
 - 用户要求"部署"/"发布"/"上线"静态网站
 - 用户提到 "BytePlus"/"Edge Pages"/"CDN 部署"
 - 用户要求重新部署或更新已有项目
+- 用户要求"绑定域名"/"自定义域名"/"配置域名"
+- 用户提到默认域名失效/过期/不能访问
 
 ---
 
@@ -42,6 +44,28 @@ description: "Deploy static websites to BytePlus Edge Pages with CDN. Invoke whe
    - 获取地址：https://console.byteplus.com/iam/keymanage
 2. 静态网站目录包含 `index.html`
 3. Node.js 已安装（零外部依赖）
+
+### 部署前必须确认：部署到哪个项目？
+
+由于自定义域名配额只有 1 个，部署前**必须询问用户**：
+
+> 这个网站是要发布到主站（永久访问），还是临时预览？
+>
+> - **主站**（app.muxiatong.top）→ 部署到 web-app-01（`--project-id p-2e9j5dbfm9ziu5uu`），内容会替换主站当前内容
+> - **临时预览**（3小时有效）→ 部署到 web-app-02~05 中的任意一个，获得临时预览链接
+> - **新项目** → 如果 5 个项目都已占满且都不想覆盖，需先删除一个再创建
+
+根据用户选择使用对应的项目 ID：
+
+| 用途 | 项目名 | 项目 ID | 域名 |
+|------|--------|---------|------|
+| 主站（永久） | web-app-01 | p-2e9j5dbfm9ziu5uu | app.muxiatong.top |
+| 临时预览1 | web-app-02 | p-2e9iyp4817qtuepq | 默认预览域名 |
+| 临时预览2 | web-app-03 | p-2e9k954c31x9l5sm | 默认预览域名 |
+| 临时预览3 | web-app-04 | p-2e9gy188chzot8ti | 默认预览域名 |
+| 临时预览4 | web-app-05 | p-2e9h1540alc7nkl2 | 默认预览域名 |
+
+**重要：** 用 `--project-id` 部署到已有项目时，旧内容会被新内容替换，项目 ID 和域名绑定不变。不需要删除重建。
 
 ### 部署
 
@@ -90,6 +114,161 @@ node scripts/manage.js delete --project-id <项目ID>
 ### 测试
 
 部署完成后，脚本会自动验证预览链接的 HTTP 状态码。也可以用浏览器手动打开预览链接验证。
+
+---
+
+## 自定义域名管理
+
+### 默认域名 vs 自定义域名
+
+部署成功后，BytePlus 会自动分配一个预览域名，格式为 `p-xxx.synthopages.bytepluses.com`。
+
+**重要：默认预览域名每 3 小时重置一次，不能作为稳定访问地址！** 必须绑定自定义域名才能长期使用。
+
+| 类型 | 域名格式 | 稳定性 | SSL |
+|------|---------|--------|-----|
+| 默认预览域名 | `p-xxx.synthopages.bytepluses.com?_token=...` | 每 3 小时失效 | 无 |
+| 自定义域名 | `app.yourdomain.com` | 永久有效 | 自动配置 |
+
+### 部署后流程
+
+```
+部署成功 → 获得默认预览域名（3小时有效）
+    ↓
+用户有自有域名？
+    ├─ 是 → 绑定自定义域名（见下方）
+    └─ 否 → 告知用户默认域名 3 小时后失效，建议尽快绑定自有域名
+```
+
+### 一键绑定域名
+
+```bash
+node scripts/domain.js bind --project-id <项目ID> --domain <你的域名>
+```
+
+此命令会自动完成：
+1. 调用 `AddPagesDomain` API 添加域名
+2. 轮询 `GetPagesDomain` 等待 CNAME 地址生成
+3. 输出 DNS 配置指引（记录类型、主机记录、记录值）
+4. 提示用户去域名 DNS 管理处添加 CNAME 记录
+5. 提示用户配置完成后运行 verify 验证
+
+### 绑定域名的交互流程（AI 必须遵守）
+
+绑定域名涉及用户手动操作 DNS，AI 不能只跑命令就结束，**必须按以下步骤引导用户**：
+
+**步骤1：AI 运行 bind 命令，拿到 CNAME 地址**
+
+```bash
+node scripts/domain.js bind --project-id <项目ID> --domain <域名>
+```
+
+**步骤2：AI 主动告诉用户去 DNS 管理处配置**
+
+拿到 CNAME 地址后，AI 必须向用户输出清晰的配置指引，例如：
+
+> 域名已添加成功！CNAME 地址是 `app.muxiatong.top.bplslb.com`。
+>
+> 现在需要你去阿里云域名控制台添加一条 CNAME 记录：
+>
+> | 项目 | 填什么 |
+> |------|--------|
+> | 记录类型 | CNAME |
+> | 主机记录 | app |
+> | 记录值 | app.muxiatong.top.bplslb.com |
+> | TTL | 默认 |
+>
+> 操作路径：阿里云控制台 → 域名 → muxiatong.top → 解析 → 添加记录
+>
+> 如果主机记录已存在其他记录（如 A 记录），需要先删除或修改，否则会报"解析冲突"。
+>
+> 配置完成后告诉我，我来帮你验证。
+
+**步骤3：等用户确认配置完成**
+
+AI 必须等待用户回复"配好了"之类确认后，才能进行验证。不要跳过这一步。
+
+**步骤4：AI 运行 verify 验证**
+
+```bash
+node scripts/domain.js verify --project-id <项目ID> --domain <域名>
+```
+
+**步骤5：告知用户访问方式和注意事项**
+
+验证通过后，AI 必须告知用户：
+- HTTP 可立即访问，HTTPS 可能需要 5-15 分钟（SSL 证书配置中）
+- 如遇 421 Misdirected Request 是 CDN 传播中，等待即可
+- 自定义域名永久有效，不像默认预览域名那样 3 小时失效
+
+### 手动分步操作
+
+```bash
+# 1. 添加域名
+node scripts/domain.js add --project-id <项目ID> --domain app.example.com
+
+# 2. 查看域名详情（获取 CNAME 地址）
+node scripts/domain.js get --project-id <项目ID> --domain app.example.com
+
+# 3. 列出项目所有域名
+node scripts/domain.js list --project-id <项目ID>
+
+# 4. DNS 配置完成后验证
+node scripts/domain.js verify --project-id <项目ID> --domain app.example.com
+
+# 5. 删除域名
+node scripts/domain.js delete --project-id <项目ID> --domain app.example.com
+```
+
+### DNS 配置方法（以阿里云为例）
+
+获取到 CNAME 地址后，在域名 DNS 管理处添加一条 CNAME 记录：
+
+| 项目 | 填什么 |
+|------|--------|
+| 记录类型 | CNAME |
+| 主机记录 | 子域名前缀（如 `app`、`blog`、`timer`） |
+| 记录值 | BytePlus 给的 CNAME 地址（如 `app.example.com.bplslb.com`） |
+| TTL | 默认（600 秒） |
+
+**注意事项：**
+- 如果该主机记录已存在 A 记录等其他记录，必须先删除或修改，否则会报"解析冲突"
+- **域名配额只有 1 个**：整个 BytePlus 账户只能绑定 1 个自定义域名，请选择最常用的项目绑定
+- 配置 CNAME 后需等待 DNS 传播（通常几分钟）
+- 如需更换绑定的项目，先删除旧域名绑定再绑新项目（CNAME 地址可能变化，需更新 DNS 记录）
+
+### 绑定后的访问说明
+
+| 阶段 | HTTP | HTTPS | 说明 |
+|------|------|-------|------|
+| DNS 刚配置 | 可能 404 | 失败 | DNS 传播中 |
+| DNS 已生效 | 200 可访问 | TLS 失败 | SSL 证书配置中 |
+| 完全就绪 | 200 | 200 | 正常，HTTP 和 HTTPS 均可 |
+
+- SSL 证书由 BytePlus 自动配置，通常需要 5-15 分钟
+- 在 HTTPS 就绪前，HTTP 可先使用
+- 如遇 `421 Misdirected Request`，是 CDN 边缘节点传播中，等待即可
+
+### 域名管理 API 清单
+
+| API Action | 用途 | 关键参数 |
+|------------|------|----------|
+| `AddPagesDomain` | 添加自定义域名 | `ProjectID`, `Domain` |
+| `GetPagesDomain` | 查看域名详情（含 CNAME 地址） | `ProjectID`, `Domain` |
+| `ListPagesDomain` | 列出项目所有域名 | `ProjectID` |
+| `VerifyPagesDomain` | 验证域名 DNS 配置 | `ProjectID`, `Domain` |
+| `DeletePagesDomain` | 删除域名 | `ProjectID`, `Domain` |
+
+### 多项目域名绑定
+
+BytePlus Edge Pages 项目上限为 5 个（实测可创建 10 个），但**自定义域名配额为每账户 1 个**。这意味着只能给 1 个项目绑定自定义域名，其他项目只能用默认预览域名（3 小时失效）。
+
+| 项目 | 域名 | 稳定性 |
+|------|------|--------|
+| 主项目 | `app.yourdomain.top`（自定义域名） | 永久有效 |
+| 其他项目 | 默认预览域名 | 每 3 小时失效 |
+
+**建议策略：** 把最常用的项目绑定为自定义域名作为主站，其他项目按需用默认预览域名临时预览。如需多个自定义域名，可在 BytePlus 控制台提交工单申请提升配额。
 
 ---
 
@@ -168,15 +347,21 @@ node scripts/onboard.js subscribe-cdn
 步骤4: 开通 CDN → onboard.js subscribe-cdn
 步骤5: 部署 → deploy.js --dir ./my-site --name my-project
 步骤6: 获取链接 → check_status.js --project-id p-xxx
-步骤7: 浏览器测试
+步骤7: 绑定域名（推荐）→ domain.js bind --project-id p-xxx --domain app.example.com
+步骤8: DNS 配置（在域名管理处添加 CNAME 记录）
+步骤9: 验证域名 → domain.js verify --project-id p-xxx --domain app.example.com
+步骤10: 浏览器访问自定义域名
 ```
 
 ### 老用户（场景A）
 ```
 步骤1: 部署 → deploy.js --dir ./my-site --name my-project
 步骤2: 获取链接 → check_status.js --project-id p-xxx
-步骤3: 浏览器测试
-步骤4: 迭代更新 → deploy.js --dir ./my-site --name my-project
+步骤3: 绑定域名（推荐）→ domain.js bind --project-id p-xxx --domain app.example.com
+步骤4: DNS 配置（在域名管理处添加 CNAME 记录）
+步骤5: 验证域名 → domain.js verify --project-id p-xxx --domain app.example.com
+步骤6: 浏览器访问自定义域名
+步骤7: 迭代更新 → deploy.js --dir ./my-site --name my-project（自定义域名不变）
 ```
 
 ---
@@ -190,6 +375,7 @@ scripts/
 ├── lib.js                # 公共库（API签名、HTTP、上传、跨平台ZIP打包）★ 含关键修复
 ├── deploy.js             # 部署脚本（创建/更新项目）★ 含关键修复
 ├── check_status.js       # 状态轮询 + HTTP 验证（获取预览链接，检测 404）
+├── domain.js             # 域名管理（add/get/list/verify/delete/bind）★ 新增
 ├── manage.js             # 项目管理（list/get/deployments/offline/delete）
 └── onboard.js            # 新用户引导（注册/获取凭证/开通CDN）
 ```
@@ -305,6 +491,11 @@ node scripts/deploy.js --dir ./my-site --name my-project
 | `ListPagesDeployment` | 列出部署历史 | `ProjectID` |
 | `OfflinePagesProject` | 下线项目 | `ProjectID` |
 | `SubscribeCdnService` | 开通 CDN 服务 | `Regions` |
+| `AddPagesDomain` | 添加自定义域名 | `ProjectID`, `Domain` |
+| `GetPagesDomain` | 查看域名详情（含 CNAME） | `ProjectID`, `Domain` |
+| `ListPagesDomain` | 列出项目所有域名 | `ProjectID` |
+| `VerifyPagesDomain` | 验证域名 DNS | `ProjectID`, `Domain` |
+| `DeletePagesDomain` | 删除域名 | `ProjectID`, `Domain` |
 
 ### 坑 #7：API 网络波动需要重试
 
@@ -314,6 +505,45 @@ node scripts/deploy.js --dir ./my-site --name my-project
 - 内置自动重试机制，默认 8 次，每次间隔 5 秒
 - 上传文件操作也有重试（8 次）
 - 最终失败时返回包含错误信息的结构化对象，不会直接崩溃
+
+### 坑 #8：默认预览域名每 3 小时失效
+
+**现象：** 部署成功后获得的预览域名 `p-xxx.synthopages.bytepluses.com` 在几小时后无法访问。
+
+**根因：** BytePlus 默认预览域名每 3 小时重置一次 token，这是官方设计行为，不是 Bug。
+
+**解决：** 必须绑定自定义域名才能获得稳定的访问地址。使用 `domain.js bind` 一键绑定。
+
+### 坑 #9：DNS 解析冲突导致无法添加 CNAME
+
+**现象：** 在阿里云等 DNS 管理处添加 CNAME 记录时，提示"解析冲突"。
+
+**根因：** 同一个主机记录（如 `www`）已存在 A 记录等其他类型的 DNS 记录。DNS 协议不允许同一主机记录同时存在 CNAME 和其他记录。
+
+**解决：** 先删除该主机记录下的其他记录（特别是 A 记录），再添加 CNAME 记录。或者使用一个新的子域名（如 `app`、`blog`）避免冲突。
+
+### 坑 #10：域名绑定后 HTTPS 无法访问
+
+**现象：** 域名验证通过，HTTP 可访问，但 HTTPS 报 TLS 错误或 `421 Misdirected Request`。
+
+**根因：** SSL 证书配置需要时间，CDN 边缘节点传播也需要时间。
+
+**解决：**
+- 这是正常传播过程，HTTP 先可用，HTTPS 会在 5-15 分钟后自动就绪
+- `421 Misdirected Request` 是 CDN 边缘节点尚未配置完域名路由
+- 无需任何操作，等待即可
+
+### 坑 #11：自定义域名配额只有 1 个
+
+**现象：** 给第二个项目绑定自定义域名时，API 返回 `"quota exceeded: quota domain.count.limit is 1"`。
+
+**根因：** BytePlus Edge Pages 的自定义域名配额是**每账户 1 个**，不是每项目 1 个。即使有 5 个项目，也只能给其中 1 个绑定自定义域名。
+
+**解决：**
+- 只给最常用的主项目绑定自定义域名
+- 其他项目使用默认预览域名（3 小时失效，需重新部署刷新）
+- 如需多个自定义域名，在 BytePlus 控制台提交工单申请提升配额
+- 或将其他项目部署到 Cloudflare Pages（免费、无限自定义域名）
 
 ---
 
@@ -365,11 +595,42 @@ node scripts/deploy.js --dir ./my-site --name my-project
 
 脚本会自动重试 8 次。如果仍然失败，检查网络连接和 `config.json` 中的凭证是否有效。
 
+### Q: 默认预览域名访问不了？
+
+默认预览域名每 3 小时重置 token，过期后无法访问。这是正常行为，需要绑定自定义域名获得稳定地址：
+
+```bash
+node scripts/domain.js bind --project-id <项目ID> --domain <你的域名>
+```
+
+### Q: 添加 CNAME 记录时提示"解析冲突"？
+
+该子域名已存在其他类型的 DNS 记录（如 A 记录）。先删除原有记录，或换一个新子域名。
+
+### Q: 域名绑定后 HTTPS 访问报错？
+
+SSL 证书配置需要 5-15 分钟。期间 HTTP 可先使用，HTTPS 会自动就绪。如遇 `421 Misdirected Request` 是 CDN 传播中，等待即可。
+
+### Q: 能用通配符域名 `*.example.com` 吗？
+
+不能。每个 BytePlus 项目的 CNAME 地址不同，必须为每个项目单独添加子域名 CNAME 记录。
+
+### Q: 一个域名能绑定多个项目吗？
+
+不能。BytePlus 账户自定义域名配额只有 1 个，只能绑到 1 个项目。如需多个域名，提交工单申请提升配额。
+
+### Q: 项目配额和域名配额分别是多少？
+
+项目配额 5 个（实测可创建 10 个），自定义域名配额 1 个（每账户）。项目可以删除重建释放配额，域名删除后也可重新绑定到其他项目。
+
 ---
 
 ## 已部署项目记录
 
-| 项目名 | 项目 ID | 说明 |
-|--------|---------|------|
-| pomodoro-timer | p-2e9gpjd4tav9n9yf | 番茄钟计时器 |
-| hello-world | （部署后填入） | Hello World 测试页 |
+| 项目名 | 项目 ID | 说明 | 自定义域名 |
+|--------|---------|------|-----------|
+| web-app-01 | p-2e9j5dbfm9ziu5uu | 主项目（自定义域名） | app.muxiatong.top |
+| web-app-02 | p-2e9iyp4817qtuepq | 备用项目1 | 默认预览域名 |
+| web-app-03 | p-2e9k954c31x9l5sm | 备用项目2 | 默认预览域名 |
+| web-app-04 | p-2e9gy188chzot8ti | 备用项目3 | 默认预览域名 |
+| web-app-05 | p-2e9h1540alc7nkl2 | 备用项目4 | 默认预览域名 |

@@ -57,6 +57,11 @@ async function main() {
             } else {
                 console.log(`  HTTP ${result.statusCode} - 状态异常`);
             }
+
+            // 提示默认域名失效和自定义域名绑定
+            console.log('\n  ⚠ 重要: 默认预览域名每 3 小时失效，不能作为稳定访问地址！');
+            console.log('  建议绑定自定义域名以获得永久访问地址:');
+            console.log(`  node domain.js bind --project-id ${PROJECT_ID} --domain <你的域名>`);
             return;
         }
 
